@@ -8,7 +8,7 @@ public class ButtonGrid {
     private JFrame frame; //создаем фрейм
     private JLabel[][] grid2; //создаем грид (по-русски сетку из ячеек)
     private Border border;
-
+    
     public void createGui(int width, int height, int cellX, int cellY){ //конструктор
         frame = new JFrame("Simple Animation"); //создает фрейм
         frame.setLayout(new GridLayout(width,height)); //устанавливаем размещение
