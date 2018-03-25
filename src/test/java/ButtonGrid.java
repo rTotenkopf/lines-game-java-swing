@@ -14,6 +14,7 @@ public class ButtonGrid {
         frame.setLayout(new GridLayout(width,height)); //устанавливаем размещение
 
         grid2 = new JLabel[width][height];
+        
 
         border = BorderFactory.createLineBorder(Color.BLACK, 1);
 
