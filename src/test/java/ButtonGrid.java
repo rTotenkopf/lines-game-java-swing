@@ -8,13 +8,12 @@ public class ButtonGrid {
     private JFrame frame; //создаем фрейм
     private JLabel[][] grid2; //создаем грид (по-русски сетку из ячеек)
     private Border border;
-    
+
     public void createGui(int width, int height, int cellX, int cellY){ //конструктор
         frame = new JFrame("Simple Animation"); //создает фрейм
         frame.setLayout(new GridLayout(width,height)); //устанавливаем размещение
 
         grid2 = new JLabel[width][height];
-        
 
         border = BorderFactory.createLineBorder(Color.BLACK, 1);
 
@@ -23,7 +22,6 @@ public class ButtonGrid {
             System.out.println( "Could not find image!" );
         else
             frame.setIconImage(new ImageIcon(url).getImage());
-
         
         cellX--;
         cellY--;
