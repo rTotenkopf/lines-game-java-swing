@@ -14,7 +14,6 @@ public class ButtonGrid {
         frame.setLayout(new GridLayout(width,height)); //устанавливаем размещение
 
         grid2 = new JLabel[width][height];
-        
 
         border = BorderFactory.createLineBorder(Color.BLACK, 1);
 
@@ -23,7 +22,7 @@ public class ButtonGrid {
             System.out.println( "Could not find image!" );
         else
             frame.setIconImage(new ImageIcon(url).getImage());
-
+        
         cellX--;
         cellY--;
         for (int y = height - 1; y >= 0; y--) {
