@@ -24,6 +24,7 @@ public class ButtonGrid {
         else
             frame.setIconImage(new ImageIcon(url).getImage());
 
+        
         cellX--;
         cellY--;
         for (int y = height - 1; y >= 0; y--) {
