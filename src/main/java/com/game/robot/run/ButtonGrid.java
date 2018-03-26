@@ -1,3 +1,5 @@
+package com.game.robot.run;
+
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
@@ -30,7 +32,7 @@ public class ButtonGrid {
 
         for (int y = height - 1; y >= 0; y--) {
             for (int x = 0; x < width; x++) {
-                // create a new button/other gui-element
+                // create a new cell on grid
                 grid[x][y] = new JLabel("(" + (x + 1) + "," + (y + 1) + ")");
                 grid[x][y].setBorder(border);
                 key = getCoordinates(x + 1, y + 1);
