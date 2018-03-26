@@ -1,5 +1,9 @@
 package com.game.robot.entities;
 
+/**
+ * @author Eugene Ivanov on 26.03.2018
+ */
+
 import com.game.robot.enums.Direction;
 import com.game.robot.logic.Movable;
 

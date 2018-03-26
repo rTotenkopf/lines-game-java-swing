@@ -3,6 +3,10 @@ package com.game.robot.entities;
 import com.game.robot.connections.RobotConnection;
 import com.game.robot.connections.RobotConnectionManager;
 
+/**
+ * @author Eugene Ivanov on 26.03.2018
+ */
+
 public class Robot extends AbstractRobot implements RobotConnectionManager
 {
     private static int totalSteps = 0;

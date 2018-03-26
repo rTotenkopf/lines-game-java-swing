@@ -2,9 +2,12 @@ import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Function;
 
 /**
- * @author Eugene Ivanov
+ * @author Eugene Ivanov on 26.03.2018
  */
 
 public class ButtonGrid {
@@ -13,6 +16,8 @@ public class ButtonGrid {
     private JLabel[][] grid;
     private Border border;
     private ImageIcon targetImage;
+    private Map<Integer, JLabel> cellMap;
+    private Function<Integer, Integer> keyMapFunction;
 
     public void createGui(int width, int height, int cellX, int cellY){ // constructor of class
         frame = new JFrame("Simple Animation"); // create a frame
@@ -41,11 +46,20 @@ public class ButtonGrid {
         cellX--;
         cellY--;
 
+        cellMap = new HashMap<>();
+        Integer key;
+
         for (int y = height - 1; y >= 0; y--) {
             for (int x = 0; x < width; x++) {
                 // create a new button/other gui-element
                 grid[x][y] = new JLabel("(" + (x + 1) + "," + (y + 1) + ")");
                 grid[x][y].setBorder(border);
+
+                key = Integer.parseInt(String.valueOf(x + 1) + String.valueOf(y + 1));
+                cellMap.put(key, grid[x][y]);
+
+                System.out.println("key = " + key);
+
                 if (x == cellX && y == cellY) {
                     grid[cellX][cellY].setBackground(Color.YELLOW);
                     grid[cellX][cellY].setIcon(targetImage);
@@ -63,6 +77,11 @@ public class ButtonGrid {
 
     public static void main(String[] args) {
         ButtonGrid buttonGrid = new ButtonGrid();
-        buttonGrid.createGui(   5,5, 5, 4);
+        buttonGrid.createGui(   5,5, 1, 2);
+
+        buttonGrid.cellMap.get(55).setBackground(Color.GREEN);
+        buttonGrid.cellMap.get(55).setOpaque(true);
+
+        //buttonGrid.frame.repaint();
     }
 }

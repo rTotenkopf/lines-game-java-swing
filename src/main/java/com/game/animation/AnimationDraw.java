@@ -12,6 +12,10 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
 
+/**
+ * @author Eugene Ivanov on 26.03.2018
+ */
+
 public class AnimationDraw extends JPanel {
 
     private DrawPanel contentPane;

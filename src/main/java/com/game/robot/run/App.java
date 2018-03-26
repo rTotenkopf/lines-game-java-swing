@@ -5,6 +5,10 @@ import com.game.robot.exceptions.RobotConnectionException;
 import com.game.robot.connections.RobotConnection;
 import com.game.robot.connections.RobotConnectionManager;
 
+/**
+ * @author Eugene Ivanov on 26.03.2018
+ */
+
 public class App
 {
     public static void main(String[] args) throws InterruptedException {
