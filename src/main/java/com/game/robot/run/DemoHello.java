@@ -1,5 +1,6 @@
 package com.game.robot.run;
 
+import org.lwjgl.LWJGLUtil;
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.BasicGame;
 import org.newdawn.slick.GameContainer;
@@ -8,7 +9,10 @@ import org.newdawn.slick.SlickException;
 import sun.reflect.Reflection;
 
 import java.io.File;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 /**
  * Slick Hello-world demo
@@ -69,18 +73,25 @@ public class DemoHello extends BasicGame {
      * @param args
      * @throws SlickException
      */
-    public static void main(String[] args) throws SlickException, ClassNotFoundException {
+    public static void main(String[] args) throws SlickException, ClassNotFoundException, URISyntaxException {
+        // Получили jar либо папку target/classes
+        Path path = Paths.get(DemoHello.class.getProtectionDomain()
+                .getCodeSource()
+                .getLocation()
+                .toURI());
+        // Переходим к родителю, то есть в папку где лежит jar
+        Path parent = path.getParent();
 
-        System.setProperty("java.library.path", "./lib/native/");
-        System.out.println(System.getProperty("./lib/native/"));
-
-        final File file = new File("./lib/native/");
-        System.out.println("./lib/native/" + ":");
-        if (file.exists()) {
-            System.out.println("Файл существует.");
-        } else {
-            System.out.println("Файл не существует.");
-        }
+        // Тут у нас распакованные зависимости
+        Path unpackPath = parent.resolve("unpack");
+        String unpackPathString = unpackPath.toAbsolutePath().normalize().toString();
+        
+        System.out.println("Unpack Libs: " + unpackPathString);
+        
+        // org.lwjgl.Sys#run
+        System.setProperty("org.lwjgl.librarypath", unpackPathString);
+        // net.java.games.input.DirectInputEnvironmentPlugin#run
+        System.setProperty("net.java.games.input.librarypath", unpackPathString);
 
         AppGameContainer app = new AppGameContainer(new DemoHello());
         app.setDisplayMode(500, 500, false);
