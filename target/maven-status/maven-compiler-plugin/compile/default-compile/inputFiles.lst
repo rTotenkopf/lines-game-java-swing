@@ -1,0 +1,10 @@
+/home/op4ik/Projects/JavaProjects/SimpleAnimation/src/main/java/com/game/robot/entities/Robot.java
+/home/op4ik/Projects/JavaProjects/SimpleAnimation/src/main/java/com/game/robot/enums/Direction.java
+/home/op4ik/Projects/JavaProjects/SimpleAnimation/src/main/java/com/game/robot/connections/RobotConnectionManager.java
+/home/op4ik/Projects/JavaProjects/SimpleAnimation/src/main/java/com/game/robot/run/App.java
+/home/op4ik/Projects/JavaProjects/SimpleAnimation/src/main/java/com/game/robot/run/ButtonGrid.java
+/home/op4ik/Projects/JavaProjects/SimpleAnimation/src/main/java/com/game/robot/connections/RobotConnection.java
+/home/op4ik/Projects/JavaProjects/SimpleAnimation/src/main/java/com/game/robot/run/DemoHello.java
+/home/op4ik/Projects/JavaProjects/SimpleAnimation/src/main/java/com/game/robot/exceptions/RobotConnectionException.java
+/home/op4ik/Projects/JavaProjects/SimpleAnimation/src/main/java/com/game/robot/entities/AbstractRobot.java
+/home/op4ik/Projects/JavaProjects/SimpleAnimation/src/main/java/com/game/robot/logic/Movable.java
