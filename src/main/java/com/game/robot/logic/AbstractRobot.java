@@ -1,11 +1,10 @@
-package com.game.robot.entities;
+package com.game.robot.logic;
+
+import com.game.robot.enums.Direction;
 
 /**
  * @author Eugene Ivanov on 26.03.2018
  */
-
-import com.game.robot.enums.Direction;
-import com.game.robot.logic.Movable;
 
 public class AbstractRobot implements Movable
 {

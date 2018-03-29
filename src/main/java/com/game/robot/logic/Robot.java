@@ -1,4 +1,4 @@
-package com.game.robot.entities;
+package com.game.robot.logic;
 
 import com.game.robot.connections.RobotConnection;
 import com.game.robot.connections.RobotConnectionManager;

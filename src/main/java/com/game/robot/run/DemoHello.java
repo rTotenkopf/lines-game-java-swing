@@ -16,6 +16,7 @@ import java.nio.file.Paths;
  * Apr 6, 2013
  * Copyright (c) Massimo Musante 2013
  */
+
 public class DemoHello extends BasicGame {
 
     static {
@@ -34,19 +35,19 @@ public class DemoHello extends BasicGame {
 
     /*
      * (non-Javadoc)
+     * @see org.newdawn.slick.BasicGame#init(org.newdawn.slick.GameContainer)
+     */
+    @Override
+    public void init(GameContainer gc) throws SlickException {
+    }
+
+    /*
+     * (non-Javadoc)
      * @see org.newdawn.slick.Game#render(org.newdawn.slick.GameContainer, org.newdawn.slick.Graphics)
      */
     @Override
     public void render(GameContainer gc, Graphics g) throws SlickException {
         g.drawString("Hello There!", x, y);
-    }
-
-    /*
-     * (non-Javadoc)
-     * @see org.newdawn.slick.BasicGame#init(org.newdawn.slick.GameContainer)
-     */
-    @Override
-    public void init(GameContainer gc) throws SlickException {
     }
 
     /*
@@ -69,7 +70,7 @@ public class DemoHello extends BasicGame {
      * @param args
      * @throws SlickException
      */
-    public static void main(String[] args) throws SlickException, ClassNotFoundException, URISyntaxException {
+    public static void main(String[] args) throws SlickException, URISyntaxException {
         // Получили jar либо папку target/classes
         Path path = Paths.get(DemoHello.class.getProtectionDomain()
                 .getCodeSource()

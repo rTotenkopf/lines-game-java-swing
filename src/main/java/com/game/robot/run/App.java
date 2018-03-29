@@ -1,6 +1,6 @@
 package com.game.robot.run;
 
-import com.game.robot.entities.Robot;
+import com.game.robot.logic.Robot;
 import com.game.robot.exceptions.RobotConnectionException;
 import com.game.robot.connections.RobotConnection;
 import com.game.robot.connections.RobotConnectionManager;
