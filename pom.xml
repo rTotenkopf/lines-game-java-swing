@@ -63,7 +63,7 @@
                         <manifest>
                             <classpathPrefix>lib/</classpathPrefix>
                             <addClasspath>true</addClasspath>
-                            <mainClass>com.game.robot.run.DemoHello</mainClass>
+                            <mainClass>com.game.robot.run.Breakout</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
