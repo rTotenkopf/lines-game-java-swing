@@ -1,14 +1,15 @@
 package com.game.robot.run;
 
-import org.newdawn.slick.AppGameContainer;
-import org.newdawn.slick.BasicGame;
-import org.newdawn.slick.GameContainer;
-import org.newdawn.slick.Graphics;
-import org.newdawn.slick.SlickException;
+import org.newdawn.slick.*;
 
 import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+
+import com.game.robot.logic.Constants;
+import org.newdawn.slick.geom.Circle;
+import org.newdawn.slick.geom.Rectangle;
+import org.newdawn.slick.geom.Shape;
 
 /**
  * Slick Hello-world demo
@@ -17,20 +18,22 @@ import java.nio.file.Paths;
  * Copyright (c) Massimo Musante 2013
  */
 
-public class DemoHello extends BasicGame {
+public class Breakout extends BasicGame {
 
-    static {
-
-    }
+    private int speed = 5;
 
     private int x = 100;
     private int y = 100;
-    private int dx = 1;
-    private int dy = 1;
+    private int dx = speed;
+    private int dy = speed;
 
-    public DemoHello()
+    private Shape rectangle;
+    private Shape circle;
+    private Image image;
+
+    public Breakout()
     {
-        super("Demo Hello");
+        super(Constants.SCREEN_TITLE);
     }
 
     /*
@@ -39,6 +42,10 @@ public class DemoHello extends BasicGame {
      */
     @Override
     public void init(GameContainer gc) throws SlickException {
+         rectangle = new Rectangle(1, 1, 100, 100);
+         circle = new Circle(gc.getWidth() / 2, gc.getHeight() / 2, 10);
+         gc.setVSync(true);
+         //image = new Image("/src/main/resources/bananas.png");
     }
 
     /*
@@ -47,7 +54,13 @@ public class DemoHello extends BasicGame {
      */
     @Override
     public void render(GameContainer gc, Graphics g) throws SlickException {
-        g.drawString("Hello There!", x, y);
+//        g.drawString("Hello!", x, y);
+//        rectangle.setLocation(x, y);
+//        rectangle.getTriangles();
+//        g.draw(rectangle);
+        g.draw(circle);
+        circle.setLocation(x, y);
+//        g.drawImage(image, x, y);
     }
 
     /*
@@ -57,10 +70,18 @@ public class DemoHello extends BasicGame {
     @Override
     public void update(GameContainer gc, int delta) throws SlickException
     {
-        if(x>gc.getWidth()) dx = -1;
-        if(x<0) dx = 1;
-        if(y>gc.getHeight()) dy = -1;
-        if(y<0) dy = 1;
+        if (x > gc.getWidth() - circle.getWidth()) {
+            dx = -speed;
+        }
+        if (x < 0) {
+            dx = speed;
+        }
+        if (y > gc.getHeight() - circle.getHeight()) {
+            dy = -speed;
+        }
+        if (y < 0) {
+            dy = speed;
+        }
         x = x+dx;
         y = y+dy;
     }
@@ -72,7 +93,7 @@ public class DemoHello extends BasicGame {
      */
     public static void main(String[] args) throws SlickException, URISyntaxException {
         // Получили jar либо папку target/classes
-        Path path = Paths.get(DemoHello.class.getProtectionDomain()
+        Path path = Paths.get(Breakout.class.getProtectionDomain()
                 .getCodeSource()
                 .getLocation()
                 .toURI());
@@ -90,8 +111,9 @@ public class DemoHello extends BasicGame {
         // net.java.games.input.DirectInputEnvironmentPlugin#run
         System.setProperty("net.java.games.input.librarypath", unpackPathString);
 
-        AppGameContainer app = new AppGameContainer(new DemoHello());
-        app.setDisplayMode(500, 500, false);
+        AppGameContainer app = new AppGameContainer(new Breakout());
+        app.setDisplayMode(600, 400, false);
+        app.setTargetFrameRate(70);
         app.start();
     }
 }
