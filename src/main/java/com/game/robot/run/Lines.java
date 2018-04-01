@@ -13,26 +13,24 @@ import java.util.Map;
  * @author Eugene Ivanov on 26.03.2018
  */
 
-public class Spots {
+public class Lines {
 
     private JFrame frame;
     private static JLabel[][] grid;
-    private Border lineBorder;
-    private Color standardCellColor;
     private Map<Integer, JLabel> cellMap;
 
     // constructor of class
     public void createGui(int frameWidth, int frameHeight, int gridWidth, int gridHeight) {
-        frame = new JFrame("Simple Animation"); // create a frame
+        frame = new JFrame("Lines"); // create a frame
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE); // default close operation
 
-        JPanel panel1 = new JPanel();
-        JPanel panel2 = new JPanel();
-        JPanel panel3 = new JPanel();
+        JPanel northPanel = new JPanel();
+        JPanel centerPanel = new JPanel();
+        JPanel southPanel = new JPanel();
 
-        panel1.setLayout(new GridLayout(gridWidth,gridHeight) ); // set layout of frame
-
+        centerPanel.setLayout(new GridLayout(gridWidth,gridHeight) ); // set layout of frame
         grid = new JLabel[gridWidth][gridHeight]; // create a grid from many cells (size in choose)
-        lineBorder = BorderFactory.createLineBorder(Color.BLACK, 1);
+        Border borderLine = BorderFactory.createLineBorder(Color.BLACK, 1);
 
         String iconPath = "food/bananas";
         frame.setIconImage(new ImageIcon(
@@ -41,21 +39,19 @@ public class Spots {
         JButton button1 = new JButton("BUTTON_1");
         JButton button2 = new JButton("BUTTON_2");
 
-        panel2.add(BorderLayout.WEST, button1);
-        panel3.add(BorderLayout.WEST, button2);
-
-        panel2.setBackground(Color.ORANGE);
-        panel3.setBackground(Color.GREEN);
+        northPanel.setBackground(Color.ORANGE);
+        northPanel.add(button1);
+        southPanel.setBackground(Color.GREEN);
+        southPanel.add(button2);
 
         cellMap = new HashMap<>();
         int key;
 
         for (int y = gridHeight-1; y >= 0; y--) {
             for (int x = 0; x < gridWidth; x++) {
-                // create a new cell on grid
 //                grid[x][y] = new JLabel("(" + (x + 1) + "," + (y + 1) + ")");
-                grid[x][y] = new JLabel();
-                grid[x][y].setBorder(lineBorder);
+                grid[x][y] = new JLabel(); // create a new cell on grid
+                grid[x][y].setBorder(borderLine);
                 grid[x][y].setVerticalAlignment(SwingConstants.CENTER);
                 grid[x][y].setHorizontalAlignment(SwingConstants.CENTER);
                 grid[x][y].addMouseListener(new Clicker());
@@ -63,16 +59,15 @@ public class Spots {
                 grid[x][y].setOpaque(true);
                 key = getCoordinates(x + 1, y + 1);
                 cellMap.put(key, grid[x][y]);
-                panel1.add(grid[x][y]); // add element at grid
+                centerPanel.add(grid[x][y]); // add element at grid
             }
         }
-        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE); // default close operation
         frame.pack(); // set appropriate frame size
         frame.setLocation(500, 100); // location of fram at user screen
         frame.setSize(frameWidth, frameHeight); // standard size of frame
-        frame.getContentPane().add(BorderLayout.CENTER, panel1);
-        frame.getContentPane().add(BorderLayout.NORTH, panel2);
-        frame.getContentPane().add(BorderLayout.SOUTH, panel3);
+        frame.getContentPane().add(BorderLayout.CENTER, centerPanel);
+        frame.getContentPane().add(BorderLayout.NORTH, northPanel);
+        frame.getContentPane().add(BorderLayout.SOUTH, southPanel);
         frame.setVisible(true); // set option "visible" of frame
     }
 
@@ -80,21 +75,21 @@ public class Spots {
         return Integer.parseInt(String.valueOf(x) + String.valueOf(y));
     }
 
-    private static URL checkingUrl(String resourcePath) {
+    public static URL checkingUrl(String resourcePath) {
         resourcePath = resourcePath + ".png";
-        URL resourceUrl = Spots.class.getResource(resourcePath);
+        URL resourceUrl = Lines.class.getResource(resourcePath);
         if (resourceUrl == null) {
             System.out.println("Could not find resource!");
-            resourceUrl = Spots.class.getResource("/");
+            resourceUrl = Lines.class.getResource("/");
         }
         return resourceUrl;
     }
 
     public static void main(String[] args) {
-        Spots app = new Spots();
+        Lines app = new Lines();
 
         // 7 X 7
-        app.createGui(   420,450, 7, 7);
+        app.createGui(   395,470, 7, 7);
 
         // 8 X 8
 //        app.createGui(   480,510, 8, 8);
@@ -109,7 +104,7 @@ public class Spots {
 //        app.createGui(   660,690, 11, 11);
 
         // 12 X 12
-//        app.createGui(   720,750, 12, 12);
+//        app.createGui(   690,770, 12, 12);
 
         // coordinates of cherries
 //        int cherriCoordinates = getCoordinates(5, 3);
