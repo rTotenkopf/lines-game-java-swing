@@ -1,6 +1,5 @@
 package com.game.robot.run;
 
-import javax.swing.*;
 import java.util.List;
 
 /**
@@ -12,8 +11,8 @@ public class RunLines {
     public void go() {
         for (int i = 0; i < 3; i++) {
             Cell cell = getRandomCell(GameConstants.FREE_CELLS);
-            cell.setIcon(new ImageIcon(MainFrame
-                    .checkingUrl("/balls/" + getRandomColor() + "-ball") ));
+            int index = (int) (Math.random() * GameConstants.BALLS.length);
+            cell.setIcon(GameConstants.BALLS[index] );
             GameConstants.FREE_CELLS.remove(cell);
         }
     }
@@ -21,10 +20,6 @@ public class RunLines {
     private Cell getRandomCell(List<Cell> freeCells) {
         int index = (int) (Math.random() * freeCells.size() );
         return freeCells.get(index);
-    }
-
-    private String getRandomColor () {
-        return GameConstants.COLORS[(int) (Math.random() * GameConstants.COLORS.length)];
     }
 
     public static void main(String[] args) {

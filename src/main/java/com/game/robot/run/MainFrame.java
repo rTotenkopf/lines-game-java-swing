@@ -15,6 +15,7 @@ public class MainFrame extends JFrame {
 
     public MainFrame(int frameWidth, int frameHeight, int gridWidth, int gridHeight) {
         setTitle(GameConstants.MAIN_FRAME_TITLE);
+        setIconImage(GameConstants.MAIN_FRAME_ICON);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         JPanel southPanel = new JPanel();
@@ -24,10 +25,6 @@ public class MainFrame extends JFrame {
         centerPanel.setLayout(new GridLayout(gridWidth,gridHeight) ); // set layout of frame
         grid = new Cell[gridWidth][gridHeight]; // create a grid from many cells (size in choose)
         Border lineBorder = BorderFactory.createLineBorder(Color.BLACK, 1);
-
-        String iconPath = "food/bananas";
-        setIconImage(new ImageIcon(
-                checkingUrl("/"+iconPath )).getImage());
 
         JButton startButton = new JButton("Следующий ход");
 

@@ -26,11 +26,7 @@ public class GameConstants {
             new ImageIcon(MainFrame.checkingUrl("/balls/red-ball")),
             new ImageIcon(MainFrame.checkingUrl("/balls/sapphire-ball")),
             new ImageIcon(MainFrame.checkingUrl("/balls/yellow-ball")),
-
     };
-
-    public static final String[] COLORS = new String[]
-            {"black", "blue", "gray", "green", "pink", "purple", "red", "sapphire", "yellow"};
 
     public static final List<Cell> FREE_CELLS = new LinkedList<>();
 }
