@@ -1,5 +1,6 @@
 package com.game.robot.run;
 
+import javax.swing.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.List;
@@ -34,11 +35,14 @@ class ClickListener implements MouseListener {
     public void mouseClicked(MouseEvent e) {
         System.out.println("======================");
         System.out.println("Я кнопка, меня нажали");
-        clickCount++;
 
         setCell((Cell) e.getComponent() );
 
         getCell().containsImage = getCell().getIcon() != null;
+
+        if (getCell().containsImage) {
+            clickCount++;
+        }
 
         List<Cell> cells = GameConstants.CLICKED_CELLS;
 
@@ -46,62 +50,52 @@ class ClickListener implements MouseListener {
         System.out.println("getCell().containsImage: " + getCell().containsImage);
 
 
-
+        // если кликаем 1-й раз на ячейку с изображением
         if (clickCount == 1 && getCell().containsImage) {
+            cells.add(cell);
             getCell().isClicked = true;
             getCell().setBorder(GameConstants.RED_BORDER);
+        }
+
+        // если кликаем 2-й раз на НЕЁ ЖЕ
+        if (clickCount == 2 && getCell().containsImage) {
             cells.add(cell);
+            if (Objects.equals(cells.get(0), cells.get(1))) {
+                cells.remove(cells.get(1));
+                clickCount = 1;
+            }
         }
 
         System.out.println("clickCount = " + clickCount);
 
+        // если кликаем 2-й раз на ДРУГУЮ ячейку с изображенем
         if (clickCount == 2 && getCell().containsImage) {
             cells.add(cell);
 
             System.out.println("Objects.equals(cells.get(0), cells.get(1)) = "
                     + Objects.equals(cells.get(0), cells.get(1)));
 
-            clickCount = 0;
-            cells.clear();
+            if (!Objects.equals(cells.get(0), cells.get(1))) {
+                cells.get(0).setBorder(GameConstants.DEFAULT_BORDER);
+                cells.get(1).setBorder(GameConstants.RED_BORDER);
+                cells.clear();
+                cells.add(cell);
+                clickCount = 1;
+            }
         }
-
-//        System.out.println("cell.getBorder() = " + cell.getBorder().toString());
-//
-//        if (clickCount == 2) {
-//            GameConstants.CLICKED_CELLS.add(cell);
-//        }
-//
-//        if (GameConstants.CLICKED_CELLS.size() == 2) {
-//            List cells = GameConstants.CLICKED_CELLS;
-//            System.out.println("Objects.equals(cells.get(0), cells.get(1)) = "
-//                    + Objects.equals(cells.get(0), cells.get(1)));
-//
-//            if (Objects.equals(cells.get(0), cells.get(1))) {
-//                GameConstants.CLICKED_CELLS.get(0).setBorder(GameConstants.DEFAULT_BORDER);
-//            } else {
-//                GameConstants.CLICKED_CELLS.get(0).setBorder(GameConstants.DEFAULT_BORDER);
-//                GameConstants.CLICKED_CELLS.get(1).setBorder(GameConstants.RED_BORDER);
-//            }
-//
-//            cells.clear();
-//            clickCount = 0;
-//
-//        }
-
-
-//        if (Objects.equals(getCell(), this.cell) &&
-//                Objects.equals(getClickCount(), this.clickCount) ) {
-//
-//            if (this.cell.getIcon() != null) {
-//                this.getCell().setBorder(GameConstants.RED_BORDER);
-//                this.clickCount++;
-//            }
-//            if (this.clickCount == 2) {
-//                this.cell.setBorder(GameConstants.DEFAULT_BORDER);
-//                this.clickCount = 0;
-//            }
-//        }
-//
+        // если нажимаем 2-й раз на ПУСТУЮ ЯЧЕЙКУ
+        else if (!getCell().containsImage) {
+            Icon icon = cells.get(0).getIcon();
+            cells.add(cell);
+            cells.get(0).setBorder(GameConstants.DEFAULT_BORDER);
+            cells.get(0).setIcon(null);
+            cells.get(1).setBorder(GameConstants.RED_BORDER);
+            cells.get(1).setIcon(icon);
+            cells.clear();
+            cells.add(cell);
+            clickCount = 1;
+            System.out.println("cells.size() = " + cells.size());
+        }
     }
 
     @Override
