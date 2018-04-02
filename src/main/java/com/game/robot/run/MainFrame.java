@@ -43,6 +43,8 @@ public class MainFrame extends JFrame {
         southPanel.setBackground(Color.GREEN);
         southPanel.add(button2);
 
+        ClickListener clickListener = new ClickListener();
+
         for (int y = gridHeight-1; y >= 0; y--) {
             for (int x = 0; x < gridWidth; x++) {
 //                grid[x][y] = new JLabel("(" + (x + 1) + "," + (y + 1) + ")");
@@ -50,7 +52,7 @@ public class MainFrame extends JFrame {
                 grid[x][y].setBorder(lineBorder);
                 grid[x][y].setVerticalAlignment(SwingConstants.CENTER);
                 grid[x][y].setHorizontalAlignment(SwingConstants.CENTER);
-                grid[x][y].addMouseListener(new ClickListener());
+                grid[x][y].addMouseListener(clickListener);
                 grid[x][y].setBackground(Color.WHITE);
                 grid[x][y].setOpaque(true);
                 centerPanel.add(grid[x][y]); // add element at grid

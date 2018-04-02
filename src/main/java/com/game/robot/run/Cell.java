@@ -10,7 +10,6 @@ public class Cell extends JLabel {
 
     public int clickCount = 0;
     public boolean containsImage = false; // cell with or without image
-    public void doanything() {
-
-    }
+    public boolean isClicked = false; // cell clicked or not cliked
+    public void doanything() {}
 }
