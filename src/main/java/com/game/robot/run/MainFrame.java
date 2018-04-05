@@ -11,7 +11,7 @@ import java.net.URL;
 
 public class MainFrame extends JFrame {
 
-    protected static JLabel[][] grid;
+    private static JLabel[][] grid;
 
     public MainFrame(int frameWidth, int frameHeight, int gridWidth, int gridHeight) {
         setTitle(GameConstants.MAIN_FRAME_TITLE);
@@ -32,7 +32,7 @@ public class MainFrame extends JFrame {
             if (GameConstants.FREE_CELLS.size() < 3) {
                 System.out.println("End of game!");
             } else {
-                new RunLines().go();
+               RunLines.go();
             }
         });
 
@@ -46,17 +46,21 @@ public class MainFrame extends JFrame {
         ClickListener clickListener = new ClickListener();
 
         for (int y = gridHeight-1; y >= 0; y--) {
+            Cell createdCell;
             for (int x = 0; x < gridWidth; x++) {
-//                grid[x][y] = new JLabel("(" + (x + 1) + "," + (y + 1) + ")");
                 grid[x][y] = new Cell(); // create a new cell on grid
-                grid[x][y].setBorder(lineBorder);
-                grid[x][y].setVerticalAlignment(SwingConstants.CENTER);
-                grid[x][y].setHorizontalAlignment(SwingConstants.CENTER);
-                grid[x][y].addMouseListener(clickListener);
-                grid[x][y].setBackground(Color.WHITE);
-                grid[x][y].setOpaque(true);
-                centerPanel.add(grid[x][y]); // add element at grid
-                GameConstants.FREE_CELLS.add((Cell) grid[x][y]); // add element on List<Cell> FREE_CELLS
+                createdCell = (Cell) grid[x][y];
+                createdCell.setXx(x + 1);
+                createdCell.setYy(y + 1);
+//                createdCell.setText("(" + (x + 1) + "," + (y + 1) + ")");
+                createdCell.setBorder(lineBorder);
+                createdCell.setVerticalAlignment(SwingConstants.CENTER);
+                createdCell.setHorizontalAlignment(SwingConstants.CENTER);
+                createdCell.addMouseListener(clickListener);
+                createdCell.setBackground(Color.WHITE);
+                createdCell.setOpaque(true);
+                centerPanel.add(createdCell); // add element at grid
+                GameConstants.FREE_CELLS.add(createdCell); // add element on List<Cell> FREE_CELLS
             }
         }
 
