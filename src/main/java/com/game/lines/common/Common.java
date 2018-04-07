@@ -6,7 +6,7 @@ import com.game.lines.entity.Picture;
 import javax.swing.*;
 import java.awt.*;
 import java.net.URL;
-import java.util.LinkedList;
+import java.util.*;
 import java.util.List;
 
 /**
@@ -14,18 +14,6 @@ import java.util.List;
  */
 
 public class Common {
-
-    private static URL checkUrl(String resourcePath) {
-        resourcePath = resourcePath + ".png";
-        URL resourceUrl = Common.class.getResource(resourcePath);
-        if (resourceUrl == null) {
-            System.out.println("Could not find resource!");
-            resourceUrl = Common.class.getResource("/");
-        }
-        return resourceUrl;
-    }
-
-    public static List<Cell> FREE_CELLS = new LinkedList<>();
 
     public static final String MAIN_FRAME_TITLE = "Lines";
 
@@ -43,4 +31,32 @@ public class Common {
             new Picture(checkUrl("/balls/sapphire-ball")),
             new Picture(checkUrl("/balls/yellow-ball")),
     };
+
+    public static Map<String, Picture> imageIconMap() {
+        Map<String, Picture> map = new HashMap<>();
+        map.put("black", PICTURES[0]);
+        map.put("blue", PICTURES[1]);
+        map.put("gray", PICTURES[2]);
+        map.put("green", PICTURES[3]);
+        map.put("pink", PICTURES[4]);
+        map.put("purple", PICTURES[5]);
+        map.put("red", PICTURES[6]);
+        map.put("sapphire", PICTURES[7]);
+        map.put("yellow", PICTURES[8]);
+        return map;
+    }
+
+    private static URL checkUrl(String resourcePath) {
+        resourcePath = resourcePath + ".png";
+        URL resourceUrl = Common.class.getResource(resourcePath);
+        if (resourceUrl == null) {
+            System.out.println("Could not find resource!");
+            resourceUrl = Common.class.getResource("/");
+        }
+        return resourceUrl;
+    }
+
+    public static List<Cell> FREE_CELLS = new LinkedList<>();
+
+    public static Cell choosedCell;
 }

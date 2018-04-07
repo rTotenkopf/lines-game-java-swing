@@ -11,9 +11,9 @@ public class Cell extends JLabel {
 
     private int Xx; // coordinate X
     private int Yy; // coordinate Y
-    private int clickCount;
+    private int clickCount; // click counter for implementation of game logic
 
-    public boolean isClicked = false; // cell clicked or not cliked
+    private Picture picture; // image icon of this cell
 
     public void setXx(int xx) {
         this.Xx = xx;
@@ -40,7 +40,8 @@ public class Cell extends JLabel {
     }
 
     public void setClickCount(int clickCount) {
-        this.clickCount += clickCount % 3;
+        if (this.containsImage())
+            this.clickCount += clickCount % 3;
     }
 
     public int getClickCount() {
@@ -50,20 +51,17 @@ public class Cell extends JLabel {
         return clickCount % 3;
     }
 
+    public String getPictureColor() {
+        String iconAbsolutePath = this.getIcon().toString();
+        String[] pathArray = iconAbsolutePath.split("/");
+        String[] fileName = pathArray[pathArray.length - 1].split("[-]");
+        return fileName[0];
+    }
+
     // cell with or without image
     public boolean containsImage() {
         return this.getIcon() != null;
     }
-
-//    public boolean isClicked() {
-//        this.setFocus
-//    }
-
-//    public void setFocus() {
-//        if (this.isClicked && containsImage()) {
-//            this.setRedBorder();
-//        }
-//    }
 
     @Override
     public boolean equals(Object obj) {

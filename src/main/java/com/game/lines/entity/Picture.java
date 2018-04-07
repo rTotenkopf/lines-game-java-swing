@@ -1,7 +1,6 @@
 package com.game.lines.entity;
 
 import javax.swing.*;
-import java.awt.*;
 import java.net.URL;
 
 /**
@@ -10,14 +9,8 @@ import java.net.URL;
 
 public class Picture extends ImageIcon {
 
-
     public Picture(URL url) {
         super(url);
-    }
-
-    @Override
-    public Image getImage() {
-        return super.getImage();
     }
 
 }
