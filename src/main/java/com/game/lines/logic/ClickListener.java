@@ -13,8 +13,8 @@ import java.awt.event.MouseListener;
 
 public class ClickListener implements MouseListener {
 
-    private Cell anyCell;
-    private boolean flag;
+    private Cell previousCell;
+    private boolean cellWasMoved;
 
     @Override
     public void mouseClicked(MouseEvent e) {
@@ -28,15 +28,15 @@ public class ClickListener implements MouseListener {
 
         Cell choosedCell = (Cell) e.getComponent();
         choosedCell.setClickCount(1);
-        flag = false;
+        cellWasMoved = false;
 
-        if (anyCell != null && anyCell.containsImage() && !choosedCell.containsImage() &&
-                anyCell.getClickCount() == 1) {
+        if (previousCell != null && previousCell.containsImage() && !choosedCell.containsImage() &&
+                previousCell.getClickCount() == 1) {
             moveImageCell(choosedCell);
         }
-        if (anyCell != null && !(anyCell.equals(choosedCell) )) {
-            anyCell.setDefaultBorder();
-            anyCell.setClickCount(1);
+        if (previousCell != null && !(previousCell.equals(choosedCell) )) {
+            previousCell.setDefaultBorder();
+            previousCell.setClickCount(1);
         }
         if (choosedCell.containsImage()) {
             if (choosedCell.getClickCount() == 0) {
@@ -49,12 +49,12 @@ public class ClickListener implements MouseListener {
             }
         }
         System.out.println("choosedCell.getClickCount() = " + choosedCell.getClickCount());
-        if (flag) {
+        if (cellWasMoved) {
             choosedCell.setDefaultBorder();
             choosedCell.setClickCount(2);
-            anyCell = null;
+            previousCell = null;
         } else {
-            anyCell = choosedCell;
+            previousCell = choosedCell;
         }
     }
 
@@ -68,16 +68,16 @@ public class ClickListener implements MouseListener {
     public void mouseExited(MouseEvent e) {}
 
     private void moveImageCell(Cell choosed) {
-        System.out.println("equals: " + (anyCell.equals(choosed)) );
-        System.out.println("icon  : " + anyCell.getIcon());
+        System.out.println("equals: " + (previousCell.equals(choosed)) );
+        System.out.println("icon  : " + previousCell.getIcon());
 
-        String pictureColor = anyCell.getPictureColor();
+        String pictureColor = previousCell.getPictureColor();
         choosed.setIcon(Common.imageIconMap().get(pictureColor) );
-        anyCell.setIcon(null);
+        previousCell.setIcon(null);
 
-        Common.FREE_CELLS.add(anyCell);
+        Common.FREE_CELLS.add(previousCell);
         Common.FREE_CELLS.remove(choosed);
-        flag = true;
+        cellWasMoved = true;
         RunLines.go();
     }
 }

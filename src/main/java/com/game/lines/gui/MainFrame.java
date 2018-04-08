@@ -67,7 +67,6 @@ public class MainFrame extends JFrame {
                 Common.FREE_CELLS.add(createdCell); // add element on List<Cell> FREE_CELLS
             }
         }
-
         pack(); // set up of appropriate frame size
         setLocation(500, 100); // location of frame at the user screen
         setSize(frameWidth, frameHeight); // set up of frame size

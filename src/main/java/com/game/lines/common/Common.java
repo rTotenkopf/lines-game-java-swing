@@ -57,6 +57,4 @@ public class Common {
     }
 
     public static List<Cell> FREE_CELLS = new LinkedList<>();
-
-    public static Cell choosedCell;
 }

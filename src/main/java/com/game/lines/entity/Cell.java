@@ -42,6 +42,7 @@ public class Cell extends JLabel {
     public void setClickCount(int clickCount) {
         if (this.containsImage())
             this.clickCount += clickCount % 3;
+        else this.clickCount = 0;
     }
 
     public int getClickCount() {
