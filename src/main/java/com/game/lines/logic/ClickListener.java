@@ -50,9 +50,9 @@ public class ClickListener implements MouseListener {
             if (checkMoveAbility()) {
                 // Вызов метода в котором происходит перемещение изображения.
                 moveImageCell(choosedCell);
-                moveLogger.log(Level.INFO, "Ход выполен успешно.");
+                moveLogger.log(Level.INFO, "Cell move completed");
             } else {
-                moveLogger.log(Level.INFO, "Невозможно совершить ход.");
+                moveLogger.log(Level.INFO, "Cell move impossible");
             }
         }
         // При нажатии на ячейку, границы её выделяются красным цветом.
