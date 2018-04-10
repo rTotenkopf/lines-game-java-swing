@@ -6,6 +6,8 @@ import com.game.lines.entity.Cell;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * @author Eugene Ivanov on 31.03.18
@@ -18,6 +20,9 @@ public class ClickListener implements MouseListener {
     // и в положение true, если изображение ячейки было перемещено в другую ячейку игрового поля.
     private boolean pictureWasMoved;
 
+    private Logger clickLogger = Logger.getLogger(ClickListener.class.getName());
+    private Logger moveLogger = Logger.getLogger(ClickListener.class.getName());
+
     @Override
     public void mouseClicked(MouseEvent e) {}
 
@@ -28,8 +33,6 @@ public class ClickListener implements MouseListener {
     @Override
     public void mousePressed(MouseEvent e) {
         // Происходит событие нажатия, которое сохраняется в объекте MouseEvent.
-        System.out.println("======================");
-        System.out.println("Я кнопка, меня нажали");
         // Инициализируется выбранная ячейка игрового поля (по которой было нажатие мышью),
         // путём приведения типов Component к Сell (класс - наследник JLabel).
         Cell choosedCell = (Cell) e.getComponent();
@@ -43,8 +46,14 @@ public class ClickListener implements MouseListener {
         // изображение "перемещается" в пустую ячейку.
         if (previousCell != null && previousCell.containsImage() && !choosedCell.containsImage() &&
                 previousCell.getClickCount() == 1) {
-            // Вызов метода в котором происходит перемещение изображения.
-            moveImageCell(choosedCell);
+            // Вызов метода проверки возможности совершения хода.
+            if (checkMoveAbility()) {
+                // Вызов метода в котором происходит перемещение изображения.
+                moveImageCell(choosedCell);
+                moveLogger.log(Level.INFO, "Ход выполен успешно.");
+            } else {
+                moveLogger.log(Level.INFO, "Невозможно совершить ход.");
+            }
         }
         // При нажатии на ячейку, границы её выделяются красным цветом.
         // Если мы повторно нажимаем на ту же самую ячейку, то устанавливается стандартное выделение границ
@@ -64,9 +73,15 @@ public class ClickListener implements MouseListener {
                 choosedCell.setRedBorder();
             } else {
                 choosedCell.setDefaultBorder();
+                clickLogger.log(Level.INFO, "Cell released"
+                        + " { clickCount = " + choosedCell.getClickCount() + " }");
             }
         }
-        System.out.println("choosedCell.getClickCount() = " + choosedCell.getClickCount());
+        if (choosedCell.getClickCount() == 0)
+            clickLogger.info("Empty cell" + " { clickCount = " + choosedCell.getClickCount() + " }");
+        if (choosedCell.getClickCount() == 1 && !pictureWasMoved)
+            clickLogger.info("Cell choosed" + " { clickCount = " + choosedCell.getClickCount() + " }");
+
         // Если изображение ячейки было успешно перемещено, то границы той ячейки, куда оно было перемещено
         // выделяются по умолчанию, счетчик кликов инкрементируется на 2, т.е. ячейка становится не активной.
         // Таким образом, от игрока ожидается выбор новой ячейки для перемещения, а не перемещение той же самой
@@ -94,7 +109,6 @@ public class ClickListener implements MouseListener {
      * @param choosed - это ссылка на переменную экземпляра choosedCell - "ячейку", которая была нажата последней.
      */
     private void moveImageCell(Cell choosed) {
-        System.out.println("icon  : " + previousCell.getIcon());
         // Получаем изображение из "предыдущей" ячейки.
         String pictureColor = previousCell.getPictureColor();
         // Устанавливаем изображение в последнюю нажатую ячейку.
@@ -108,5 +122,9 @@ public class ClickListener implements MouseListener {
         pictureWasMoved = true;
         // Вызываем метод go() класса RunLines, который заполняет 3 свободных ячейки поля изображениями.
         RunLines.go();
+    }
+
+    private boolean checkMoveAbility() {
+        return true;
     }
 }
