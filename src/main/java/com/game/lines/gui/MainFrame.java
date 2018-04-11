@@ -17,6 +17,10 @@ public class MainFrame extends JFrame {
 
     private static JLabel[][] grid;
 
+    public static int getGridLength() {
+        return grid.length;
+    }
+
     public MainFrame(int frameWidth, int frameHeight, int gridWidth, int gridHeight) {
         setTitle(Common.MAIN_FRAME_TITLE);
         setIconImage(Common.MAIN_FRAME_ICON);
@@ -33,7 +37,7 @@ public class MainFrame extends JFrame {
         JButton startButton = new JButton("Следующий ход");
 
         startButton.addActionListener(e -> {
-            if (Common.FREE_CELLS.size() < 3) {
+            if (Common.freeCells.size() < 3) {
                 System.out.println("End of game!");
             } else {
                RunLines.go();
@@ -57,6 +61,7 @@ public class MainFrame extends JFrame {
                 createdCell.setXx(x + 1);
                 createdCell.setYy(y + 1);
 //                createdCell.setText("(" + (x + 1) + "," + (y + 1) + ")");
+                Common.cellMap.put(createdCell.getCoordinates(), createdCell);
                 createdCell.setBorder(lineBorder);
                 createdCell.setVerticalAlignment(SwingConstants.CENTER);
                 createdCell.setHorizontalAlignment(SwingConstants.CENTER);
@@ -64,7 +69,7 @@ public class MainFrame extends JFrame {
                 createdCell.setBackground(Color.WHITE);
                 createdCell.setOpaque(true);
                 centerPanel.add(createdCell); // add element at grid
-                Common.FREE_CELLS.add(createdCell); // add element on List<Cell> FREE_CELLS
+                Common.freeCells.add(createdCell); // add element on List<Cell> freeCells
             }
         }
         pack(); // set up of appropriate frame size

@@ -14,10 +14,10 @@ public class RunLines {
 
     public static void go() {
         for (int i = 0; i < 3; i++) {
-            Cell cell = getRandomCell(Common.FREE_CELLS);
+            Cell cell = getRandomCell(Common.freeCells);
             int index = (int) (Math.random() * Common.PICTURES.length);
             cell.setIcon(Common.PICTURES[index] );
-            Common.FREE_CELLS.remove(cell);
+            Common.freeCells.remove(cell);
         }
     }
 

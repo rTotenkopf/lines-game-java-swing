@@ -1,19 +1,20 @@
 package com.game.lines.entity;
 
+import com.game.lines.gui.MainFrame;
+import javafx.util.Pair;
+
 import javax.swing.*;
-import java.awt.*;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * @author Eugene Ivanov on 01.04.18
  */
 
-public class Cell extends JLabel {
+public class Cell extends AbstractCell {
 
     private int Xx; // Положение ячейки по оси координат X.
     private int Yy; // Положение ячейки по оси координат Y.
-    private int clickCount; // Счетчик кликов по ячейке (используется для реализации игровой логики).
-
-    private Picture picture; // Изображение ячейки.
 
     // Сеттеры и геттеры координат ячейки.
     public void setXx(int xx) {
@@ -32,48 +33,24 @@ public class Cell extends JLabel {
         return Yy;
     }
 
-    // Метод устанавливает стандартные границы ячейки, без выделения цветом (когда ячейка не активна).
-    public void setDefaultBorder() {
-        setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
-    }
-
-    // Метод устанавливает границы ячейки, выделяя их красным цветом (когда ячейка активна).
-    public void setRedBorder() {
-        setBorder(BorderFactory.createLineBorder(Color.RED, 5));
+    /**
+     * Реализация абстрактного метода.
+     * @return - объект Pair c координатами ячейки (x,y).
+     */
+    @Override
+    public Pair<Integer, Integer> getCoordinates() {
+        return new Pair<>(getXx(), getYy());
     }
 
     /**
-     * Метод устанавливает значение счетчика кликов от 0 до 2.
-     * 0 - ячейка пуста, изображение отсутствует.
-     * 1 - ячейка с изображением выделена (активна).
-     * 2 - ячейка с изображением сброшена (не активна).
-     * @param clickCount - счетчик кликов.
+     * Реализация абстрактного метода
+     * @return - список ячеек, находящихся по соседству данной ячейки.
      */
-    public void setClickCount(int clickCount) {
-        if (this.containsImage())
-            this.clickCount += clickCount % 3;
-        else this.clickCount = 0;
-    }
-
-    // Метод возвращает значение счетчика кликов.
-    public int getClickCount() {
-        if (clickCount == 3) {
-            clickCount = 1;
-        }
-        return clickCount % 3;
-    }
-
-    // Метод возвращает String, содержащий название цвета изображения в ячейке.
-    public String getPictureColor() {
-        String iconAbsolutePath = this.getIcon().toString();
-        String[] pathArray = iconAbsolutePath.split("/");
-        String[] fileName = pathArray[pathArray.length - 1].split("[-]");
-        return fileName[0];
-    }
-
-    // Метод возвращает true или false в зависимости есть ли изображение в ячейке.
-    public boolean containsImage() {
-        return this.getIcon() != null;
+    @Override
+    public List<? extends JLabel> getNeigbors() {
+        List<Cell> neighborsList = new LinkedList<>();
+        int lenghtOfGridSide = MainFrame.getGridLength();
+        return null;
     }
 
     // Переопределение методов equals() и hashCode().
@@ -82,7 +59,7 @@ public class Cell extends JLabel {
         boolean value = false;
         if (!(obj instanceof JButton)) {
             Cell other = (Cell) obj;
-            value = this.getXx() == other.getXx() && this.getYy() == other.getYy();
+            value = (this.getXx() == other.getXx() && this.getYy() == other.getYy() );
         }
         return value;
     }

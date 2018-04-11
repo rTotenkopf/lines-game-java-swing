@@ -12,5 +12,4 @@ public class Picture extends ImageIcon {
     public Picture(URL url) {
         super(url);
     }
-
 }

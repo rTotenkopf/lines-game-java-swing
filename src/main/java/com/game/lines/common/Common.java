@@ -2,6 +2,7 @@ package com.game.lines.common;
 
 import com.game.lines.entity.Cell;
 import com.game.lines.entity.Picture;
+import javafx.util.Pair;
 
 import javax.swing.*;
 import java.awt.*;
@@ -19,6 +20,8 @@ public class Common {
 
     public static final Image MAIN_FRAME_ICON = new ImageIcon(
             checkUrl("/food/bananas")).getImage();
+
+    public static final JLabel[][] GRID_9X9 = new JLabel[9][9];
 
     public static final Picture[] PICTURES = new Picture[] {
             new Picture(checkUrl("/balls/black-ball")),
@@ -46,6 +49,8 @@ public class Common {
         return map;
     }
 
+    public static Map<Pair<Integer, Integer>, Cell> cellMap = new HashMap<>();
+
     private static URL checkUrl(String resourcePath) {
         resourcePath = resourcePath + ".png";
         URL resourceUrl = Common.class.getResource(resourcePath);
@@ -56,5 +61,5 @@ public class Common {
         return resourceUrl;
     }
 
-    public static List<Cell> FREE_CELLS = new LinkedList<>();
+    public static List<Cell> freeCells = new LinkedList<>();
 }
