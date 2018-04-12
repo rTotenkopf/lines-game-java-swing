@@ -1,7 +1,6 @@
 package com.game.lines.common;
 
 import com.game.lines.entity.Cell;
-import com.game.lines.entity.Picture;
 import javafx.util.Pair;
 
 import javax.swing.*;
@@ -23,20 +22,20 @@ public class Common {
 
     public static final JLabel[][] GRID_9X9 = new JLabel[9][9];
 
-    public static final Picture[] PICTURES = new Picture[] {
-            new Picture(checkUrl("/balls/black-ball")),
-            new Picture(checkUrl("/balls/blue-ball")),
-            new Picture(checkUrl("/balls/gray-ball")),
-            new Picture(checkUrl("/balls/green-ball")),
-            new Picture(checkUrl("/balls/pink-ball")),
-            new Picture(checkUrl("/balls/purple-ball")),
-            new Picture(checkUrl("/balls/red-ball")),
-            new Picture(checkUrl("/balls/sapphire-ball")),
-            new Picture(checkUrl("/balls/yellow-ball")),
+    public static final ImageIcon[] PICTURES = new ImageIcon[] {
+            new ImageIcon(checkUrl("/balls/black-ball")),
+            new ImageIcon(checkUrl("/balls/blue-ball")),
+            new ImageIcon(checkUrl("/balls/gray-ball")),
+            new ImageIcon(checkUrl("/balls/green-ball")),
+            new ImageIcon(checkUrl("/balls/pink-ball")),
+            new ImageIcon(checkUrl("/balls/purple-ball")),
+            new ImageIcon(checkUrl("/balls/red-ball")),
+            new ImageIcon(checkUrl("/balls/sapphire-ball")),
+            new ImageIcon(checkUrl("/balls/yellow-ball")),
     };
 
-    public static Map<String, Picture> imageIconMap() {
-        Map<String, Picture> map = new HashMap<>();
+    public static Map<String, ImageIcon> imageIconMap() {
+        Map<String, ImageIcon> map = new HashMap<>();
         map.put("black", PICTURES[0]);
         map.put("blue", PICTURES[1]);
         map.put("gray", PICTURES[2]);
