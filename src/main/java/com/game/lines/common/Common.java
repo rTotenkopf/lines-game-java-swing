@@ -60,6 +60,4 @@ public class Common {
         }
         return resourceUrl;
     }
-
-//    public static List<Cell> freeCells = new LinkedList<>();
 }

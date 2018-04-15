@@ -16,14 +16,7 @@ import java.awt.*;
 public class MainFrame extends JFrame {
 
     // Сетка/игровое поле
-    private static JLabel[][] grid;
-
-    /**
-     * @return длина стороны сетки/игрового поля.
-     */
-    public static int getGridLength() {
-        return grid.length;
-    }
+    public static JLabel[][] grid;
 
     // Конструктор класса, отвечающего за создание графического интерфейса.
     public MainFrame(int frameWidth, int frameHeight, int gridWidth, int gridHeight) {

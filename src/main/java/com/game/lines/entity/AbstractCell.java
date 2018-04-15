@@ -1,5 +1,6 @@
 package com.game.lines.entity;
 
+import com.game.lines.gui.MainFrame;
 import javafx.util.Pair;
 
 import javax.swing.*;
@@ -16,6 +17,13 @@ abstract class AbstractCell extends JLabel implements Clickable {
     // т.к. данный класс или его потомки должны реализовать методы интерфейса-слушателя.
     AbstractCell() {
         addMouseListener(this);
+    }
+
+    /**
+     * @return длина стороны сетки/игрового поля.
+     */
+    public static int getGridLength() {
+        return MainFrame.grid.length;
     }
 
     /**

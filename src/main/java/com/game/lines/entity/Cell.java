@@ -103,7 +103,7 @@ public class Cell extends AbstractCell {
     @Override
     public List<? extends JLabel> getNeigbors() {
         List<Cell> neighborsList = new LinkedList<>();
-        int lengthOfGridSide = MainFrame.getGridLength();
+        int lengthOfGridSide = getGridLength();
         System.out.println("color of image cell = " + getImageColor());
         System.out.println("lenghtOfGridSide = " + lengthOfGridSide);
         return null;
