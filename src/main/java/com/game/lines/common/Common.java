@@ -1,6 +1,7 @@
 package com.game.lines.common;
 
 import com.game.lines.entity.Cell;
+import com.game.lines.entity.State;
 import javafx.util.Pair;
 
 import javax.swing.*;
@@ -34,7 +35,7 @@ public class Common {
             new ImageIcon(checkUrl("/balls/yellow-ball")),
     };
 
-    public static Map<String, ImageIcon> imageIconMap() {
+    public static Map<String, ImageIcon> picturesMap() {
         Map<String, ImageIcon> map = new HashMap<>();
         map.put("black", PICTURES[0]);
         map.put("blue", PICTURES[1]);
@@ -60,5 +61,5 @@ public class Common {
         return resourceUrl;
     }
 
-    public static List<Cell> freeCells = new LinkedList<>();
+//    public static List<Cell> freeCells = new LinkedList<>();
 }

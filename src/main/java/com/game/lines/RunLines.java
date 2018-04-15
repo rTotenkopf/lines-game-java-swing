@@ -2,6 +2,7 @@ package com.game.lines;
 
 import com.game.lines.entity.Cell;
 import com.game.lines.common.Common;
+import com.game.lines.entity.State;
 import com.game.lines.gui.MainFrame;
 
 import java.util.List;
@@ -14,10 +15,11 @@ public class RunLines {
 
     public static void go() {
         for (int i = 0; i < 3; i++) {
-            Cell cell = getRandomCell(Common.freeCells);
+            Cell cell = getRandomCell(Cell.emptyCells);
             int index = (int) (Math.random() * Common.PICTURES.length);
             cell.setIcon(Common.PICTURES[index] );
-            Common.freeCells.remove(cell);
+            cell.setState(State.RELEASED);
+            Cell.emptyCells.remove(cell);
         }
     }
 
