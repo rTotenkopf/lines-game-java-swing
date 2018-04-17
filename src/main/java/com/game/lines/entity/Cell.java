@@ -2,7 +2,6 @@ package com.game.lines.entity;
 
 import com.game.lines.RunLines;
 import com.game.lines.common.Common;
-import com.game.lines.gui.MainFrame;
 import javafx.util.Pair;
 
 import javax.swing.*;
@@ -100,18 +99,63 @@ public class Cell extends AbstractCell {
      * Реализация абстрактного метода.
      * @return список ячеек, находящихся по соседству данной ячейки.
      */
-    @Override
-    public List<? extends JLabel> getNeigbors() {
-        List<Cell> neighborsList = new LinkedList<>();
-        int lengthOfGridSide = getGridLength();
-        System.out.println("color of image cell = " + getImageColor());
-        System.out.println("lenghtOfGridSide = " + lengthOfGridSide);
-        return null;
+    public List<? extends JLabel> getNeighbors() {
+        List<Cell> neighborsList = new ArrayList<>();
+        int gridLength = getGridLength();
+        // Поиск соседей для ячеек, располагающихся не у края поля.
+        if ( (getXx() > 1 && getXx() < gridLength) && (getYy() > 1 && getYy() < gridLength) ) {
+            neighborsList.add(Common.cellMap.get(new Pair<>(getXx(), getYy() - 1) ));
+            neighborsList.add(Common.cellMap.get(new Pair<>(getXx(), getYy() + 1) ));
+            neighborsList.add(Common.cellMap.get(new Pair<>(getXx() - 1, getYy()) ));
+            neighborsList.add(Common.cellMap.get(new Pair<>(getXx() + 1, getYy()) ));
+        }
+        // Поиск соседей для ячеек, занимающих крайний нижний или крайний верхний ряд,
+        // (за исключением крайних правой и левой ячеек).
+        else if ( getXx() > 1 && getXx() < gridLength ) {
+            neighborsList.add(Common.cellMap.get(new Pair<>(getXx() - 1, getYy()) ));
+            neighborsList.add(Common.cellMap.get(new Pair<>(getXx() + 1, getYy()) ));
+            if ( getYy() == 1 ) {
+                neighborsList.add(Common.cellMap.get(new Pair<>(getXx(), getYy() + 1)));
+            } else if ( getYy() == gridLength ) {
+                neighborsList.add(Common.cellMap.get(new Pair<>(getXx(), getYy() - 1)));
+            }
+        }
+        // Поиск соседей для ячеек, занимающих крайний левый и крайний правый ряд,
+        // (за исключением крайних нижней и верхней ячеек).
+        else if ( getYy() > 1 && getYy() < gridLength ) {
+            neighborsList.add(Common.cellMap.get(new Pair<>(getXx(), getYy() + 1) ));
+            neighborsList.add(Common.cellMap.get(new Pair<>(getXx(), getYy() - 1) ));
+            if ( getXx() == 1 ) {
+                neighborsList.add(Common.cellMap.get(new Pair<>(getXx() + 1, getYy()) ));
+            } else if ( getXx() == gridLength ) {
+                neighborsList.add(Common.cellMap.get(new Pair<>(getXx() - 1, getYy()) ));
+            }
+        }
+        // Поиск соседей для ячеек, находящихся "в углах" игрового поля.
+        else if ( getXx() == 1 ) {
+            neighborsList.add(Common.cellMap.get(new Pair<>(getXx() + 1, getYy()) ));
+            if ( getYy() == 1 ) {
+                neighborsList.add(Common.cellMap.get(new Pair<>(getXx(), getYy() + 1) ));
+            } else if ( getYy() == gridLength ) {
+                neighborsList.add(Common.cellMap.get(new Pair<>(getXx(), getYy() - 1) ));
+            }
+        } else if ( getXx() == gridLength ) {
+            neighborsList.add(Common.cellMap.get(new Pair<>(getXx() - 1, getYy()) ));
+            if ( getYy() == 1 ) {
+                neighborsList.add(Common.cellMap.get(new Pair<>(getXx(), getYy() + 1) ));
+            } else if (getYy() == gridLength) {
+                neighborsList.add(Common.cellMap.get(new Pair<>(getXx(), getYy() - 1) ));
+            }
+        }
+        System.out.println("neighborsList.size() = " + neighborsList.size());
+//        neighborsList.forEach(e -> e.setBackground(Color.YELLOW));
+        return neighborsList;
     }
 
     @Override
     public void mousePressed(MouseEvent e) {
         Cell currentCell = this;
+        currentCell.getNeighbors();
         // В зависимости от состояние нажатой ячейки, выполняется определенный код:
         switch ( currentCell.getState() ) {
             // Если ячейка выбрана (выделена цветом), то при нажатии на неё, она деактивируется.

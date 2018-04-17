@@ -40,7 +40,7 @@ abstract class AbstractCell extends JLabel implements Clickable {
 
     public abstract Pair<Integer, Integer> getCoordinates();
 
-    public abstract List<? extends JLabel> getNeigbors();
+    public abstract List<? extends JLabel> getNeighbors();
 
     @Override
     public void mouseClicked(MouseEvent e) { }
