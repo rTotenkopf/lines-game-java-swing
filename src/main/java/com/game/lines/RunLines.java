@@ -2,7 +2,7 @@ package com.game.lines;
 
 import com.game.lines.entity.Cell;
 import com.game.lines.common.Common;
-import com.game.lines.entity.State;
+import com.game.lines.logic.State;
 import com.game.lines.gui.MainFrame;
 
 import java.util.List;

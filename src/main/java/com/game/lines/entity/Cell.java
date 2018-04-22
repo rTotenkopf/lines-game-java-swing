@@ -2,6 +2,7 @@ package com.game.lines.entity;
 
 import com.game.lines.RunLines;
 import com.game.lines.common.Common;
+import com.game.lines.logic.State;
 import javafx.util.Pair;
 
 import javax.swing.*;
@@ -97,7 +98,7 @@ public class Cell extends AbstractCell {
 
     /**
      * Реализация абстрактного метода.
-     * @return список ячеек, находящихся по соседству данной ячейки.
+     * @return список ячеек, находящихся по соседству от данной ячейки.
      */
     public List<? extends JLabel> getNeighbors() {
         List<Cell> neighborsList = new ArrayList<>();

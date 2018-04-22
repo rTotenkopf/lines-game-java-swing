@@ -1,4 +1,4 @@
-package com.game.lines.entity;
+package com.game.lines.logic;
 
 import java.awt.event.MouseListener;
 

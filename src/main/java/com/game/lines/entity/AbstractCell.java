@@ -1,6 +1,7 @@
 package com.game.lines.entity;
 
 import com.game.lines.gui.MainFrame;
+import com.game.lines.logic.Clickable;
 import javafx.util.Pair;
 
 import javax.swing.*;
@@ -27,7 +28,7 @@ abstract class AbstractCell extends JLabel implements Clickable {
     }
 
     /**
-     * Возвращаемое значение будет использоваться для маппинга объекта изображения по части названия файла
+     * Возвращаемое значение будет использоваться для маппинга изображения по части названия файла
      * этого изображения, содержащей название цвета.
      * @return String, содержащий название цвета картинки, отображаемой в ячейке.
      */

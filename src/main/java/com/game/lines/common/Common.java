@@ -1,14 +1,12 @@
 package com.game.lines.common;
 
 import com.game.lines.entity.Cell;
-import com.game.lines.entity.State;
 import javafx.util.Pair;
 
 import javax.swing.*;
 import java.awt.*;
 import java.net.URL;
 import java.util.*;
-import java.util.List;
 
 /**
  * @author Eugene Ivanov on 01.04.18
