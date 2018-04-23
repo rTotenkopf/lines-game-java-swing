@@ -1,7 +1,7 @@
 package com.game.lines.entity;
 
-import com.game.lines.RunLines;
 import com.game.lines.common.Common;
+import com.game.lines.logic.Playable;
 import com.game.lines.logic.State;
 import javafx.util.Pair;
 
@@ -177,9 +177,8 @@ public class Cell extends AbstractCell {
             case EMPTY:
                 if ( !Objects.isNull(previousCell) && (previousCell.getState() == State.SELECTED) ) {
                     previousCell.release();
-                    moveImageCell(currentCell);
-                    // Вызов метода go() класса RunLines, который заполняет 3 свободных ячейки изображениями.
-                    RunLines.go();
+                    // Выполнение игрового хода.
+                    Playable.moveImageCell(previousCell, currentCell);
                 }
                 // Обнуляем предыдущую ячейку.
                 previousCell = null;
@@ -188,25 +187,6 @@ public class Cell extends AbstractCell {
         if ( this.state == State.SELECTED) { cellLogger.info("Cell selected"); }
         if ( this.state == State.RELEASED) { cellLogger.info("Cell released"); }
         if ( this.state == State.EMPTY )   { cellLogger.info("Cell is empty"); }
-    }
-
-    /**
-     * Ход, осуществляемый игроком, при котором происходит перемещение изображения из одной ячейки в другую.
-     * @param currentCell нажатая/кликнутая пустая ячейка на игровом поле.
-     */
-    private void moveImageCell(Cell currentCell) {
-        // Получаем изображение из предыдущей ячейки.
-        String pictureColor = previousCell.getImageColor();
-        // Устанавливаем изображение в пустую ячейку.
-        currentCell.setIcon(Common.picturesMap().get(pictureColor) );
-        // Удаляем изображение из предыдущей ячейки.
-        previousCell.setIcon(null);
-        // Меняем состояния предыдущей и текущей ячеек.
-        previousCell.setState(State.EMPTY);
-        currentCell.setState(State.RELEASED);
-        // Добавляем предыдущую ячейку в список свободных ячеек и удаляем из этого списка текущую ячейку.
-        Cell.emptyCells.add(previousCell);
-        Cell.emptyCells.remove(currentCell);
     }
 
     // Переопределение методов equals() и hashCode().

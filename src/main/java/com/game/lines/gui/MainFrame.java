@@ -1,8 +1,8 @@
 package com.game.lines.gui;
 
-import com.game.lines.*;
 import com.game.lines.entity.Cell;
 import com.game.lines.common.Common;
+import com.game.lines.logic.Playable;
 import com.game.lines.logic.State;
 
 import javax.swing.*;
@@ -38,7 +38,7 @@ public class MainFrame extends JFrame {
             if (Cell.emptyCells.size() < 3) {
                 System.out.println("End of game!");
             } else {
-               RunLines.go();
+                Playable.generateRandomImages();
             }
         });
         // Пока просто кнопка..
