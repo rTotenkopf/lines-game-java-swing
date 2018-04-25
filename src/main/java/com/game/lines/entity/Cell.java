@@ -1,7 +1,6 @@
 package com.game.lines.entity;
 
-import com.game.lines.common.Common;
-import com.game.lines.logic.Playable;
+import com.game.lines.logic.Play;
 import com.game.lines.logic.State;
 import javafx.util.Pair;
 
@@ -18,10 +17,13 @@ import java.util.logging.Logger;
 
 public class Cell extends AbstractCell {
 
-    // Добавляем логгер.
+    // Добавляем логгер ячейки.
     private Logger cellLogger = Logger.getLogger(Cell.class.getName());
 
-    // Список пустых ячеек (State.EMPTY), которые могут быть заполнены изображениями.
+    // Карта ячеек, где Ключ - координаты, а Значение - ячейка.
+    public static Map<Pair<Integer, Integer>, Cell> cellMap = new HashMap<>();
+
+    // Список пустых ячеек (this.State == State.EMPTY), которые могут быть заполнены изображениями.
     public static List<Cell> emptyCells = new LinkedList<>();
 
     // Предыдущая нажатая ячейка.
@@ -59,7 +61,7 @@ public class Cell extends AbstractCell {
     /**
      * @return true или false в зависимости есть ли изображение в ячейке.
      */
-    private boolean containsImage() {
+    public boolean containsImage() {
         return this.getIcon() != null;
     }
 
@@ -100,55 +102,55 @@ public class Cell extends AbstractCell {
      * Реализация абстрактного метода.
      * @return список ячеек, находящихся по соседству от данной ячейки.
      */
-    public List<? extends JLabel> getNeighbors() {
+    public List<Cell> getNeighbors() {
         List<Cell> neighborsList = new ArrayList<>();
         int gridLength = getGridLength();
         // Поиск соседей для ячеек, располагающихся не у края поля.
         if ( (getXx() > 1 && getXx() < gridLength) && (getYy() > 1 && getYy() < gridLength) ) {
-            neighborsList.add(Common.cellMap.get(new Pair<>(getXx(), getYy() - 1) ));
-            neighborsList.add(Common.cellMap.get(new Pair<>(getXx(), getYy() + 1) ));
-            neighborsList.add(Common.cellMap.get(new Pair<>(getXx() - 1, getYy()) ));
-            neighborsList.add(Common.cellMap.get(new Pair<>(getXx() + 1, getYy()) ));
+            neighborsList.add(cellMap.get(new Pair<>(getXx(), getYy() - 1) ));
+            neighborsList.add(cellMap.get(new Pair<>(getXx(), getYy() + 1) ));
+            neighborsList.add(cellMap.get(new Pair<>(getXx() - 1, getYy()) ));
+            neighborsList.add(cellMap.get(new Pair<>(getXx() + 1, getYy()) ));
         }
         // Поиск соседей для ячеек, занимающих крайний нижний или крайний верхний ряд,
         // (за исключением крайних правой и левой ячеек).
         else if ( getXx() > 1 && getXx() < gridLength ) {
-            neighborsList.add(Common.cellMap.get(new Pair<>(getXx() - 1, getYy()) ));
-            neighborsList.add(Common.cellMap.get(new Pair<>(getXx() + 1, getYy()) ));
+            neighborsList.add(cellMap.get(new Pair<>(getXx() - 1, getYy()) ));
+            neighborsList.add(cellMap.get(new Pair<>(getXx() + 1, getYy()) ));
             if ( getYy() == 1 ) {
-                neighborsList.add(Common.cellMap.get(new Pair<>(getXx(), getYy() + 1)));
+                neighborsList.add(cellMap.get(new Pair<>(getXx(), getYy() + 1)));
             } else if ( getYy() == gridLength ) {
-                neighborsList.add(Common.cellMap.get(new Pair<>(getXx(), getYy() - 1)));
+                neighborsList.add(cellMap.get(new Pair<>(getXx(), getYy() - 1)));
             }
         }
         // Поиск соседей для ячеек, занимающих крайний левый и крайний правый ряд,
         // (за исключением крайних нижней и верхней ячеек).
         else if ( getYy() > 1 && getYy() < gridLength ) {
-            neighborsList.add(Common.cellMap.get(new Pair<>(getXx(), getYy() + 1) ));
-            neighborsList.add(Common.cellMap.get(new Pair<>(getXx(), getYy() - 1) ));
+            neighborsList.add(cellMap.get(new Pair<>(getXx(), getYy() + 1) ));
+            neighborsList.add(cellMap.get(new Pair<>(getXx(), getYy() - 1) ));
             if ( getXx() == 1 ) {
-                neighborsList.add(Common.cellMap.get(new Pair<>(getXx() + 1, getYy()) ));
+                neighborsList.add(cellMap.get(new Pair<>(getXx() + 1, getYy()) ));
             } else if ( getXx() == gridLength ) {
-                neighborsList.add(Common.cellMap.get(new Pair<>(getXx() - 1, getYy()) ));
+                neighborsList.add(cellMap.get(new Pair<>(getXx() - 1, getYy()) ));
             }
         }
         // Поиск соседей для ячеек, находящихся "в углах" игрового поля.
         else if ( getXx() == 1 ) {
-            neighborsList.add(Common.cellMap.get(new Pair<>(getXx() + 1, getYy()) ));
+            neighborsList.add(cellMap.get(new Pair<>(getXx() + 1, getYy()) ));
             if ( getYy() == 1 ) {
-                neighborsList.add(Common.cellMap.get(new Pair<>(getXx(), getYy() + 1) ));
+                neighborsList.add(cellMap.get(new Pair<>(getXx(), getYy() + 1) ));
             } else if ( getYy() == gridLength ) {
-                neighborsList.add(Common.cellMap.get(new Pair<>(getXx(), getYy() - 1) ));
+                neighborsList.add(cellMap.get(new Pair<>(getXx(), getYy() - 1) ));
             }
         } else if ( getXx() == gridLength ) {
-            neighborsList.add(Common.cellMap.get(new Pair<>(getXx() - 1, getYy()) ));
+            neighborsList.add(cellMap.get(new Pair<>(getXx() - 1, getYy()) ));
             if ( getYy() == 1 ) {
-                neighborsList.add(Common.cellMap.get(new Pair<>(getXx(), getYy() + 1) ));
+                neighborsList.add(cellMap.get(new Pair<>(getXx(), getYy() + 1) ));
             } else if (getYy() == gridLength) {
-                neighborsList.add(Common.cellMap.get(new Pair<>(getXx(), getYy() - 1) ));
+                neighborsList.add(cellMap.get(new Pair<>(getXx(), getYy() - 1) ));
             }
         }
-        System.out.println("neighborsList.size() = " + neighborsList.size());
+//        System.out.println("neighborsList.size() = " + neighborsList.size());
 //        neighborsList.forEach(e -> e.setBackground(Color.YELLOW));
         return neighborsList;
     }
@@ -162,6 +164,7 @@ public class Cell extends AbstractCell {
             // Если ячейка выбрана (выделена цветом), то при нажатии на неё, она деактивируется.
             case SELECTED:
                 currentCell.release();
+                cellLogger.info("Cell released");
                 break;
             // Если ячейка не выбрана, то она выбирается (выделяется цветом), предыдущая ячейка,
             // в свою очередь, деактивируется.
@@ -170,6 +173,7 @@ public class Cell extends AbstractCell {
                     previousCell.release();
                 }
                 currentCell.select();
+                cellLogger.info("Cell selected");
                 break;
             // Если ячейка пуста, то проверяется состояние предыдущей ячейки.
             // Если предыдущая ячейка была выбрана, то изображение из неё переносится в текущую (пустую) ячейку.
@@ -178,14 +182,14 @@ public class Cell extends AbstractCell {
                 if ( !Objects.isNull(previousCell) && (previousCell.getState() == State.SELECTED) ) {
                     previousCell.release();
                     // Выполнение игрового хода.
-                    Playable.moveImageCell(previousCell, currentCell);
+                    Play.getMove(previousCell, currentCell);
                 }
                 // Обнуляем предыдущую ячейку.
                 previousCell = null;
                 break;
         }
-        if ( this.state == State.SELECTED) { cellLogger.info("Cell selected"); }
-        if ( this.state == State.RELEASED) { cellLogger.info("Cell released"); }
+//        if ( this.state == State.SELECTED) { cellLogger.info("Cell selected"); }
+//        if ( this.state == State.RELEASED) { cellLogger.info("Cell released"); }
         if ( this.state == State.EMPTY )   { cellLogger.info("Cell is empty"); }
     }
 

@@ -2,7 +2,7 @@ package com.game.lines.gui;
 
 import com.game.lines.entity.Cell;
 import com.game.lines.common.Common;
-import com.game.lines.logic.Playable;
+import com.game.lines.logic.Play;
 import com.game.lines.logic.State;
 
 import javax.swing.*;
@@ -34,11 +34,11 @@ public class MainFrame extends JFrame {
 
         JButton startButton = new JButton("Следующий ход"); // Кнопка нового хода.
         // Слушатель кнопки.
-        startButton.addActionListener(e -> {
+        startButton.addActionListener( e -> {
             if (Cell.emptyCells.size() < 3) {
                 System.out.println("End of game!");
             } else {
-                Playable.generateRandomImages();
+                Play.getBalls();
             }
         });
         // Пока просто кнопка..
@@ -57,7 +57,7 @@ public class MainFrame extends JFrame {
                 createdCell.setXx(x + 1); // Установка координаты Х.
                 createdCell.setYy(y + 1); // Установка координаты Y.
 //                createdCell.setText("(" + (x + 1) + "," + (y + 1) + ")");
-                Common.cellMap.put(createdCell.getCoordinates(), createdCell); // Добавление ячейки в карту ячеек.
+                Cell.cellMap.put(createdCell.getCoordinates(), createdCell); // Добавление ячейки в карту ячеек.
                 createdCell.setBorder(lineBorder); // Установка границ ячейки.
                 createdCell.setVerticalAlignment(SwingConstants.CENTER); // Установка вертикальной центровки.
                 createdCell.setHorizontalAlignment(SwingConstants.CENTER); // Установка горизонтальной центровки.
