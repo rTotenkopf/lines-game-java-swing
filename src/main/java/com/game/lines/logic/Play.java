@@ -3,11 +3,7 @@ package com.game.lines.logic;
 import com.game.lines.common.Common;
 import com.game.lines.entity.Cell;
 
-import java.util.Collection;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.function.Predicate;
+import java.util.*;
 import java.util.logging.Logger;
 
 /**
@@ -18,36 +14,41 @@ public class Play {
 
     // Добавляем логгер игрового процесса.
     private Logger playLogger = Logger.getLogger(Play.class.getName());
+    // Ячейка, изображение которой необходимо переместить в пустую ячейку, также является первой вершиной
+    // или узлом графа ячеек.
+    private Cell node;
+    // Ячейка, в которую перемещаем изображение.
+    private Cell target;
+    // Список или массив соседних ячеек, для какой-либо ячейки.
+    private List<Cell> neighbors;
+    // Связанный список ячеек для реализации проверки возможности хода.
+    private List<Cell> visited = new LinkedList<>();
+    // Очередь, основанная на связанном списке, необходима для реализации проверки возможности хода.
+    private Queue<Cell> queue = new LinkedList<>();
 
-    private Cell previousCell;
-    private Cell currentCell;
-    private List<Cell> neighborsOfCell;
-    private Set<Cell> allEmptyNeighborsCells = new LinkedHashSet<>();
-
+    // Конструктор класса по умолчанию.
     private Play() {
         generateRandomImages();
     }
 
+
     private Play(Cell previousCell, Cell currentCell) {
-        this.previousCell = previousCell;
-        this.currentCell = currentCell;
-        this.neighborsOfCell = previousCell.getNeighbors();
+        this.node = previousCell;
+        this.target = currentCell;
+        this.neighbors = previousCell.getNeighbors();
 
-        int i = (int) neighborsOfCell.stream().filter(e -> e.getState() == State.EMPTY).count();
+        int i = (int) neighbors.stream().filter(e -> e.getState() == State.EMPTY).count();
 
-        Predicate<Integer> cellUnblocked = e -> e != 0;
-
-        if (cellUnblocked.test(i)) {
+        if (i != 0) {
             moveImageCell(previousCell, currentCell);
             generateRandomImages();
             playLogger.severe("Move complete.");
         } else {
-            playLogger.severe("Move was blocked, because empty neighbors = { " + i + " }");
+            playLogger.severe("Move was blocked, because empty children = { " + i + " }");
         }
 
-//        checkAbilityToMove( neighborsOfCell );
-
-        Common.emptyCells.clear();
+        visited.add( node );
+        traverse( node );
     }
 
     public static void getBalls() {
@@ -58,32 +59,23 @@ public class Play {
         new Play( previousCell, currentCell );
     }
 
-    /**
-     * Проверка возможности хода (перемещения изображения из непустой ячейки в пустую).
-     * Если пустая ячейка, в которую игрок хочет переместить изображение, "заблокирована" другими ячейками
-     * содержащими изображения, то ход невозможен.
-     * @param setOfCells множество ячеек.
-     */
-    private void checkAbilityToMove(Collection<Cell> setOfCells) {
-        Set<Cell> emptyCellSet = new LinkedHashSet<>();
+    private void traverse(Cell node) {
+        // Добавляем ячейку-родителя в конец очереди.
+        queue.offer( node );
+        // Получаем потомков, находящихся по соседству от ячейки-родителя.
+        List<Cell> children = node.getNeighbors();
 
-        setOfCells.forEach( e -> {
-            if (e.getState() == State.EMPTY) {
-                allEmptyNeighborsCells.add(e);
-
-                emptyCellSet.add(e);
-                if (allEmptyNeighborsCells.size() < Cell.emptyCells.size()) {
-                    decomposition(e);
-                }
+        // Если статус потомка "пустой", то добавляем её в список посещенных ячеек и в конец очереди.
+        for (Cell child : children) {
+            if (child.getState() == State.EMPTY && !visited.contains( child )) {
+                visited.add( child );
+                queue.offer( child );
             }
-        });
-    }
+        }
 
-    private void decomposition(Cell emptyCell) {
-        int emptyNeighbors = (int) neighborsOfCell.stream().filter(e -> e.getState() == State.EMPTY).count();
-
-        if (emptyNeighbors != 0) {
-            checkAbilityToMove( emptyCell.getNeighbors() );
+        if ( !visited.contains( target ) && !queue.isEmpty() ) {
+            queue.poll();
+            traverse( queue.peek() );
         }
     }
 

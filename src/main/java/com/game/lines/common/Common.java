@@ -1,12 +1,9 @@
 package com.game.lines.common;
 
-import com.game.lines.entity.Cell;
-
 import javax.swing.*;
 import java.awt.*;
 import java.net.URL;
 import java.util.*;
-import java.util.List;
 
 /**
  * @author Eugene Ivanov on 01.04.18
@@ -46,8 +43,6 @@ public class Common {
         map.put("yellow", PICTURES[8]);
         return map;
     }
-
-    public static List<Cell> emptyCells = new ArrayList<>();
 
     private static URL checkUrl(String resourcePath) {
         resourcePath = resourcePath + ".png";

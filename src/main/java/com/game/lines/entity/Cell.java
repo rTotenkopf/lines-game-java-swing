@@ -103,7 +103,7 @@ public class Cell extends AbstractCell {
      * @return список ячеек, находящихся по соседству от данной ячейки.
      */
     public List<Cell> getNeighbors() {
-        List<Cell> neighborsList = new ArrayList<>();
+        List<Cell> neighborsList = new LinkedList<>();
         int gridLength = getGridLength();
         // Поиск соседей для ячеек, располагающихся не у края поля.
         if ( (getXx() > 1 && getXx() < gridLength) && (getYy() > 1 && getYy() < gridLength) ) {
@@ -190,7 +190,7 @@ public class Cell extends AbstractCell {
         }
 //        if ( this.state == State.SELECTED) { cellLogger.info("Cell selected"); }
 //        if ( this.state == State.RELEASED) { cellLogger.info("Cell released"); }
-        if ( this.state == State.EMPTY )   { cellLogger.info("Cell is empty"); }
+//        if ( this.state == State.EMPTY )   { cellLogger.info("Cell is empty"); }
     }
 
     // Переопределение методов equals() и hashCode().
