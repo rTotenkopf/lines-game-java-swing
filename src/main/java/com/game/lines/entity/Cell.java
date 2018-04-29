@@ -21,7 +21,7 @@ public class Cell extends AbstractCell {
     private Logger cellLogger = Logger.getLogger(Cell.class.getName());
 
     // Карта ячеек, где Ключ - координаты, а Значение - ячейка.
-    public static Map<Pair<Integer, Integer>, Cell> cellMap = new HashMap<>();
+    public static Map<Pair<Integer, Integer>, Cell> cellMap = new Hashtable<>();
 
     // Список пустых ячеек (this.State == State.EMPTY), которые могут быть заполнены изображениями.
     public static List<Cell> emptyCells = new LinkedList<>();

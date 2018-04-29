@@ -4,6 +4,7 @@ import com.game.lines.common.Common;
 import com.game.lines.entity.Cell;
 
 import java.util.*;
+import java.util.List;
 import java.util.logging.Logger;
 
 /**
@@ -13,43 +14,13 @@ import java.util.logging.Logger;
 public class Play {
 
     // Добавляем логгер игрового процесса.
-    private Logger playLogger = Logger.getLogger(Play.class.getName());
-    // Ячейка, изображение которой необходимо переместить в пустую ячейку, также является первой вершиной
-    // или узлом графа ячеек.
-    private Cell node;
+    private static Logger playLogger = Logger.getLogger(Play.class.getName());
     // Ячейка, в которую перемещаем изображение.
-    private Cell target;
-    // Список или массив соседних ячеек, для какой-либо ячейки.
-    private List<Cell> neighbors;
+    private static Cell target;
     // Связанный список ячеек для реализации проверки возможности хода.
-    private List<Cell> visited = new LinkedList<>();
+    private static List<Cell> visited = new LinkedList<>();
     // Очередь, основанная на связанном списке, необходима для реализации проверки возможности хода.
-    private Queue<Cell> queue = new LinkedList<>();
-
-    // Конструктор класса по умолчанию.
-    private Play() {
-        generateRandomImages();
-    }
-
-
-    private Play(Cell previousCell, Cell currentCell) {
-        this.node = previousCell;
-        this.target = currentCell;
-        this.neighbors = previousCell.getNeighbors();
-
-        int i = (int) neighbors.stream().filter(e -> e.getState() == State.EMPTY).count();
-
-        if (i != 0) {
-            moveImageCell(previousCell, currentCell);
-            generateRandomImages();
-            playLogger.severe("Move complete.");
-        } else {
-            playLogger.severe("Move was blocked, because empty children = { " + i + " }");
-        }
-
-        visited.add( node );
-        traverse( node );
-    }
+    private static Queue<Cell> queue = new LinkedList<>();
 
     public static void getBalls() {
         new Play();
@@ -59,24 +30,42 @@ public class Play {
         new Play( previousCell, currentCell );
     }
 
-    private void traverse(Cell node) {
-        // Добавляем ячейку-родителя в конец очереди.
-        queue.offer( node );
+    // Конструктор класса по умолчанию.
+    private Play() {
+        generateRandomImages();
+    }
+
+    private Play(Cell previousCell, Cell currentCell) {
+        target = currentCell;
+        visited = new LinkedList<>();
+        queue = new LinkedList<>();
+        boolean moveAbility = traverse(previousCell);
+
+        if (moveAbility) {
+            moveImageCell(previousCell, currentCell);
+            generateRandomImages();
+            playLogger.info("Move complete!");
+        } else {
+            playLogger.info("Move impossible..");
+        }
+    }
+
+    private boolean traverse(Cell node) {
         // Получаем потомков, находящихся по соседству от ячейки-родителя.
-        List<Cell> children = node.getNeighbors();
-
-        // Если статус потомка "пустой", то добавляем её в список посещенных ячеек и в конец очереди.
-        for (Cell child : children) {
-            if (child.getState() == State.EMPTY && !visited.contains( child )) {
-                visited.add( child );
-                queue.offer( child );
+        List<Cell> children;
+        if (!Objects.isNull(node)) {
+            children = node.getNeighbors();
+            // Если статус потомка "пустой", то добавляем его в список посещенных ячеек и в конец очереди.
+            for (Cell child : children) {
+                if (child.getState() == State.EMPTY && !visited.contains(child)) {
+                    visited.add(child);
+                    queue.offer(child);
+                }
             }
+//            System.out.println(queue.size());
+            traverse(queue.poll());
         }
-
-        if ( !visited.contains( target ) && !queue.isEmpty() ) {
-            queue.poll();
-            traverse( queue.peek() );
-        }
+        return visited.contains(target) && queue.size() == 0;
     }
 
     /**
