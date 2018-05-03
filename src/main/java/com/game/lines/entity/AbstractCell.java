@@ -9,19 +9,22 @@ import java.awt.event.MouseEvent;
 import java.util.List;
 
 /**
+ * AbstractCell - абстрактный класс, который реализует часть логики класса Cell и "выполняет контракт"
+ * с интерфейсом MouseListener, реализуя методы, обязательные для реализации, но не нужные для игрового процесса.
+ *
  * @author Eugene Ivanov on 11.04.18
  */
 
 abstract class AbstractCell extends JLabel implements Clickable {
 
     // Конструктор класса-наследника, в котором к объекту добавляется слушатель нажатий мыши (т.е. текущий объект),
-    // т.к. данный класс или его потомки должны реализовать методы интерфейса-слушателя.
+    // т.к. данный класс или его потомки должны реализовать методы MouseListener.
     AbstractCell() {
         addMouseListener(this);
     }
 
     /**
-     * @return длина стороны сетки/игрового поля.
+     * @return длину стороны сетки/игрового поля.
      */
     public static int getGridLength() {
         return MainFrame.grid.length;
