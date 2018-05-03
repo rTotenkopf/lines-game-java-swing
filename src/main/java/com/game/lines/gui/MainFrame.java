@@ -10,6 +10,9 @@ import javax.swing.border.Border;
 import java.awt.*;
 
 /**
+ * Класс MainFrame нужен для создания главного окна программы с отрисовкой всех необходимых виджетов и
+ * игрового поля.
+ *
  * @author Eugene Ivanov on 31.03.18
  */
 
@@ -71,7 +74,7 @@ public class MainFrame extends JFrame {
         pack(); // Установка соответствующего размер фрейма.
         setLocation(500, 100); // Установка положения фрейма на экране пользователя.
         setSize(frameWidth, frameHeight); // Установка размера фрейма.
-        // Добавление панелей:
+        // Добавление панелей на главный фрейм с заданием необходимого расположения панели:
         getContentPane().add(BorderLayout.SOUTH, southPanel);
         getContentPane().add(BorderLayout.CENTER, gridPanel);
         getContentPane().add(BorderLayout.NORTH, northPanel);
