@@ -1,6 +1,7 @@
 package com.game.lines.logic;
 
 /**
+ * Перечисление State содержит все возможные состояние ячейки в игре.
  * @author Eugene Ivanov on 13.04.18
  */
 
