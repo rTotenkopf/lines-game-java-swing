@@ -39,14 +39,19 @@ public class Play {
         generateRandomImages();
     }
 
-    private Play(Cell previousCell, Cell currentCell) {
-        target = currentCell;
+    /**
+     * Конструктор класса, принимающий 2 ячейки в качестве аргументов.
+     * @param filledCell ячейка, из которой необходимо переместить изображение.
+     * @param emptyCell пустая ячейка, в которую необходимо переместить изображение.
+     */
+    private Play(Cell filledCell, Cell emptyCell) {
+        target = emptyCell;
         visited = new LinkedList<>();
         queue = new LinkedList<>();
-        boolean moveAbility = traverse(previousCell);
+        boolean moveAbility = traverse(filledCell);
 
         if (moveAbility) {
-            moveImageCell(previousCell, currentCell);
+            moveImageCell(filledCell, emptyCell);
             generateRandomImages();
             playLogger.info("Move complete!");
         } else {
@@ -54,10 +59,14 @@ public class Play {
         }
     }
 
-    // Рекурсивный обход графа пустых ячеек (массив или область пустых ячеек на игровом поле, в которой находится
-    // ячейка, ИЗ КОТОРОЙ планируется переместить изображение), с целью "посетить" все пустые ячейки в заданной
-    // области. Если среди "посещенных" ячеек будет находиться пустая ячейка В КОТОРУЮ планируется переместить
-    // изображение, то ход (перемещение) возможен, иначе - ход невозможен.
+    /**
+     * Рекурсивный обход графа пустых ячеек (массив или область пустых ячеек на игровом поле, в которой находится
+     * ячейка, ИЗ КОТОРОЙ планируется переместить изображение), с целью "посетить" все пустые ячейки в заданной
+     * области. Если среди "посещенных" ячеек будет находиться пустая ячейка В КОТОРУЮ планируется переместить
+     * изображение, то ход (перемещение) возможен, иначе - ход невозможен.
+     * @param node вершина графа, она же - ячейка из которой перемещается изображение.
+     * @return true - ход (перемещение) в выбранную ячейку возможен или false - ход невозможен.
+     */
     private boolean traverse(Cell node) {
         // Получаем потомков, находящихся по соседству от ячейки-родителя.
         List<Cell> children;
