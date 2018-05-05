@@ -2,7 +2,9 @@ package com.game.lines.logic;
 
 import com.game.lines.common.Common;
 import com.game.lines.entity.Cell;
+import javafx.util.Pair;
 
+import java.awt.*;
 import java.util.*;
 import java.util.List;
 import java.util.logging.Logger;
@@ -25,13 +27,16 @@ public class Play {
     private static List<Cell> visited = new LinkedList<>();
     // Очередь, основанная на связанном списке, необходима для реализации проверки возможности хода.
     private static Queue<Cell> queue = new LinkedList<>();
+    // В эту переменную устанавливается значение true, если ход возможен, иначе - значение false.
+    private static boolean moveAbility;
 
     public static void getBalls() {
         new Play();
     }
 
-    public static void getMove(Cell previousCell, Cell currentCell) {
+    public static boolean getMove(Cell previousCell, Cell currentCell) {
         new Play( previousCell, currentCell );
+        return moveAbility;
     }
 
     // Конструктор класса по умолчанию.
@@ -48,12 +53,15 @@ public class Play {
         target = emptyCell;
         visited = new LinkedList<>();
         queue = new LinkedList<>();
-        boolean moveAbility = traverse(filledCell);
-
+        // Получение результата выполнения рекурсивного метода traverse.
+        moveAbility = traverse(filledCell);
+        // Если ход возможен, то перемещаем изображения (выполняем ход), генерируем новые изображения
+        // и выводим сообщение - "ход выполнен успешно". Иначе, выводим сообщение - "ход невозможен".
         if (moveAbility) {
             moveImageCell(filledCell, emptyCell);
             generateRandomImages();
             playLogger.info("Move complete!");
+//            checkLines(); здесь должен быть вызов метода для поиска всех сформированных линий.
         } else {
             playLogger.info("Move impossible..");
         }
@@ -70,7 +78,7 @@ public class Play {
     private boolean traverse(Cell node) {
         // Получаем потомков, находящихся по соседству от ячейки-родителя.
         List<Cell> children;
-        if (!Objects.isNull(node)) {
+        if ( !Objects.isNull(node) ) {
             children = node.getNeighbors();
             // Если статус потомка "пустой", то добавляем его в список посещенных ячеек и в конец очереди.
             for (Cell child : children) {
@@ -80,7 +88,7 @@ public class Play {
                 }
             }
 //            System.out.println(queue.size());
-            traverse(queue.poll());
+            traverse( queue.poll() );
         }
         return visited.contains(target) && queue.size() == 0;
     }

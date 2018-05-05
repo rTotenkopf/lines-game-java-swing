@@ -164,10 +164,10 @@ public class Cell extends AbstractCell {
     @Override
     public void mousePressed(MouseEvent e) {
         Cell currentCell = this;
-        currentCell.getNeighbors();
-        // В зависимости от состояние нажатой ячейки, выполняется определенный код:
+        boolean moveComplete = false;
+        // В зависимости от состояния нажатой ячейки, выполняется определенный код:
         switch ( currentCell.getState() ) {
-            // Если ячейка выбрана (выделена цветом), то при нажатии на неё, она деактивируется.
+            // Если ячейка уже выбрана (выделена цветом), то при нажатии на неё - выделение снимается.
             case SELECTED:
                 currentCell.release();
                 cellLogger.info("Cell released");
@@ -186,12 +186,17 @@ public class Cell extends AbstractCell {
             // Таким образом, осуществляется один игровой ход.
             case EMPTY:
                 if ( !Objects.isNull(previousCell) && (previousCell.getState() == State.SELECTED) ) {
-                    previousCell.release();
-                    // Выполнение игрового хода.
-                    Play.getMove(previousCell, currentCell);
+                    // Выполнение игрового хода (перемещение изображения из одной ячейки в другую).
+                    // Метод getMove(previousCell, currentCell) возвращает true если ход выполнен успешно.
+                    moveComplete = Play.getMove(previousCell, currentCell);
+                    if ( moveComplete ) {
+                        previousCell.release();
+                    }
                 }
-                // Обнуляем предыдущую ячейку.
-                previousCell = null;
+                // Если ход выполнен успешно, то "обнуляем" предыдущую ячейку.
+                if ( moveComplete ) {
+                    previousCell = null;
+                }
                 break;
         }
 //        if ( this.state == State.SELECTED) { cellLogger.info("Cell selected"); }
