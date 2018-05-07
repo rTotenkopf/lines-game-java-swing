@@ -4,15 +4,14 @@ import com.game.lines.common.Common;
 import com.game.lines.entity.Cell;
 import javafx.util.Pair;
 
-import java.awt.*;
 import java.util.*;
 import java.util.List;
 import java.util.logging.Logger;
 
 /**
- * Класс Play содержит игровую логику игры Lines: перемещение шара из ячейки в ячейку (проверка возможности
- * перемещения), генерация новых шаров на игровом поле, а также удаление с поля 5-ти шаров одинакового цвета,
- * выстроенных в линию.
+ * Класс Play отвечает за игровую логику игры Lines: перемещение шара из ячейки в ячейку (проверка возможности
+ * перемещения); генерация новых шаров на игровом поле, а также удаление с поля линии из 5-ти шаров
+ * одинакового цвета.
  *
  * @author Eugene Ivanov on 24.04.18
  */
@@ -30,22 +29,13 @@ public class Play {
     // В эту переменную устанавливается значение true, если ход возможен, иначе - значение false.
     private static boolean moveAbility;
 
-    public static void getBalls() {
-        new Play();
-    }
-
     public static boolean getMove(Cell previousCell, Cell currentCell) {
         new Play( previousCell, currentCell );
         return moveAbility;
     }
 
-    // Конструктор класса по умолчанию.
-    private Play() {
-        generateRandomImages();
-    }
-
     /**
-     * Конструктор класса, принимающий 2 ячейки в качестве аргументов.
+     * Конструктор класса Play, отвечающий за игровой процесс, принимает в качестве аргументов 2 ячейки:
      * @param filledCell ячейка, из которой необходимо переместить изображение.
      * @param emptyCell пустая ячейка, в которую необходимо переместить изображение.
      */
@@ -57,14 +47,51 @@ public class Play {
         moveAbility = traverse(filledCell);
         // Если ход возможен, то перемещаем изображения (выполняем ход), генерируем новые изображения
         // и выводим сообщение - "ход выполнен успешно". Иначе, выводим сообщение - "ход невозможен".
-        if (moveAbility) {
+        if ( moveAbility ) {
             moveImageCell(filledCell, emptyCell);
-            generateRandomImages();
+            generateRandomImages(3);
             playLogger.info("Move complete!");
-//            checkLines(); здесь должен быть вызов метода для поиска всех сформированных линий.
+            checkLines(); // Вызов метода для поиска всех сформированных линий.
         } else {
             playLogger.info("Move impossible..");
         }
+    }
+
+    private void checkLines() {
+        int sideLength = Cell.getGridLength(); // Получаем длину стороны сетки игрового поля.
+        Cell prevCell = Cell.cellMap.get(new Pair<>(1, 1));;
+        Cell nextCell;
+
+        for (int x = 1; x <= sideLength; x++) {
+            Set<Cell> line = new HashSet<>();
+
+            for (int y = 1; y <= sideLength; y++) {
+                nextCell = Cell.cellMap.get(new Pair<>(x, y));
+
+                if ( (nextCell.containsImage() && prevCell.containsImage()) &&
+                        nextCell.getImageColor().equals(prevCell.getImageColor()) ) {
+
+                    line.add(prevCell);
+                    line.add(nextCell);
+                } else if (line.size() < 5) {
+                    line.clear();
+                }
+                if (line.size() == 5) {
+                    deleteImagesFromCells(line);
+                }
+                prevCell = nextCell;
+            }
+//            System.out.println("line.size() = " + line.size());
+        }
+    }
+
+    private void deleteImagesFromCells(Collection<Cell> line) {
+        line.forEach( cell -> {
+            cell.setIcon(null);
+            cell.setState(State.EMPTY);
+            Cell.emptyCells.add(cell);
+        });
+        line.clear();
     }
 
     /**
@@ -113,10 +140,10 @@ public class Play {
         Cell.emptyCells.remove(currentCell);
     }
 
-    // Заполнение изображениями 3-х пустых случайных ячеек.
-    private void generateRandomImages() {
-        for (int i = 0; i < 3; i++) {
-            Cell cell = getRandomCell(Cell.emptyCells); // Получаем рандомную ячейку.
+    // Заполнение изображениями N пустых случайных ячеек.
+    public static void generateRandomImages(int cells) {
+        for (int i = 0; i < cells; i++) {
+            Cell cell = getRandomCell(Cell.emptyCells); // Получаем рандомную ячейку из массива пустых ячеек.
             int index = (int) (Math.random() * Common.PICTURES.length); // Подбираем случайный индекс.
             cell.setIcon(Common.PICTURES[index]); // Устанавливаем случайное изображение в ячейку.
             cell.setState(State.RELEASED); // Устанавливаем состояние "ячейка освобождена".
@@ -129,7 +156,7 @@ public class Play {
      * @param freeCells список пустых ячеек.
      * @return случайная пустая ячейка.
      */
-    private Cell getRandomCell(List<Cell> freeCells) {
+    private static Cell getRandomCell(List<Cell> freeCells) {
         int index = (int) (Math.random() * freeCells.size() );
         return freeCells.get(index);
     }

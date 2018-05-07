@@ -31,7 +31,7 @@ public class MainFrame extends JFrame {
         JPanel southPanel = new JPanel();   // Доп. панель.
         JPanel northPanel = new JPanel();   // Доп панель.
 
-        gridPanel.setLayout(new GridLayout(gridWidth,gridHeight) ); // Установка сетки на панель.
+        gridPanel.setLayout(new GridLayout(gridWidth, gridHeight) ); // Установка сетки на панель.
         grid = new Cell[gridWidth][gridHeight]; // Инициализация сетки.
         Border lineBorder = BorderFactory.createLineBorder(Color.BLACK, 1); // Установка границ ячеек сетки.
 
@@ -41,7 +41,7 @@ public class MainFrame extends JFrame {
             if (Cell.emptyCells.size() < 3) {
                 System.out.println("End of game!");
             } else {
-                Play.getBalls();
+                Play.generateRandomImages(5);
             }
         });
         // Пока просто кнопка..

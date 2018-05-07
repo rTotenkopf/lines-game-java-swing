@@ -156,8 +156,6 @@ public class Cell extends AbstractCell {
                 neighborsList.add(cellMap.get(new Pair<>(getXx(), getYy() - 1) ));
             }
         }
-//        System.out.println("neighborsList.size() = " + neighborsList.size());
-//        neighborsList.forEach(e -> e.setBackground(Color.YELLOW));
         return neighborsList;
     }
 
@@ -187,7 +185,7 @@ public class Cell extends AbstractCell {
             case EMPTY:
                 if ( !Objects.isNull(previousCell) && (previousCell.getState() == State.SELECTED) ) {
                     // Выполнение игрового хода (перемещение изображения из одной ячейки в другую).
-                    // Метод getMove(previousCell, currentCell) возвращает true если ход выполнен успешно.
+                    // Метод getMove возвращает true, если ход выполнен успешно.
                     moveComplete = Play.getMove(previousCell, currentCell);
                     if ( moveComplete ) {
                         previousCell.release();
