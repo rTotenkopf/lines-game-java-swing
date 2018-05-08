@@ -6,6 +6,7 @@ import javafx.util.Pair;
 
 import java.util.*;
 import java.util.List;
+import java.util.function.BiConsumer;
 import java.util.logging.Logger;
 
 /**
@@ -59,30 +60,40 @@ public class Play {
 
     private void checkLines() {
         int sideLength = Cell.getGridLength(); // Получаем длину стороны сетки игрового поля.
-        Cell prevCell = Cell.cellMap.get(new Pair<>(1, 1));;
-        Cell nextCell;
 
-        for (int x = 1; x <= sideLength; x++) {
-            Set<Cell> line = new HashSet<>();
+        BiConsumer<Integer, Integer> straight = ( x, y ) -> {
+            boolean vertical = x < y;
+            x = x == 2 ? 1 : 1;
+            y = y == 2 ? 1 : 1;
 
-            for (int y = 1; y <= sideLength; y++) {
-                nextCell = Cell.cellMap.get(new Pair<>(x, y));
+            Cell prevCell = Cell.cellMap.get( new Pair<>(x, y) );
+            Cell nextCell;
 
-                if ( (nextCell.containsImage() && prevCell.containsImage()) &&
-                        nextCell.getImageColor().equals(prevCell.getImageColor()) ) {
+            for (x = 1; x <= sideLength; x++) {
+                Set<Cell> line = new HashSet<>();
 
-                    line.add(prevCell);
-                    line.add(nextCell);
-                } else if (line.size() < 5) {
-                    line.clear();
+                for (y = 1; y <= sideLength; y++) {
+                    nextCell = vertical ? Cell.cellMap.get(new Pair<>(x, y)) : Cell.cellMap.get(new Pair<>(y, x));
+
+                    if ((nextCell.containsImage() && prevCell.containsImage()) &&
+                            nextCell.getImageColor().equals(prevCell.getImageColor())) {
+
+                        line.add(prevCell);
+                        line.add(nextCell);
+                    } else if (line.size() < 5) {
+                        line.clear();
+                    }
+                    if (line.size() == 5) {
+                        deleteImagesFromCells(line);
+                    }
+                    prevCell = nextCell;
                 }
-                if (line.size() == 5) {
-                    deleteImagesFromCells(line);
-                }
-                prevCell = nextCell;
-            }
 //            System.out.println("line.size() = " + line.size());
-        }
+            }
+        };
+
+        straight.accept(1, 2); // Поиск линий по-вертикали.
+        straight.accept(2, 1); // Поиск линий по-горизонтали.
     }
 
     private void deleteImagesFromCells(Collection<Cell> line) {
