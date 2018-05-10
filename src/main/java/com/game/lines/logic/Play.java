@@ -92,8 +92,8 @@ public class Play {
             }
         };
 
-        straight.accept(1, 2); // Поиск линий по-вертикали.
-        straight.accept(2, 1); // Поиск линий по-горизонтали.
+        straight.accept(1, 2); // Поиск линий по вертикали.
+        straight.accept(2, 1); // Поиск линий по горизонтали.
     }
 
     private void deleteImagesFromCells(Collection<Cell> line) {
