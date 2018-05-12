@@ -95,6 +95,7 @@ public class Play {
 
         straight.accept(1, 2); // Поиск линий по вертикали.
         straight.accept(2, 1); // Поиск линий по горизонтали.
+
         // Поиск линий по диагонали справа налево и сверху вниз с ++ сдвигом по оси Y и -- сдвигом по оси X.
         for (int x = 5; x <= sideLength ; x++) {
             diagonally_1.accept(x, 1);
