@@ -74,26 +74,46 @@ public class Play {
 
                 for (y = 1; y <= sideLength; y++) {
                     nextCell = vertical ? Cell.cellMap.get(new Pair<>(x, y)) : Cell.cellMap.get(new Pair<>(y, x));
-
-                    if ((nextCell.containsImage() && prevCell.containsImage()) &&
-                            nextCell.getImageColor().equals(prevCell.getImageColor())) {
-
-                        line.add(prevCell);
-                        line.add(nextCell);
-                    } else if (line.size() < 5) {
-                        line.clear();
-                    }
-                    if (line.size() == 5) {
-                        deleteImagesFromCells(line);
-                    }
+                    checkCellSequence(prevCell, nextCell, line);
                     prevCell = nextCell;
                 }
 //            System.out.println("line.size() = " + line.size());
             }
         };
 
+        BiConsumer<Integer, Integer> diagonally_1 = ( x, y ) -> {
+            Cell prevCell = Cell.cellMap.get( new Pair<>(x, y) );
+            Cell nextCell;
+            Set<Cell> line = new HashSet<>();
+
+            for (; x >= 1; x--) {
+                nextCell = Cell.cellMap.get(new Pair<>(x, y++));
+                checkCellSequence(prevCell, nextCell, line);
+                prevCell = nextCell;
+            }
+        };
+
         straight.accept(1, 2); // Поиск линий по вертикали.
         straight.accept(2, 1); // Поиск линий по горизонтали.
+        // Поиск линий по диагонали справа налево и сверху вниз с ++ сдвигом по оси Y и -- сдвигом по оси X.
+        for (int x = 5; x <= sideLength ; x++) {
+            diagonally_1.accept(x, 1);
+        }
+    }
+
+    private void checkCellSequence(Cell prevCell, Cell nextCell, Collection<Cell> line) {
+        if ( (nextCell.containsImage() && prevCell.containsImage()) &&
+                nextCell.getImageColor().equals(prevCell.getImageColor()) )
+        {
+            line.add(prevCell);
+            line.add(nextCell);
+//            System.out.println("line.size() = " + line.size());
+        } else if (line.size() < 5) {
+            line.clear();
+        }
+        if (line.size() == 5) {
+            deleteImagesFromCells(line);
+        }
     }
 
     private void deleteImagesFromCells(Collection<Cell> line) {
@@ -106,12 +126,12 @@ public class Play {
     }
 
     /**
-     * Рекурсивный обход графа пустых ячеек (массив или область пустых ячеек на игровом поле, в которой находится
+     * Обход графа пустых ячеек (массив или область пустых ячеек на игровом поле, в которой находится
      * ячейка, ИЗ КОТОРОЙ планируется переместить изображение), с целью "посетить" все пустые ячейки в заданной
      * области. Если среди "посещенных" ячеек будет находиться пустая ячейка В КОТОРУЮ планируется переместить
      * изображение, то ход (перемещение) возможен, иначе - ход невозможен.
      * @param node вершина графа, она же - ячейка из которой перемещается изображение.
-     * @return true - ход (перемещение) в выбранную ячейку возможен или false - ход невозможен.
+     * @return true - ход в выбранную ячейку возможен или false - ход невозможен.
      */
     private boolean traverse(Cell node) {
         Function<Cell, List<Cell>> findNeighbors = (cell) ->
