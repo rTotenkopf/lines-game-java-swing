@@ -52,13 +52,13 @@ public class Play {
             moveImageCell(filledCell, emptyCell);
             generateRandomImages(3);
             playLogger.info("Move complete!");
-            findLines(); // Вызов метода для поиска всех сформированных линий.
+            linesSearch(); // Вызов метода для поиска всех сформированных линий.
         } else {
             playLogger.info("Move impossible..");
         }
     }
 
-    private void findLines() {
+    private void linesSearch() {
         int sideLength = Cell.getGridLength(); // Получаем длину стороны сетки игрового поля.
 
         BiConsumer<Integer, Integer> straight = ( x, y ) -> {
