@@ -6,7 +6,7 @@ import javafx.util.Pair;
 
 import java.util.*;
 import java.util.List;
-import java.util.function.BiConsumer;
+import java.util.function.*;
 import java.util.logging.Logger;
 
 /**
@@ -114,21 +114,15 @@ public class Play {
      * @return true - ход (перемещение) в выбранную ячейку возможен или false - ход невозможен.
      */
     private boolean traverse(Cell node) {
-        // Получаем потомков, находящихся по соседству от ячейки-родителя.
-        List<Cell> children;
-        if ( !Objects.isNull(node) ) {
-            children = node.getNeighbors();
-            // Если статус потомка "пустой", то добавляем его в список посещенных ячеек и в конец очереди.
-            for (Cell child : children) {
-                if (child.getState() == State.EMPTY && !visited.contains(child)) {
-                    visited.add(child);
-                    queue.offer(child);
-                }
-            }
-//            System.out.println(queue.size());
+        Function<Cell, List<Cell>> findNeighbors = (cell) ->
+                Objects.isNull(cell) ? Collections.emptyList() : cell.getNeighbors();
+        Predicate<Cell> predicate = child -> child.getState() == State.EMPTY && !visited.contains(child);
+        findNeighbors.apply(node).stream().filter(predicate).forEach( child -> {
+            visited.add(child);
+            queue.offer(child);
             traverse( queue.poll() );
-        }
-        return visited.contains(target) && queue.size() == 0;
+        });
+        return visited.contains(target);
     }
 
     /**
