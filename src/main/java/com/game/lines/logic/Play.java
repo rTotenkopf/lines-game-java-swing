@@ -81,13 +81,15 @@ public class Play {
             }
         };
 
-        BiConsumer<Integer, Integer> diagonally_1 = ( x, y ) -> {
-            Cell prevCell = Cell.cellMap.get( new Pair<>(x, y) );
+        Consumer<Integer> diagonally_1 = ( start_X ) -> {
+            Function<Integer, Integer> linearFunction = number -> -1 * number + start_X + 1;
+            int y = linearFunction.apply(start_X);
+            Cell prevCell = Cell.cellMap.get( new Pair<>( start_X, y ));
             Cell nextCell;
             Set<Cell> line = new HashSet<>();
 
-            for (; x >= 1; x--) {
-                nextCell = Cell.cellMap.get(new Pair<>(x, y++));
+            for (int x = start_X; x >= 1; x--) {
+                nextCell = Cell.cellMap.get(new Pair<>( x, linearFunction.apply(x) ));
                 checkCellSequence(prevCell, nextCell, line);
                 prevCell = nextCell;
             }
@@ -95,10 +97,9 @@ public class Play {
 
         straight.accept(1, 2); // Поиск линий по вертикали.
         straight.accept(2, 1); // Поиск линий по горизонтали.
-
         // Поиск линий по диагонали справа налево и сверху вниз с ++ сдвигом по оси Y и -- сдвигом по оси X.
         for (int x = 5; x <= sideLength ; x++) {
-            diagonally_1.accept(x, 1);
+            diagonally_1.accept(x);
         }
     }
 
