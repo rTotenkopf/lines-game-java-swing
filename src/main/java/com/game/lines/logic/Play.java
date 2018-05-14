@@ -89,7 +89,25 @@ public class Play {
             Set<Cell> line = new HashSet<>();
 
             for (int x = start_X; x >= 1; x--) {
-                nextCell = Cell.cellMap.get(new Pair<>( x, linearFunction.apply(x) ));
+                y = linearFunction.apply(x);
+                nextCell = Cell.cellMap.get(new Pair<>(x, y));
+//                nextCell.setBackground(Color.YELLOW); // visualize algorithm
+                checkCellSequence(prevCell, nextCell, line);
+                prevCell = nextCell;
+            }
+        };
+
+        Consumer<Integer> diagonally_2 = ( start_X ) -> {
+            Function<Integer, Integer> function = number -> Math.abs(number - (start_X - 1) - (sideLength + 1));
+            int y = function.apply(start_X);
+            Cell prevCell = Cell.cellMap.get( new Pair<>(start_X, y));
+            Cell nextCell;
+            Set<Cell> line = new HashSet<>();
+
+            for (int x = start_X; x <= sideLength; x++) {
+                y = function.apply(x);
+                nextCell = Cell.cellMap.get(new Pair<>(x, y));
+//                nextCell.setBackground(Color.YELLOW); // visualize algorithm
                 checkCellSequence(prevCell, nextCell, line);
                 prevCell = nextCell;
             }
@@ -97,9 +115,14 @@ public class Play {
 
         straight.accept(1, 2); // Поиск линий по вертикали.
         straight.accept(2, 1); // Поиск линий по горизонтали.
-        // Поиск линий по диагонали справа налево и сверху вниз с ++ сдвигом по оси Y и -- сдвигом по оси X.
-        for (int x = 5; x <= sideLength ; x++) {
+        // Поиск линий по диагонали справа налево и снизу вверх с ++ сдвигом по оси Y и -- сдвигом по оси X.
+        for (int x = sideLength - 4; x <= sideLength ; x++) {
             diagonally_1.accept(x);
+        }
+        // Поиск линий по диагонали слева направо и сверху вниз с -- сдвигом по оси Y и ++ сдвигом по оси X.
+        int x = sideLength - 4;
+        for (; x >= 2; x--) {
+            diagonally_2.accept(x);
         }
     }
 

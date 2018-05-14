@@ -21,9 +21,9 @@ public class Common {
     public static final ImageIcon[] PICTURES = new ImageIcon[] {
             new ImageIcon(checkUrl("/balls/black-ball")),
             new ImageIcon(checkUrl("/balls/blue-ball")),
-            new ImageIcon(checkUrl("/balls/gray-ball")),
+//            new ImageIcon(checkUrl("/balls/gray-ball")),
             new ImageIcon(checkUrl("/balls/green-ball")),
-            new ImageIcon(checkUrl("/balls/pink-ball")),
+//            new ImageIcon(checkUrl("/balls/pink-ball")),
             new ImageIcon(checkUrl("/balls/purple-ball")),
             new ImageIcon(checkUrl("/balls/red-ball")),
             new ImageIcon(checkUrl("/balls/sapphire-ball")),
@@ -34,13 +34,13 @@ public class Common {
         Map<String, ImageIcon> map = new HashMap<>();
         map.put("black", PICTURES[0]);
         map.put("blue", PICTURES[1]);
-        map.put("gray", PICTURES[2]);
-        map.put("green", PICTURES[3]);
-        map.put("pink", PICTURES[4]);
-        map.put("purple", PICTURES[5]);
-        map.put("red", PICTURES[6]);
-        map.put("sapphire", PICTURES[7]);
-        map.put("yellow", PICTURES[8]);
+//        map.put("gray", PICTURES[2]);
+        map.put("green", PICTURES[2]);
+//        map.put("pink", PICTURES[4]);
+        map.put("purple", PICTURES[3]);
+        map.put("red", PICTURES[4]);
+        map.put("sapphire", PICTURES[5]);
+        map.put("yellow", PICTURES[6]);
         return map;
     }
 
