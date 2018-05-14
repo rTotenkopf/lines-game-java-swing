@@ -65,7 +65,6 @@ public class Play {
             boolean vertical = x < y;
             x = x == 2 ? 1 : 1;
             y = y == 2 ? 1 : 1;
-
             Cell prevCell = Cell.cellMap.get( new Pair<>(x, y) );
             Cell nextCell;
 
