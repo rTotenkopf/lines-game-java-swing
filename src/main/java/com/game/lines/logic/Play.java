@@ -29,6 +29,10 @@ public class Play {
     private static Queue<Cell> queue = new LinkedList<>();
     // В эту переменную устанавливается значение true, если ход возможен, иначе - значение false.
     private static boolean moveAbility;
+    // Множество ячеек, представляющее линию из шаров одинакового цвета.
+    // Когда линия достигает определенной (в зависимости от настроек игры) длины, то она удалется и ячейки
+    // снова становятся пустыми.
+    private Set<Cell> line;
 
     public static boolean getMove(Cell previousCell, Cell currentCell) {
         new Play( previousCell, currentCell );
@@ -69,7 +73,7 @@ public class Play {
             Cell nextCell;
 
             for (x = 1; x <= sideLength; x++) {
-                Set<Cell> line = new HashSet<>();
+                line = new HashSet<>();
 
                 for (y = 1; y <= sideLength; y++) {
                     nextCell = vertical ? Cell.cellMap.get(new Pair<>(x, y)) : Cell.cellMap.get(new Pair<>(y, x));
@@ -85,7 +89,7 @@ public class Play {
             int y = linearFunction.apply(start_X);
             Cell prevCell = Cell.cellMap.get( new Pair<>( start_X, y ));
             Cell nextCell;
-            Set<Cell> line = new HashSet<>();
+            line = new HashSet<>();
 
             for (int x = start_X; x >= 1; x--) {
                 y = linearFunction.apply(x);
@@ -101,7 +105,7 @@ public class Play {
             int y = function.apply(start_X);
             Cell prevCell = Cell.cellMap.get( new Pair<>(start_X, y));
             Cell nextCell;
-            Set<Cell> line = new HashSet<>();
+            line = new HashSet<>();
 
             for (int x = start_X; x <= sideLength; x++) {
                 y = function.apply(x);
