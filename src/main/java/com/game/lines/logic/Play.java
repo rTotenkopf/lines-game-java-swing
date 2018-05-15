@@ -24,9 +24,9 @@ public class Play {
     // Ячейка, в которую перемещаем изображение.
     private static Cell target;
     // Связанный список ячеек для реализации проверки возможности хода.
-    private static List<Cell> visited = new LinkedList<>();
+    private static List<Cell> visited;
     // Очередь, основанная на связанном списке, необходима для реализации проверки возможности хода.
-    private static Queue<Cell> queue = new LinkedList<>();
+    private static Queue<Cell> queue;
     // В эту переменную устанавливается значение true, если ход возможен, иначе - значение false.
     private static boolean moveAbility;
     // Множество ячеек, представляющее линию из шаров одинакового цвета.
@@ -34,13 +34,19 @@ public class Play {
     // снова становятся пустыми.
     private Set<Cell> line;
 
-    public static boolean getMove(Cell previousCell, Cell currentCell) {
-        new Play( previousCell, currentCell );
+    /**
+     * Метод отвечает за один игровой ход (перемещение изображения в пустую ячейку).
+     * @param filledCell ячейка, из которой необходимо переместить изображение.
+     * @param emptyCell пустая ячейка, в которую необходимо переместить изображение.
+     * @return значение boolean-типа означающее возможность или невозможность хода в выбранную ячейку.
+     */
+    public static boolean getMove(Cell filledCell, Cell emptyCell) {
+        new Play( filledCell, emptyCell );
         return moveAbility;
     }
 
     /**
-     * Конструктор класса Play, отвечающий за игровой процесс, принимает в качестве аргументов 2 ячейки:
+     * Конструктор класса Play, отвечающего за игровой процесс, принимает в качестве аргументов 2 ячейки:
      * @param filledCell ячейка, из которой необходимо переместить изображение.
      * @param emptyCell пустая ячейка, в которую необходимо переместить изображение.
      */
