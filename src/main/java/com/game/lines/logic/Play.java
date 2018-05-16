@@ -11,7 +11,7 @@ import java.util.logging.Logger;
 
 /**
  * Класс Play отвечает за игровую логику игры Lines: перемещение шара из ячейки в ячейку (проверка возможности
- * перемещения); генерация новых шаров на игровом поле, а также удаление с поля линии из 5-ти шаров
+ * перемещения); генерацию новых шаров на игровом поле, а также удаление с поля линии из 5-ти шаров
  * одинакового цвета.
  *
  * @author Eugene Ivanov on 24.04.18
@@ -90,15 +90,16 @@ public class Play {
             }
         };
 
-        Consumer<Integer> diagonally_1 = ( start_X ) -> {
+        BiConsumer<Integer, Boolean> diagonally_1 = ( start_X, isOpposite ) -> {
             Function<Integer, Integer> linearFunction = number -> -1 * number + start_X + 1;
-            int y = linearFunction.apply(start_X);
+            Function<Integer, Integer> oppositeLinearFunction = number -> sideLength + (number - start_X);
+            int y = isOpposite ? oppositeLinearFunction.apply(start_X) : linearFunction.apply(start_X);
             Cell prevCell = Cell.cellMap.get( new Pair<>( start_X, y ));
             Cell nextCell;
             line = new HashSet<>();
 
             for (int x = start_X; x >= 1; x--) {
-                y = linearFunction.apply(x);
+                y = isOpposite ? oppositeLinearFunction.apply(x) : linearFunction.apply(x);
                 nextCell = Cell.cellMap.get(new Pair<>(x, y));
 //                nextCell.setBackground(Color.YELLOW); // visualize algorithm
                 checkCellSequence(prevCell, nextCell, line);
@@ -106,15 +107,16 @@ public class Play {
             }
         };
 
-        Consumer<Integer> diagonally_2 = ( start_X ) -> {
+        BiConsumer<Integer, Boolean> diagonally_2 = ( start_X, isOpposite ) -> {
             Function<Integer, Integer> function = number -> Math.abs(number - (start_X - 1) - (sideLength + 1));
-            int y = function.apply(start_X);
+            Function<Integer, Integer> oppositeFunction = number -> number - start_X + 1;
+            int y = isOpposite ? oppositeFunction.apply(start_X) : function.apply(start_X);
             Cell prevCell = Cell.cellMap.get( new Pair<>(start_X, y));
             Cell nextCell;
             line = new HashSet<>();
 
             for (int x = start_X; x <= sideLength; x++) {
-                y = function.apply(x);
+                y = isOpposite ? oppositeFunction.apply(x) : function.apply(x);
                 nextCell = Cell.cellMap.get(new Pair<>(x, y));
 //                nextCell.setBackground(Color.YELLOW); // visualize algorithm
                 checkCellSequence(prevCell, nextCell, line);
@@ -125,13 +127,14 @@ public class Play {
         straight.accept(1, 2); // Поиск линий по вертикали.
         straight.accept(2, 1); // Поиск линий по горизонтали.
         // Поиск линий по диагонали справа налево и снизу вверх с ++ сдвигом по оси Y и -- сдвигом по оси X.
-        for (int x = sideLength - 4; x <= sideLength ; x++) {
-            diagonally_1.accept(x);
+        for (int x = 5; x <= sideLength ; x++) {
+            diagonally_1.accept(x, false);
+            diagonally_1.accept(x, true);
         }
         // Поиск линий по диагонали слева направо и сверху вниз с -- сдвигом по оси Y и ++ сдвигом по оси X.
-        int x = sideLength - 4;
-        for (; x >= 2; x--) {
-            diagonally_2.accept(x);
+        for (int x = sideLength - 4; x >= 2; x--) {
+            diagonally_2.accept(x, false);
+            diagonally_2.accept(x, true);
         }
     }
 
