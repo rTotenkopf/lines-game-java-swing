@@ -20,8 +20,10 @@ import java.util.stream.Stream;
 
 public class ResourceManger {
 
+
+
     // Массив изображений используемых в игре.
-    public static Object[] balls = ballsMap().values().toArray();
+    public static final Object[] BALLS = ballsMap().values().toArray();
 
     /**
      * Key = название цвета; Value = изображение;

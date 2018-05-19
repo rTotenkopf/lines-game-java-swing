@@ -207,8 +207,8 @@ public class Play {
     public static void generateRandomImages(int cells) {
         for (int i = 0; i < cells; i++) {
             Cell cell = getRandomCell(Cell.emptyCells); // Получаем рандомную ячейку из массива пустых ячеек.
-            int index = (int) (Math.random() * ResourceManger.balls.length); // Подбираем случайный индекс.
-            cell.setIcon( (ImageIcon) ResourceManger.balls[index] ); // Устанавливаем случайное изображение в ячейку.
+            int index = (int) (Math.random() * ResourceManger.BALLS.length); // Подбираем случайный индекс.
+            cell.setIcon( (ImageIcon) ResourceManger.BALLS[index] ); // Устанавливаем случайное изображение в ячейку.
             cell.setState(State.RELEASED); // Устанавливаем состояние "ячейка освобождена".
             Cell.emptyCells.remove(cell); // Удаляем ячейку из списка пустых ячеек.
         }
