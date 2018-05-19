@@ -13,7 +13,7 @@ import java.util.*;
 import java.util.stream.Stream;
 
 /**
- * Класс Resource Manager управляет доступом к ресурсам проекта.
+ * Класс ResourceManager управляет доступом к ресурсам проекта.
  *
  * @author Eugene Ivanov on 01.04.18
  */
