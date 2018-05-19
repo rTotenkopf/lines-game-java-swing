@@ -1,7 +1,6 @@
 package com.game.lines.gui;
 
 import com.game.lines.entity.Cell;
-import com.game.lines.common.Common;
 import com.game.lines.logic.Play;
 import com.game.lines.logic.State;
 
@@ -23,13 +22,17 @@ public class MainFrame extends JFrame {
 
     // Конструктор класса, отвечающего за создание графического интерфейса.
     public MainFrame(int frameWidth, int frameHeight, int gridWidth, int gridHeight) {
-        setTitle(Common.MAIN_FRAME_TITLE); // Устанавливаем название окна игры.
-        setIconImage(Common.MAIN_FRAME_ICON); // Устанавливаем изображение/иконку окна игры.
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE); // Закрытие окна нажатием на "крестик".
+        // Устанавливаем заголовок окна игры.
+        setTitle("Lines");
+        // Устанавливаем изображение/иконку окна игры.
+        setIconImage(new ImageIcon(
+                MainFrame.class.getResource("/food/bananas.png")).getImage());
+        // Устанавливаем закрытие окна нажатием на "крестик".
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         JPanel gridPanel = new JPanel();    // Панель, на которой будет располагаться игровое поле.
         JPanel southPanel = new JPanel();   // Доп. панель.
-        JPanel northPanel = new JPanel();   // Доп панель.
+        JPanel northPanel = new JPanel();   // Доп. панель.
 
         gridPanel.setLayout(new GridLayout(gridWidth, gridHeight) ); // Установка сетки на панель.
         grid = new Cell[gridWidth][gridHeight]; // Инициализация сетки.

@@ -3,6 +3,8 @@ package com.game.lines.run;
 import com.game.lines.gui.MainFrame;
 
 /**
+ * Класс RunLines содержит главный метод для запуска приложения.
+ *
  * @author Eugene Ivanov on 31.03.18
  */
 
@@ -16,7 +18,7 @@ public class RunLines {
 //        new MainFrame(   480,555, 8, 8);
 
         // 9 X 9
-        new MainFrame(   565,640, 9, 9);
+        new MainFrame(   565, 640, 9, 9);
 
         // 10 X 10
 //        new MainFrame(   600,630, 10, 10);

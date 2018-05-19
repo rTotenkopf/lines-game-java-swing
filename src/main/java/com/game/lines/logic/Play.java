@@ -1,9 +1,10 @@
 package com.game.lines.logic;
 
-import com.game.lines.common.Common;
+import com.game.lines.common.ResourceManger;
 import com.game.lines.entity.Cell;
 import javafx.util.Pair;
 
+import javax.swing.*;
 import java.util.*;
 import java.util.List;
 import java.util.function.*;
@@ -191,7 +192,7 @@ public class Play {
         // Получаем изображение из предыдущей ячейки.
         String pictureColor = previousCell.getImageColor();
         // Устанавливаем изображение в пустую ячейку.
-        currentCell.setIcon(Common.picturesMap().get(pictureColor) );
+        currentCell.setIcon(ResourceManger.ballsMap().get(pictureColor) );
         // Удаляем изображение из предыдущей ячейки.
         previousCell.setIcon(null);
         // Меняем состояния предыдущей и текущей ячеек.
@@ -206,8 +207,8 @@ public class Play {
     public static void generateRandomImages(int cells) {
         for (int i = 0; i < cells; i++) {
             Cell cell = getRandomCell(Cell.emptyCells); // Получаем рандомную ячейку из массива пустых ячеек.
-            int index = (int) (Math.random() * Common.PICTURES.length); // Подбираем случайный индекс.
-            cell.setIcon(Common.PICTURES[index]); // Устанавливаем случайное изображение в ячейку.
+            int index = (int) (Math.random() * ResourceManger.balls.length); // Подбираем случайный индекс.
+            cell.setIcon( (ImageIcon) ResourceManger.balls[index] ); // Устанавливаем случайное изображение в ячейку.
             cell.setState(State.RELEASED); // Устанавливаем состояние "ячейка освобождена".
             Cell.emptyCells.remove(cell); // Удаляем ячейку из списка пустых ячеек.
         }
