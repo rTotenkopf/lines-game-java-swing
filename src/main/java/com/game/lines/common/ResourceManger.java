@@ -42,7 +42,7 @@ public class ResourceManger {
                             URL url = RunLines.class.getResource(
                                     "/" + file.getParent().getFileName() + "/" + file.getFileName());
 
-                            String[] fileName = file.getFileName().toString().split("[\\.-]");
+                            String[] fileName = file.getFileName().toString().split("[.-]");
 //                            System.out.println(fileName[0]);
                             ImageIcon imageIcon = new ImageIcon(url);
                             iconMap.put(fileName[0], imageIcon);
