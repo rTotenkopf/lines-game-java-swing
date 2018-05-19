@@ -34,6 +34,8 @@ public class Play {
     // Когда линия достигает определенной (в зависимости от настроек игры) длины, то она удалется и ячейки
     // снова становятся пустыми.
     private Set<Cell> line;
+    // Переменная принимает значени true, если строка была удалена.
+    private static boolean lineDeleted;
 
     /**
      * Метод отвечает за один игровой ход (перемещение изображения в пустую ячейку).
@@ -55,15 +57,19 @@ public class Play {
         target = emptyCell;
         visited = new LinkedList<>();
         queue = new LinkedList<>();
+        lineDeleted = false;
         // Получение результата выполнения рекурсивного метода traverse.
         moveAbility = traverse(filledCell);
         // Если ход возможен, то перемещаем изображения (выполняем ход), генерируем новые изображения
         // и выводим сообщение - "ход выполнен успешно". Иначе, выводим сообщение - "ход невозможен".
         if ( moveAbility ) {
             moveImageCell(filledCell, emptyCell);
-            generateRandomImages(3);
             playLogger.info("Move complete!");
             linesSearch(); // Вызов метода для поиска всех сформированных линий.
+            if (!lineDeleted) {
+                generateRandomImages(3);
+//                linesSearch(); // Вызов метода для поиска всех сформированных линий.
+            }
         } else {
             playLogger.info("Move impossible..");
         }
@@ -166,6 +172,8 @@ public class Play {
     }
 
     private void deleteImagesFromCells(Collection<Cell> line) {
+        System.out.println("line.size() = " + line.size());
+        lineDeleted = true;
         line.forEach( cell -> {
             cell.setIcon(null);
             cell.setState(State.EMPTY);
