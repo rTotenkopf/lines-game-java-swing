@@ -3,6 +3,7 @@ package com.game.lines.common;
 import com.game.lines.run.RunLines;
 
 import javax.swing.*;
+import java.awt.*;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -20,8 +21,13 @@ import java.util.stream.Stream;
 
 public class ResourceManger {
 
+    // URL иконки окна игры.
+    private static final URL imageIconUrl = ResourceManger.class.getResource("/food/bananas.png");
 
-
+    // Получаем изображение иконки окна игры, используя URL.
+    public static Image getImage() {
+        return imageIconUrl != null ? new ImageIcon(imageIconUrl).getImage() : null;
+    }
     // Массив изображений используемых в игре.
     public static final Object[] BALLS = ballsMap().values().toArray();
 

@@ -1,5 +1,6 @@
 package com.game.lines.gui;
 
+import com.game.lines.common.ResourceManger;
 import com.game.lines.entity.Cell;
 import com.game.lines.logic.Play;
 import com.game.lines.logic.State;
@@ -25,8 +26,7 @@ public class MainFrame extends JFrame {
         // Устанавливаем заголовок окна игры.
         setTitle("Lines");
         // Устанавливаем изображение/иконку окна игры.
-        setIconImage(new ImageIcon(
-                MainFrame.class.getResource("/food/bananas.png")).getImage());
+        setIconImage( ResourceManger.getImage() );
         // Устанавливаем закрытие окна нажатием на "крестик".
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
