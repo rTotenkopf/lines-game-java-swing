@@ -71,6 +71,8 @@ public class Play {
 
     private void linesSearch() {
         int sideLength = Cell.getGridLength(); // Получаем длину стороны сетки игрового поля.
+        Predicate<Collection> linePredicate = collection ->
+                line.size() >= 5 && line.size() <= Cell.getGridLength();
 
         BiConsumer<Integer, Integer> straight = ( x, y ) -> {
             boolean vertical = x < y;
@@ -87,7 +89,10 @@ public class Play {
                     checkCellSequence(prevCell, nextCell, line);
                     prevCell = nextCell;
                 }
-//            System.out.println("line.size() = " + line.size());
+//                System.out.println("line.size() = " + line.size());
+                if ( linePredicate.test(line) ) {
+                    deleteImagesFromCells(line);
+                }
             }
         };
 
@@ -106,6 +111,9 @@ public class Play {
                 checkCellSequence(prevCell, nextCell, line);
                 prevCell = nextCell;
             }
+            if ( linePredicate.test(line) ) {
+                deleteImagesFromCells(line);
+            }
         };
 
         BiConsumer<Integer, Boolean> diagonally_2 = ( start_X, isOpposite ) -> {
@@ -122,6 +130,9 @@ public class Play {
 //                nextCell.setBackground(Color.YELLOW); // visualize algorithm
                 checkCellSequence(prevCell, nextCell, line);
                 prevCell = nextCell;
+            }
+            if ( linePredicate.test(line) ) {
+                deleteImagesFromCells(line);
             }
         };
 
@@ -149,9 +160,9 @@ public class Play {
         } else if (line.size() < 5) {
             line.clear();
         }
-        if (line.size() == 5) {
-            deleteImagesFromCells(line);
-        }
+//        if (line.size() == 5) {
+//            deleteImagesFromCells(line);
+//        }
     }
 
     private void deleteImagesFromCells(Collection<Cell> line) {
