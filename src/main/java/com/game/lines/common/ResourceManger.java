@@ -21,6 +21,8 @@ import java.util.stream.Stream;
 
 public class ResourceManger {
 
+    // TODO: Обычно константы задаются большими буквами
+    // TODO: А инициализацию делать лучше всё таки в конструкторе
     // URL иконки окна игры.
     private static final URL imageIconUrl = ResourceManger.class.getResource("/food/bananas.png");
 
@@ -43,10 +45,21 @@ public class ResourceManger {
         // Обход файлов, находящихся в папке ресурса.
 
         if (resourceUrl != null) {
+            // TODO весь блок try/catch рекомендуется выноосить в отдельный метод, так и читабельнее будет
             try (Stream<Path> paths = Files.walk(Paths.get(resourceUrl.toURI()))) {
                 paths
                         .filter(Files::isRegularFile)
                         .forEach(file -> {
+                            // TODO: Так же в отдельный метод выносят логику отдельного элемента в цикле
+                            // TODO: но тут в принципе 4 строчки, поэтому норм
+                            // TODO: System.out.println в качестве тестирования пойдёт, но лучше сразу закладывать использование логгера
+                            // TODO: Когда значение, которые ты хочешь передать строится как-то сложно, то лучше задать говорящую переменную:
+                            // TODO: *******************************************************************************
+                            // TODO: String color = file.getFileName().toString().split("[.-]")[0];
+                            // TODO: String image = "/" + file.getParent().getFileName() + "/" + file.getFileName();
+                            // TODO: iconMap.put(color, new ImageIcon(RunLines.class.getResource(image)));
+                            // TODO: *******************************************************************************
+
                             URL url = RunLines.class.getResource(
                                     "/" + file.getParent().getFileName() + "/" + file.getFileName());
 
@@ -57,6 +70,8 @@ public class ResourceManger {
 //                            System.out.println(url.getFile());
                         });
             } catch (URISyntaxException | IOException e) {
+                // TODO: плохой тон стектрейс выводить. нужно пользоваться логгером
+                // LOG.warn("Message", e);
                 e.printStackTrace();
             }
         }

@@ -56,8 +56,16 @@ public class MainFrame extends JFrame {
         southPanel.add(button2);
 
         for (int y = gridHeight-1; y >= 0; y--) {
+            // TODO: ты зачем его тут одного одинёшеньку оставил?
             Cell createdCell;
             for (int x = 0; x < gridWidth; x++) {
+                // TODO: 1. весь блок в отдельный метод с названием типа
+                // TODO: 2. Мне кажется тут лучше сначала создать cell а потом уже его передавать в JLabel
+                // TODO: Cell cellElement = new Cell();
+                // TODO: ....
+                // TODO: а в конце:
+                // TODO: grid[x][y] = cellElement;
+                // TODO: Cell.emptyCells.add(createdCell);
                 grid[x][y] = new Cell(); // Создание нового объекта ячейки на сетке.
                 createdCell = (Cell) grid[x][y]; // Инициализация ячейки.
                 createdCell.setXx(x + 1); // Установка координаты Х.
