@@ -25,26 +25,19 @@ public class Cell extends AbstractCell {
 
     // Добавляем логгер ячейки.
     private Logger cellLogger = Logger.getLogger(Cell.class.getName());
-
-    // TODO: здесь действительно нужен Hashtable? наверн HashMap подойдет
     // Карта ячеек, где Ключ - координаты, а Значение - ячейка.
-    public static Map<Pair<Integer, Integer>, Cell> cellMap = new Hashtable<>();
-
+    public static Map<Pair<Integer, Integer>, Cell> cellMap = new HashMap<>();
     /**
-     * TODO: Если хочешь сослаться на объект, используй link
-     * {@link State#EMPTY}
-     * TODO: Здесь тот же вопрос... действительно нужен LinkedList?
+     * Список пустых ячеек (состояние которых {@link State#EMPTY} либо {@link this#containsImage() == false})
+     * которые могут быть заполнены изображениями.
      */
-    // Список пустых ячеек (this.State == State.EMPTY), которые могут быть заполнены изображениями.
-    public static List<Cell> emptyCells = new LinkedList<>();
-
-    // Предыдущая нажатая ячейка.
-    private static Cell previousCell;
-
+    public static List<Cell> emptyCells = new ArrayList<>();
+    private static Cell previousCell; // Предыдущая нажатая ячейка.
     private int Xx; // Положение ячейки по оси координат X.
     private int Yy; // Положение ячейки по оси координат Y.
     private State state; // Состояние ячейки.
 
+    // Сеттеры и геттеры полей класса Cell.
     public int getXx() {
         return Xx;
     }
