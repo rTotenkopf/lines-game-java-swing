@@ -38,17 +38,6 @@ public class Play {
     private Set<Cell> line;
 
     /**
-     * Метод отвечает за один игровой ход (перемещение изображения в пустую ячейку).
-     * @param filledCell ячейка, из которой необходимо переместить изображение.
-     * @param emptyCell пустая ячейка, в которую необходимо переместить изображение.
-     * @return значение boolean-типа означающее возможность или невозможность хода в выбранную ячейку.
-     */
-    public static boolean getMove(Cell filledCell, Cell emptyCell) {
-        new Play( filledCell, emptyCell );
-        return moveAbility;
-    }
-
-    /**
      * Конструктор класса Play, отвечающего за игровой процесс, принимает в качестве аргументов 2 ячейки:
      * @param filledCell ячейка, из которой необходимо переместить изображение.
      * @param emptyCell пустая ячейка, в которую необходимо переместить изображение.
@@ -68,13 +57,26 @@ public class Play {
             moveImageCell(filledCell, emptyCell);
             playLogger.info("Move complete!");
             linesSearch(); // Вызов метода для поиска всех сформированных линий.
-            if (!lineDeleted) {
+            if ( !lineDeleted ) {
                 generateRandomImages(3);
-//                linesSearch(); // Вызов метода для поиска всех сформированных линий.
+                linesSearch(); // Вызов метода для поиска всех сформированных линий.
             }
         } else {
             playLogger.info("Move impossible..");
         }
+    }
+
+    /**
+     * Метод отвечает за один игровой ход (перемещение изображения в пустую ячейку) и инициализирует игру
+     * вызовом конструктора класса.
+     * Возвращаемое значение используется для определения ситуации: был выполнен ход или нет.
+     * @param filledCell ячейка, из которой необходимо переместить изображение.
+     * @param emptyCell пустая ячейка, в которую необходимо переместить изображение.
+     * @return значение boolean-типа означающее возможность или невозможность хода в выбранную ячейку.
+     */
+    public static boolean getMove(Cell filledCell, Cell emptyCell) {
+        new Play( filledCell, emptyCell );
+        return moveAbility;
     }
 
     private void linesSearch() {
@@ -113,7 +115,7 @@ public class Play {
                 checkCellSequence(prevCell, nextCell, line);
                 prevCell = nextCell;
             }
-//                System.out.println("line.size() = " + line.size());
+//            System.out.println("line.size() = " + line.size());
             if ( linePredicate.test(line) ) {
                 deleteImagesFromCells(line);
             }
@@ -134,7 +136,7 @@ public class Play {
         for (int x = start_X; x >= 1; x--) {
             y = isOpposite ? oppositeLinearFunction.apply(x) : linearFunction.apply(x);
             nextCell = Cell.cellMap.get(new Pair<>(x, y));
-//                nextCell.setBackground(Color.YELLOW); // visualize algorithm
+//            nextCell.setBackground(Color.YELLOW); // visualize algorithm
             checkCellSequence(prevCell, nextCell, line);
             prevCell = nextCell;
         }
@@ -158,7 +160,7 @@ public class Play {
         for (int x = start_X; x <= sideLength; x++) {
             y = isOpposite ? oppositeFunction.apply(x) : function.apply(x);
             nextCell = Cell.cellMap.get(new Pair<>(x, y));
-//                nextCell.setBackground(Color.YELLOW); // visualize algorithm
+//            nextCell.setBackground(Color.YELLOW); // visualize algorithm
             checkCellSequence(prevCell, nextCell, line);
             prevCell = nextCell;
         }
@@ -183,7 +185,7 @@ public class Play {
     }
 
     private void deleteImagesFromCells(Collection<Cell> line) {
-        System.out.println("line.size() = " + line.size());
+//        System.out.println("line.size() = " + line.size());
         lineDeleted = true;
         line.forEach( cell -> {
             cell.setIcon(null);
