@@ -26,9 +26,15 @@ public class Cell extends AbstractCell {
     // Добавляем логгер ячейки.
     private Logger cellLogger = Logger.getLogger(Cell.class.getName());
 
+    // TODO: здесь действительно нужен Hashtable? наверн HashMap подойдет
     // Карта ячеек, где Ключ - координаты, а Значение - ячейка.
     public static Map<Pair<Integer, Integer>, Cell> cellMap = new Hashtable<>();
 
+    /**
+     * TODO: Если хочешь сослаться на объект, используй link
+     * {@link State#EMPTY}
+     * TODO: Здесь тот же вопрос... действительно нужен LinkedList?
+     */
     // Список пустых ячеек (this.State == State.EMPTY), которые могут быть заполнены изображениями.
     public static List<Cell> emptyCells = new LinkedList<>();
 
@@ -39,17 +45,8 @@ public class Cell extends AbstractCell {
     private int Yy; // Положение ячейки по оси координат Y.
     private State state; // Состояние ячейки.
 
-    // Сеттеры и геттеры координат и состояния ячейки.
-    public void setXx(int xx) {
-        this.Xx = xx;
-    }
-
     public int getXx() {
         return Xx;
-    }
-
-    public void setYy(int yy) {
-        this.Yy = yy;
     }
 
     public int getYy() {
@@ -62,6 +59,16 @@ public class Cell extends AbstractCell {
 
     public State getState() {
         return state;
+    }
+
+    /**
+     * Конструктор класса Сell.
+     * @param x координата X.
+     * @param y координата Y.
+     */
+    public Cell(int x, int y) {
+        this.Xx = x;
+        this.Yy = y;
     }
 
     /**
@@ -104,6 +111,7 @@ public class Cell extends AbstractCell {
         return new Pair<>(getXx(), getYy());
     }
 
+    // TODO: очень длинный метод
     /**
      * Реализация абстрактного метода.
      * @return список ячеек, находящихся по соседству от данной ячейки.

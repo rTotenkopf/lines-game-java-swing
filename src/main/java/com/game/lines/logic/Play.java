@@ -80,6 +80,14 @@ public class Play {
         Predicate<Collection> linePredicate = collection ->
                 line.size() >= 5 && line.size() <= Cell.getGridLength();
 
+        // TODO: уметь пользоваться BiConsumer это конечно же хорошо,
+        // TODO: но лучше им пользоваться когда нужно а не когда "потому что могу")
+        // TODO: ниже вполне можно было использовать обычные методы
+        // TODO: BiConsumer лучше использовать тогда когда его передают в какой-нибудь метод
+        // TODO: то есть в методе заранее не известо какая должна быть логика и ты туда её как раз и передашь
+        // TODO: а тут увы совсем не такой случай
+        // TODO: P.S: методы у тебя слишком длинные...
+
         BiConsumer<Integer, Integer> straight = ( x, y ) -> {
             boolean vertical = x < y;
             x = x == 2 ? 1 : 1;
