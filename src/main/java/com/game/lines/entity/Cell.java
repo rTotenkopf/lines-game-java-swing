@@ -62,7 +62,7 @@ public class Cell extends AbstractCell {
     }
 
     /**
-     * Конструктор класса Сell.
+     * Конструктор класса Cell.
      * @param x координата X.
      * @param y координата Y.
      */
