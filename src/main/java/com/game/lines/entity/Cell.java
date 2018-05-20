@@ -45,17 +45,8 @@ public class Cell extends AbstractCell {
     private int Yy; // Положение ячейки по оси координат Y.
     private State state; // Состояние ячейки.
 
-    // Сеттеры и геттеры координат и состояния ячейки.
-    public void setXx(int xx) {
-        this.Xx = xx;
-    }
-
     public int getXx() {
         return Xx;
-    }
-
-    public void setYy(int yy) {
-        this.Yy = yy;
     }
 
     public int getYy() {
@@ -68,6 +59,16 @@ public class Cell extends AbstractCell {
 
     public State getState() {
         return state;
+    }
+
+    /**
+     * Конструктор класса Сell.
+     * @param x координата X.
+     * @param y координата Y.
+     */
+    public Cell(int x, int y) {
+        this.Xx = x;
+        this.Yy = y;
     }
 
     /**
