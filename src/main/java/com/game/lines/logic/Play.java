@@ -77,10 +77,9 @@ public class Play {
      */
     public static boolean getMove(Cell filledCell, Cell emptyCell) {
         int emptyCells = Cell.emptyCells.size();
-        if ( !Objects.isNull(filledCell) && (filledCell.getState() == State.SELECTED) && emptyCells > 3 )
-        {
+        if ( emptyCells > 3 ) {
             new Play(filledCell, emptyCell);
-        } else if (emptyCells <= 3) {
+        } else {
             playLogger.warning("End of the game!");
         }
         return moveAbility;
