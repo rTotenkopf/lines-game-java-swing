@@ -45,25 +45,24 @@ public class Play {
      * @param emptyCell пустая ячейка, в которую необходимо переместить изображение.
      */
     private Play(Cell filledCell, Cell emptyCell) {
-        sideLength = Cell.getGridLength();
-        target = emptyCell;
-        visited = new LinkedList<>();
-        queue = new LinkedList<>();
+        sideLength = Cell.getGridLength(); // Длина (в ячейках) стороны квадрата игрового поля.
+        target = emptyCell;             // "Целевая ячейка", она же ячейка, в которую нужно ходить.
+        visited = new LinkedList<>();   // Инициализация списка, используемого для проверки возможности хода в ячейку.
+        queue = new LinkedList<>();     // Инициализация очереди, используемой для проверки возможности хода в ячейку.
         moveAbility = traverse(filledCell); // Получение результата выполнения метода traverse.
         lineDeleted = false;
         playLogger = Logger.getLogger(Play.class.getName());
 
-        // Если ход возможен, то перемещаем изображения (выполняем ход), генерируем новые изображения
-        // и выводим сообщение - "ход выполнен успешно". Иначе, выводим сообщение - "ход невозможен".
-        if ( moveAbility ) {
-            moveImageCell(filledCell, emptyCell);
-            playLogger.info("Move complete!");
-            linesSearch(); // Вызов метода для поиска всех сформированных линий.
-            if ( !lineDeleted ) {
-                generateRandomImages(3);
-                linesSearch(); // Вызов метода для поиска всех сформированных линий.
+        if ( moveAbility ) {                        // Если ход возможен, то:
+            moveImageCell(filledCell, emptyCell);   // перемещаем изображения (выполняем ход)
+            playLogger.info("Move complete!"); // логируем перемещение
+            linesSearch(); // вызов метода для поиска сформированных линий (по вертикали, горизонтали и диагонали)
+            if ( !lineDeleted ) { // Если в результате работы метода linesSearch() произошло удаление строки:
+                generateRandomImages(3); // генерируем новые изображения в пустые ячейки
+                // повторно запускаем linesSearch() для поиска и удаления линий, сформированных случайно, методом выше
+                linesSearch();
             }
-        } else {
+        } else { // Если ход невозможен, то логируем сообщение о невозможности хода.
             playLogger.info("Move impossible..");
         }
     }
@@ -78,10 +77,10 @@ public class Play {
      */
     public static boolean getMove(Cell filledCell, Cell emptyCell) {
         int emptyCells = Cell.emptyCells.size();
-        if ( !Objects.isNull(filledCell) && (filledCell.getState() == State.SELECTED) && emptyCells > 3 ) {
+        if ( !Objects.isNull(filledCell) && (filledCell.getState() == State.SELECTED) && emptyCells > 3 )
+        {
             new Play(filledCell, emptyCell);
-        }
-        else if (emptyCells <= 3) {
+        } else if (emptyCells <= 3) {
             playLogger.warning("End of the game!");
         }
         return moveAbility;
@@ -184,7 +183,8 @@ public class Play {
         {
             line.add(prevCell);
             line.add(nextCell);
-            System.out.println("line.size() = " + line.size());
+            if (line.size() >= 5)
+                playLogger.severe("" + "line.size() = " + line.size());
         } else if (line.size() < 5) {
             line.clear();
         }
