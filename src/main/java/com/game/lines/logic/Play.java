@@ -20,6 +20,8 @@ import java.util.logging.Logger;
 
 public class Play {
 
+    // Логгер игрового процесса.
+    private static Logger playLogger;
     // Длина стороны сетки игрового поля.
     private static int sideLength;
     // Ячейка, в которую перемещаем изображение.
@@ -49,7 +51,7 @@ public class Play {
         queue = new LinkedList<>();
         moveAbility = traverse(filledCell); // Получение результата выполнения метода traverse.
         lineDeleted = false;
-        Logger playLogger = Logger.getLogger(Play.class.getName()); // Логирование игрового процесса.
+        playLogger = Logger.getLogger(Play.class.getName());
 
         // Если ход возможен, то перемещаем изображения (выполняем ход), генерируем новые изображения
         // и выводим сообщение - "ход выполнен успешно". Иначе, выводим сообщение - "ход невозможен".
@@ -75,7 +77,13 @@ public class Play {
      * @return значение boolean-типа означающее возможность или невозможность хода в выбранную ячейку.
      */
     public static boolean getMove(Cell filledCell, Cell emptyCell) {
-        new Play( filledCell, emptyCell );
+        int emptyCells = Cell.emptyCells.size();
+        if ( !Objects.isNull(filledCell) && (filledCell.getState() == State.SELECTED) && emptyCells > 3 ) {
+            new Play(filledCell, emptyCell);
+        }
+        else if (emptyCells <= 3) {
+            playLogger.warning("End of the game!");
+        }
         return moveAbility;
     }
 
@@ -102,6 +110,7 @@ public class Play {
                                Predicate<Collection> linePredicate) {
 
         boolean vertical = x < y;
+        // TODO: вместо преведения значений переменных через тернарный оператор, добавить функцию
         x = x == 2 ? 1 : 1;
         y = y == 2 ? 1 : 1;
         Cell prevCell = Cell.cellMap.get( new Pair<>(x, y) );
@@ -175,7 +184,7 @@ public class Play {
         {
             line.add(prevCell);
             line.add(nextCell);
-//            System.out.println("line.size() = " + line.size());
+            System.out.println("line.size() = " + line.size());
         } else if (line.size() < 5) {
             line.clear();
         }

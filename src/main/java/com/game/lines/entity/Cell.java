@@ -184,13 +184,11 @@ public class Cell extends AbstractCell {
             // Если предыдущая ячейка была выбрана, то изображение из неё переносится в текущую (пустую) ячейку.
             // Таким образом, осуществляется один игровой ход.
             case EMPTY:
-                if ( !Objects.isNull(previousCell) && (previousCell.getState() == State.SELECTED) ) {
-                    // Выполнение игрового хода (перемещение изображения из одной ячейки в другую).
-                    // Метод getMove возвращает true, если ход выполнен успешно.
-                    moveComplete = Play.getMove(previousCell, currentCell);
-                    if ( moveComplete ) {
-                        previousCell.release();
-                    }
+                // Выполнение игрового хода (перемещение изображения из одной ячейки в другую).
+                // Метод getMove возвращает true, если ход выполнен успешно.
+                moveComplete = Play.getMove(previousCell, currentCell);
+                if ( moveComplete ) {
+                    previousCell.release();
                 }
                 // Если ход выполнен успешно, то "обнуляем" предыдущую ячейку.
                 if ( moveComplete ) {
