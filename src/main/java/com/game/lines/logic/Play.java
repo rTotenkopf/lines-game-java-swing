@@ -119,7 +119,9 @@ public class Play {
 
             for (y = 1; y <= sideLength; y++) {
                 nextCell = vertical ? Cell.cellMap.get(new Pair<>(x, y)) : Cell.cellMap.get(new Pair<>(y, x));
-                checkCellSequence(prevCell, nextCell, line);
+                if ( lineContinuous(prevCell, nextCell, line) ) {
+                    break;
+                }
                 prevCell = nextCell;
             }
 //            System.out.println("line.size() = " + line.size());
@@ -144,7 +146,9 @@ public class Play {
             y = isOpposite ? oppositeLinearFunction.apply(x) : linearFunction.apply(x);
             nextCell = Cell.cellMap.get(new Pair<>(x, y));
 //            nextCell.setBackground(Color.YELLOW); // visualize algorithm
-            checkCellSequence(prevCell, nextCell, line);
+            if ( lineContinuous(prevCell, nextCell, line) ) {
+                break;
+            }
             prevCell = nextCell;
         }
         if ( linePredicate.test(line) ) {
@@ -168,7 +172,9 @@ public class Play {
             y = isOpposite ? oppositeFunction.apply(x) : function.apply(x);
             nextCell = Cell.cellMap.get(new Pair<>(x, y));
 //            nextCell.setBackground(Color.YELLOW); // visualize algorithm
-            checkCellSequence(prevCell, nextCell, line);
+            if ( lineContinuous(prevCell, nextCell, line) ) {
+                break;
+            }
             prevCell = nextCell;
         }
         if ( linePredicate.test(line) ) {
@@ -176,7 +182,18 @@ public class Play {
         }
     }
 
-    private void checkCellSequence(Cell prevCell, Cell nextCell, Collection<Cell> line) {
+    /**
+     * Поиск и добавление в коллекцию линий из 5 и более изображений одного цвета.
+     * Каждая строка ячеек: по вертикали, горизонтали и диагонали последовательно проверяется на наличие линий.
+     * @param prevCell предыдущая проверяемая ячейка в строке.
+     * @param nextCell следующая проверяемая ячейка в строке.
+     * @param line HashSet ячеек, представляющий собой непрерывную линию из изображений одинакового цвета.
+     * @return если линия строится непрерывно, метод возвращает false. Возвращает true, когда линия прерывается.
+     */
+    private boolean lineContinuous(Cell prevCell, Cell nextCell, Collection<Cell> line) {
+        boolean lineIsBreak = false; // Линия прервана или нет.
+        // Если предыдущая и следующая ячейки содержат изображения и эти изображения одинаковы, то добавляем обе
+        // ячейки в коллекцию.
         if ( (nextCell.containsImage() && prevCell.containsImage()) &&
                 nextCell.getImageColor().equals(prevCell.getImageColor()) )
         {
@@ -186,21 +203,26 @@ public class Play {
                 playLogger.severe("" + "line.size() = " + line.size());
         } else if (line.size() < 5) {
             line.clear();
+        } else {
+            playLogger.warning("Line is break!");
+            lineIsBreak = true;
         }
-//        if (line.size() == 5) {
-//            deleteImagesFromCells(line);
-//        }
+        return lineIsBreak;
     }
 
+    /**
+     * Удаление изображений из ячеек.
+     * @param line коллекция, содержащая ячейки, содержимое которых необходимо очистить.
+     */
     private void deleteImagesFromCells(Collection<Cell> line) {
 //        System.out.println("line.size() = " + line.size());
-        lineDeleted = true;
-        line.forEach( cell -> {
+        lineDeleted = true; // Флаг, означающий, что срока удалена. Используется в логике других методов.
+        line.forEach( cell -> { // Последовательное удаление изображений из ячеек.
             cell.setIcon(null);
             cell.setState(State.EMPTY);
             Cell.emptyCells.add(cell);
         });
-        line.clear();
+        line.clear(); // Очистка коллекции.
     }
 
     /**
