@@ -209,7 +209,7 @@ public class Cell extends AbstractCell {
         boolean value = false;
         if ( !(obj instanceof JButton) ) {
             Cell other = (Cell) obj;
-            value = (this.Xx == other.Xx && this.Yy == other.Yy );
+            value = (this.Xx == other.getXx() && this.Yy == other.getYy() );
         }
         return value;
     }

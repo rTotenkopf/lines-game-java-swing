@@ -30,14 +30,10 @@ public class Play {
     private static List<Cell> visited;
     // Очередь, основанная на связанном списке, необходима для реализации проверки возможности хода.
     private static Queue<Cell> queue;
-    // В эту переменную устанавливается значение true, если ход возможен, иначе - значение false.
+    // Переменная принимает значение true, если ход (перемещение) возможен.
     private static boolean moveAbility;
-    // Переменная принимает значени true, если строка была удалена.
+    // Переменная принимает значение true, если строка была удалена.
     private static boolean lineDeleted;
-    // Множество ячеек, представляющее линию из шаров одинакового цвета.
-    // Когда линия достигает определенной (в зависимости от настроек игры) длины, то она удалется и ячейки
-    // снова становятся пустыми.
-    private Set<Cell> line;
 
     /**
      * Конструктор класса Play, отвечающего за игровой процесс, принимает в качестве аргументов 2 ячейки:
@@ -45,21 +41,21 @@ public class Play {
      * @param emptyCell пустая ячейка, в которую необходимо переместить изображение.
      */
     private Play(Cell filledCell, Cell emptyCell) {
-        sideLength = Cell.getGridLength(); // Длина (в ячейках) стороны квадрата игрового поля.
-        target = emptyCell;             // "Целевая ячейка", она же ячейка, в которую нужно ходить.
-        visited = new LinkedList<>();   // Инициализация списка, используемого для проверки возможности хода в ячейку.
-        queue = new LinkedList<>();     // Инициализация очереди, используемой для проверки возможности хода в ячейку.
+        playLogger = Logger.getLogger(Play.class.getName());
+        sideLength = Cell.getGridLength();  // Длина (в ячейках) стороны квадрата игрового поля.
+        target = emptyCell;                 // "Целевая ячейка", она же ячейка, в которую нужно ходить.
+        visited = new LinkedList<>();  // Инициализация списка, используемого для проверки возможности хода в ячейку.
+        queue = new LinkedList<>();    // Инициализация очереди, используемой для проверки возможности хода в ячейку.
         moveAbility = traverse(filledCell); // Получение результата выполнения метода traverse.
         lineDeleted = false;
-        playLogger = Logger.getLogger(Play.class.getName());
 
-        if ( moveAbility ) {                        // Если ход возможен, то:
-            moveImageCell(filledCell, emptyCell);   // перемещаем изображения (выполняем ход)
-            playLogger.info("Move complete!"); // логируем перемещение
+        if ( moveAbility ) {                           // Если ход возможен, то:
+            moveImageCell(filledCell, emptyCell);      // перемещаем изображения (выполняем ход)
+//            playLogger.info("Move complete!");    // Логируем перемещение.
             linesSearch(); // вызов метода для поиска сформированных линий (по вертикали, горизонтали и диагонали)
             if ( !lineDeleted ) { // Если в результате работы метода linesSearch() произошло удаление строки:
                 generateRandomImages(3); // генерируем новые изображения в пустые ячейки
-                // повторно запускаем linesSearch() для поиска и удаления линий, сформированных случайно, методом выше
+                // Повторно запускаем linesSearch() для поиска и удаления линий, сформированных случайно, методом выше
                 linesSearch();
             }
         } else { // Если ход невозможен, то логируем сообщение о невозможности хода.
@@ -86,128 +82,128 @@ public class Play {
     }
 
     private void linesSearch() {
-        Predicate<Collection> linePredicate = collection ->
-                line.size() >= 5 && line.size() <= Cell.getGridLength();
+        perpendicularSearch(false); // Поиск линий по вертикали.
+        perpendicularSearch(true); // Поиск линий по горизонтали.
 
-        straightLines(1, 2, linePredicate); // Поиск линий по вертикали.
-        straightLines(2, 1, linePredicate); // Поиск линий по горизонтали.
         // Поиск линий по диагонали справа налево и снизу вверх с ++ сдвигом по оси Y и -- сдвигом по оси X.
         for (int x = 5; x <= sideLength ; x++) {
-            diagonallyLines_1( x, false, linePredicate );
-            diagonallyLines_1( x, true, linePredicate );
+            diagonallyLines_1( x, false);
+            diagonallyLines_1( x, true);
         }
+
         // Поиск линий по диагонали слева направо и сверху вниз с -- сдвигом по оси Y и ++ сдвигом по оси X.
         for (int x = sideLength - 4; x >= 2; x--) {
-            diagonallyLines_2( x, false, linePredicate );
-            diagonallyLines_2( x, true, linePredicate );
-        }
-    }
-
-    private void straightLines(int x,
-                               int y,
-                               Predicate<Collection> linePredicate) {
-
-        boolean vertical = x < y;
-        // TODO: вместо преведения значений переменных через тернарный оператор, добавить функцию
-        x = x == 2 ? 1 : 1;
-        y = y == 2 ? 1 : 1;
-        Cell prevCell = Cell.cellMap.get( new Pair<>(x, y) );
-        Cell nextCell;
-
-        for (x = 1; x <= sideLength; x++) {
-            line = new HashSet<>();
-
-            for (y = 1; y <= sideLength; y++) {
-                nextCell = vertical ? Cell.cellMap.get(new Pair<>(x, y)) : Cell.cellMap.get(new Pair<>(y, x));
-                if ( lineContinuous(prevCell, nextCell, line) ) {
-                    break;
-                }
-                prevCell = nextCell;
-            }
-//            System.out.println("line.size() = " + line.size());
-            if ( linePredicate.test(line) ) {
-                deleteImagesFromCells(line);
-            }
-        }
-    }
-
-    private void diagonallyLines_1(int start_X,
-                                  boolean isOpposite,
-                                  Predicate<Collection> linePredicate) {
-
-        Function<Integer, Integer> linearFunction = number -> -1 * number + start_X + 1;
-        Function<Integer, Integer> oppositeLinearFunction = number -> sideLength + (number - start_X);
-        int y = isOpposite ? oppositeLinearFunction.apply(start_X) : linearFunction.apply(start_X);
-        Cell prevCell = Cell.cellMap.get( new Pair<>( start_X, y ));
-        Cell nextCell;
-        line = new HashSet<>();
-
-        for (int x = start_X; x >= 1; x--) {
-            y = isOpposite ? oppositeLinearFunction.apply(x) : linearFunction.apply(x);
-            nextCell = Cell.cellMap.get(new Pair<>(x, y));
-//            nextCell.setBackground(Color.YELLOW); // visualize algorithm
-            if ( lineContinuous(prevCell, nextCell, line) ) {
-                break;
-            }
-            prevCell = nextCell;
-        }
-        if ( linePredicate.test(line) ) {
-            deleteImagesFromCells(line);
-        }
-
-    }
-
-    private void diagonallyLines_2(int start_X,
-                                   boolean isOpposite,
-                                   Predicate<Collection> linePredicate) {
-
-        Function<Integer, Integer> function = number -> Math.abs(number - (start_X - 1) - (sideLength + 1));
-        Function<Integer, Integer> oppositeFunction = number -> number - start_X + 1;
-        int y = isOpposite ? oppositeFunction.apply(start_X) : function.apply(start_X);
-        Cell prevCell = Cell.cellMap.get( new Pair<>(start_X, y));
-        Cell nextCell;
-        line = new HashSet<>();
-
-        for (int x = start_X; x <= sideLength; x++) {
-            y = isOpposite ? oppositeFunction.apply(x) : function.apply(x);
-            nextCell = Cell.cellMap.get(new Pair<>(x, y));
-//            nextCell.setBackground(Color.YELLOW); // visualize algorithm
-            if ( lineContinuous(prevCell, nextCell, line) ) {
-                break;
-            }
-            prevCell = nextCell;
-        }
-        if ( linePredicate.test(line) ) {
-            deleteImagesFromCells(line);
+            diagonallyLines_2( x, false);
+            diagonallyLines_2( x, true);
         }
     }
 
     /**
-     * Поиск и добавление в коллекцию линий из 5 и более изображений одного цвета.
-     * Каждая строка ячеек: по вертикали, горизонтали и диагонали последовательно проверяется на наличие линий.
-     * @param prevCell предыдущая проверяемая ячейка в строке.
-     * @param nextCell следующая проверяемая ячейка в строке.
-     * @param line HashSet ячеек, представляющий собой непрерывную линию из изображений одинакового цвета.
-     * @return если линия строится непрерывно, метод возвращает false. Возвращает true, когда линия прерывается.
+     * Метод поиска прямых (горизонтальных и вертикальных) линий.
+     * @param vertical boolean-параметр, в зависисмости от значения которого будет выполяняться поиск:
+     *                   по горизонтали или вертикали.
      */
-    private boolean lineContinuous(Cell prevCell, Cell nextCell, Collection<Cell> line) {
-        boolean lineIsBreak = false; // Линия прервана или нет.
-        // Если предыдущая и следующая ячейки содержат изображения и эти изображения одинаковы, то добавляем обе
-        // ячейки в коллекцию.
-        if ( (nextCell.containsImage() && prevCell.containsImage()) &&
-                nextCell.getImageColor().equals(prevCell.getImageColor()) )
-        {
-            line.add(prevCell);
-            line.add(nextCell);
-            if (line.size() >= 5)
-                playLogger.severe("" + "line.size() = " + line.size());
-        } else if (line.size() < 5) {
-            line.clear();
-        } else {
-            playLogger.warning("Line is break!");
-            lineIsBreak = true;
+    private void perpendicularSearch(boolean vertical) {
+        BiPredicate<Cell, Cell> searchPredicate = (curr, next) ->
+                vertical ? (curr.getYy() + 1 == next.getYy()) : (curr.getXx() + 1 == next.getXx());
+
+        for (int x = 1; x <= sideLength; x++) {
+            Map<String, List<Cell>>  colorSequenceMap = new HashMap<>();
+
+            for (int y = 1; y <= sideLength; y++) {
+                Cell nextCell = vertical ? Cell.cellMap.get(new Pair<>(x, y)) : Cell.cellMap.get(new Pair<>(y, x));
+                String color = nextCell.containsImage() ? nextCell.getImageColor() : "";
+
+                List<Cell> images = color.isEmpty() ? null : colorSequenceMap.get(color);
+                images = Objects.isNull(images) ? new ArrayList<>() : colorSequenceMap.get(color);
+                images.add(nextCell);
+                if ( !color.isEmpty() ) {
+                    colorSequenceMap.put(color, images);
+                }
+//                playLogger.warning("total keys in map: " + colorSequenceMap.values().size());
+            }
+            colorSequenceMap.values()
+                    .stream().filter( element -> element.size() >= 5)
+                    .forEach( collection -> prepareLineSequence(collection, searchPredicate));
         }
-        return lineIsBreak;
+    }
+
+    private void diagonallyLines_1(int start_X, boolean isOpposite) {
+        Function<Integer, Integer> linearFunction = number -> -1 * number + start_X + 1;
+        Function<Integer, Integer> oppositeLinearFunction = number -> sideLength + (number - start_X);
+        BiPredicate<Cell, Cell> searchPredicate = (curr, next) -> curr.getXx() - 1 == next.getXx();
+        Map<String, List<Cell>> colorSequenceMap = new HashMap<>();
+
+        for (int x = start_X; x >= 1; x--) {
+            int y = isOpposite ? oppositeLinearFunction.apply(x) : linearFunction.apply(x);
+            Cell nextCell = Cell.cellMap.get(new Pair<>(x, y));
+            String color = nextCell.containsImage() ? nextCell.getImageColor() : "";
+
+            List<Cell> images = color.isEmpty() ? null : colorSequenceMap.get(color);
+            images = Objects.isNull(images) ? new ArrayList<>() : colorSequenceMap.get(color);
+            images.add(nextCell);
+            if ( !color.isEmpty() ) {
+                colorSequenceMap.put(color, images);
+            }
+        }
+        colorSequenceMap.values()
+                .stream().filter( element -> element.size() >= 5)
+                .forEach( collection -> prepareLineSequence(collection, searchPredicate));
+    }
+
+    private void diagonallyLines_2(int start_X, boolean isOpposite) {
+        Function<Integer, Integer> function = number -> Math.abs(number - (start_X - 1) - (sideLength + 1));
+        Function<Integer, Integer> oppositeFunction = number -> number - start_X + 1;
+        BiPredicate<Cell, Cell> searchPredicate = (curr, next) -> curr.getXx() + 1 == next.getXx();
+        Map<String, List<Cell>> colorSequenceMap = new HashMap<>();
+
+        for (int x = start_X; x <= sideLength; x++) {
+            int y = isOpposite ? oppositeFunction.apply(x) : function.apply(x);
+            Cell nextCell = Cell.cellMap.get(new Pair<>(x, y));
+            String color = nextCell.containsImage() ? nextCell.getImageColor() : "";
+
+            List<Cell> images = color.isEmpty() ? null : colorSequenceMap.get(color);
+            images = Objects.isNull(images) ? new ArrayList<>() : colorSequenceMap.get(color);
+            images.add(nextCell);
+            if ( !color.isEmpty() ) {
+                colorSequenceMap.put(color, images);
+            }
+        }
+        colorSequenceMap.values()
+                .stream().filter( element -> element.size() >= 5)
+                .forEach( collection -> prepareLineSequence(collection, searchPredicate));
+    }
+
+    /**
+     * Подготовка последовательности изображений, найденных в строке.
+     * @param sequence последовательность изображений, в порядке их добавления .
+     * @param predicate условие, по которому будут сравниваться ячейки из строки.
+     */
+    private void prepareLineSequence(List<Cell> sequence, BiPredicate<Cell, Cell> predicate) {
+        Map<Integer, Set<Cell>> map = new HashMap<>();
+        Set<Cell> cellSet = new HashSet<>();
+        Cell current = sequence.get(0);
+        cellSet.add(current);
+        int key = 1;
+
+        for (int i = 0; i < sequence.size() - 1; i++) {
+            Cell next = sequence.get(i + 1);
+            if ( predicate.test(current, next) ) {
+                cellSet.add(next);
+            } else {
+                cellSet = new HashSet<>();
+                cellSet.add(next);
+                key++;
+            }
+            if ( !cellSet.isEmpty() ) {
+                map.put(key, cellSet);
+            }
+            current = next;
+        }
+        map.values()
+                .stream()
+                .filter( element -> element.size() >= 5)
+                .forEach(this::deleteImagesFromCells);
     }
 
     /**
@@ -215,7 +211,7 @@ public class Play {
      * @param line коллекция, содержащая ячейки, содержимое которых необходимо очистить.
      */
     private void deleteImagesFromCells(Collection<Cell> line) {
-//        System.out.println("line.size() = " + line.size());
+        playLogger.info("Line of " + line.size() + " balls deleted!");
         lineDeleted = true; // Флаг, означающий, что срока удалена. Используется в логике других методов.
         line.forEach( cell -> { // Последовательное удаление изображений из ячеек.
             cell.setIcon(null);

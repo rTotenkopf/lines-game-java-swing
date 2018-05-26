@@ -41,7 +41,7 @@ public class MainFrame extends JFrame {
         JButton startButton = new JButton("Следующий ход"); // Кнопка нового хода.
         // Слушатель кнопки.
         startButton.addActionListener( e -> {
-            if (Cell.emptyCells.size() < 3) {
+            if (Cell.emptyCells.size() < 5) {
                 System.out.println("End of game!");
             } else {
                 Play.generateRandomImages(5);
