@@ -81,6 +81,9 @@ public class Play {
         return moveAbility;
     }
 
+    /**
+     * Метод в котором вызываются методы для поиска, в процессе игры, всех возможных линий на игровом.
+     */
     private void linesSearch() {
         perpendicularSearch(false); // Поиск линий по вертикали.
         perpendicularSearch(true); // Поиск линий по горизонтали.
@@ -99,7 +102,7 @@ public class Play {
     }
 
     /**
-     * Метод поиска прямых (горизонтальных и вертикальных) линий.
+     * Метод поиска перпендикулярных (горизонтальных и вертикальных) линий.
      * @param vertical boolean-параметр, в зависисмости от значения которого будет выполяняться поиск:
      *                   по горизонтали или вертикали.
      */
@@ -135,16 +138,7 @@ public class Play {
         Map<String, List<Cell>> colorSequenceMap = new HashMap<>();
 
         for (int x = start_X; x >= 1; x--) {
-            int y = isOpposite ? oppositeLinearFunction.apply(x) : linearFunction.apply(x);
-            Cell nextCell = Cell.cellMap.get(new Pair<>(x, y));
-            String color = nextCell.containsImage() ? nextCell.getImageColor() : "";
-
-            List<Cell> images = color.isEmpty() ? null : colorSequenceMap.get(color);
-            images = Objects.isNull(images) ? new ArrayList<>() : colorSequenceMap.get(color);
-            images.add(nextCell);
-            if ( !color.isEmpty() ) {
-                colorSequenceMap.put(color, images);
-            }
+            lineSequence(x, isOpposite, linearFunction, oppositeLinearFunction, colorSequenceMap);
         }
         colorSequenceMap.values()
                 .stream().filter( element -> element.size() >= 5)
@@ -158,16 +152,7 @@ public class Play {
         Map<String, List<Cell>> colorSequenceMap = new HashMap<>();
 
         for (int x = start_X; x <= sideLength; x++) {
-            int y = isOpposite ? oppositeFunction.apply(x) : function.apply(x);
-            Cell nextCell = Cell.cellMap.get(new Pair<>(x, y));
-            String color = nextCell.containsImage() ? nextCell.getImageColor() : "";
-
-            List<Cell> images = color.isEmpty() ? null : colorSequenceMap.get(color);
-            images = Objects.isNull(images) ? new ArrayList<>() : colorSequenceMap.get(color);
-            images.add(nextCell);
-            if ( !color.isEmpty() ) {
-                colorSequenceMap.put(color, images);
-            }
+            lineSequence(x, isOpposite, function, oppositeFunction, colorSequenceMap);
         }
         colorSequenceMap.values()
                 .stream().filter( element -> element.size() >= 5)
@@ -175,7 +160,33 @@ public class Play {
     }
 
     /**
-     * Подготовка последовательности изображений, найденных в строке.
+     * Построение последовательности изображений одного цвета, найденных в строке.
+     * @param x координата X ячейки.
+     * @param isOpposite boolean-значение, указывающее на конфигурацию поиска линий.
+     * @param function функция, которая выражает Y через Х (линейная функция).
+     * @param oppositeFunction функция, которая выражает Y через X, но с помощью другой формулы, нежели function.
+     * @param sequenceMap карта, где Key = цвет, Value = последовательность (список) ячеек одного цвета.
+     */
+    private void lineSequence(int x,
+                              boolean isOpposite,
+                              Function<Integer, Integer> function,
+                              Function<Integer, Integer> oppositeFunction,
+                              Map<String, List<Cell>> sequenceMap) {
+
+        int y = isOpposite ? oppositeFunction.apply(x) : function.apply(x);
+        Cell nextCell = Cell.cellMap.get(new Pair<>(x, y));
+        String color = nextCell.containsImage() ? nextCell.getImageColor() : "";
+
+        List<Cell> images = color.isEmpty() ? null : sequenceMap.get(color);
+        images = Objects.isNull(images) ? new ArrayList<>() : sequenceMap.get(color);
+        images.add(nextCell);
+        if ( !color.isEmpty() ) {
+            sequenceMap.put(color, images);
+        }
+    }
+
+    /**
+     * Подготовка последовательности изображений одного цвета, найденных в строке.
      * @param sequence последовательность изображений, в порядке их добавления .
      * @param predicate условие, по которому будут сравниваться ячейки из строки.
      */
