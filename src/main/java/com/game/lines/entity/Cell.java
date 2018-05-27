@@ -14,8 +14,8 @@ import java.util.logging.Logger;
 /**
  * Класс Cell хранит в себе состояние ячейки игрового поля: координаты, игровое состояние и т.д., а также
  * предоставляет необходимые методы для работы с ячейкой.
- * Статические коллекции класса "запоминают" информацию о всех ячейках в игре.
- * Класс наследует {@link} AbstractCell, который реализует интерфейс {@link} Clickable.
+ * Статические коллекции класса {@link #cellMap} и {@link #emptyCells} запоминают информацию о всех ячейках в игре.
+ * Класс наследует {@link AbstractCell}, который реализует интерфейс {@link com.game.lines.logic.Clickable}.
  * Над объектами класса (ячейками) действия выполняются с помощью кликов мышью.
  *
  * @author Eugene Ivanov on 01.04.18
@@ -23,7 +23,7 @@ import java.util.logging.Logger;
 
 public class Cell extends AbstractCell {
 
-    // Добавляем логгер ячейки.
+    // Логгер ячейки.
     private Logger cellLogger = Logger.getLogger(Cell.class.getName());
     // Карта ячеек, где Ключ - координаты, а Значение - ячейка.
     public static Map<Pair<Integer, Integer>, Cell> cellMap = new HashMap<>();
@@ -37,7 +37,7 @@ public class Cell extends AbstractCell {
     private int Yy; // Положение ячейки по оси координат Y.
     private State state; // Состояние ячейки.
 
-    // Сеттеры и геттеры полей класса Cell.
+    // Сеттеры и геттеры полей класса.
     public int getXx() {
         return Xx;
     }
@@ -55,7 +55,7 @@ public class Cell extends AbstractCell {
     }
 
     /**
-     * Конструктор класса Cell.
+     * Конструктор класса.
      * @param x координата X.
      * @param y координата Y.
      */
@@ -65,7 +65,7 @@ public class Cell extends AbstractCell {
     }
 
     /**
-     * @return true или false в зависимости есть ли изображение в ячейке.
+     * @return true или false в зависимости от того, есть ли изображение в ячейке.
      */
     public boolean containsImage() {
         return this.getIcon() != null;
@@ -75,9 +75,7 @@ public class Cell extends AbstractCell {
     @Override
     public void select() {
         if ( (containsImage()) ) {
-            // Устанавливается выделение границ нажатой ячейки.
             setBorder(BorderFactory.createLineBorder(Color.RED, 5));
-            // Устанавливается статус нажатой ячейки.
             setState(State.SELECTED);
             // Ячейке, нажатой в прошлый раз, присваивается текущая нажатая ячейка.
             previousCell = this;
@@ -88,16 +86,14 @@ public class Cell extends AbstractCell {
     @Override
     public void release() {
         if ( containsImage() ) {
-            // Устанавливается статус нажатой ячейки.
             setState(State.RELEASED);
         }
-        // Устанавливается выделение границ нажатой ячейки.
         setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
     }
 
     /**
-     * Реализация абстрактного метода.
-     * @return объект Pair c координатами ячейки (x,y).
+     * Реализация абстрактного метода {@link AbstractCell#getCoordinates()}.
+     * @return объект {@link Pair} c координатами ячейки X {@link #Xx}, и Y {@link #Yy}.
      */
     @Override
     public Pair<Integer, Integer> getCoordinates() {
@@ -106,8 +102,8 @@ public class Cell extends AbstractCell {
 
     // TODO: очень длинный метод
     /**
-     * Реализация абстрактного метода.
-     * @return список ячеек, находящихся по соседству от данной ячейки.
+     * Реализация абстрактного метода {@link AbstractCell#getNeighbors()}.
+     * @return {@link List} ячеек, находящихся по соседству от данной ячейки.
      */
     public List<Cell> getNeighbors() {
         List<Cell> neighborsList = new LinkedList<>();
@@ -160,19 +156,24 @@ public class Cell extends AbstractCell {
         return neighborsList;
     }
 
+    /**
+     * Метод обрабатывает событие нажатия мышью на ячейку.
+     * В зависимости от состояния конкретной ячейки, выполняется выделение или снятие выделение с ячейки,
+     * а также инициируется игровой ход (перемещение изображения из одной ячейки в другую).
+     * @param e событие нажатия.
+     */
     @Override
     public void mousePressed(MouseEvent e) {
         Cell currentCell = this;
-        boolean moveComplete = false;
-        // В зависимости от состояния нажатой ячейки, выполняется определенный код:
+
         switch ( currentCell.getState() ) {
             // Если ячейка уже выбрана (выделена цветом), то при нажатии на неё - выделение снимается.
             case SELECTED:
                 currentCell.release();
                 cellLogger.info("Cell released");
                 break;
-            // Если ячейка не выбрана, то она выбирается (выделяется цветом), предыдущая ячейка,
-            // в свою очередь, деактивируется.
+            // Если ячейка не была выделена, то она выбирается (выделяется цветом), с предыдущей выбранной ячейки,
+            // выделение снимается.
             case RELEASED:
                 if ( !Objects.isNull(previousCell) ) {
                     previousCell.release();
@@ -182,12 +183,11 @@ public class Cell extends AbstractCell {
                 break;
             // Если ячейка пуста, то проверяется состояние предыдущей ячейки.
             // Если предыдущая ячейка была выбрана, то изображение из неё переносится в текущую (пустую) ячейку.
-            // Таким образом, осуществляется один игровой ход.
+            // Таким образом, осуществляется игровой ход (перемещение изображения).
             case EMPTY:
-                // Выполнение игрового хода (перемещение изображения из одной ячейки в другую).
-                // Метод getMove возвращает true, если ход выполнен успешно.
+                // Выполнение игрового хода. Метод getMove возвращает true, если ход выполнен успешно.
                 if ( !Objects.isNull(previousCell) && (previousCell.getState() == State.SELECTED) ) {
-                    moveComplete = Play.getMove(previousCell, currentCell);
+                    boolean moveComplete = Play.getMove(previousCell, currentCell);
                     if (moveComplete) {
                         previousCell.release();
                     }
