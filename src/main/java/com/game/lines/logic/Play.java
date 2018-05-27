@@ -27,7 +27,7 @@ public class Play {
     // Переменная принимает значение true, если ход (перемещение) возможен.
     private static boolean moveAbility;
     // Ячейка, в которую перемещаем изображение.
-    private Cell target;
+    private Cell targetCell;
     // Связанный список ячеек для реализации проверки возможности хода.
     private List<Cell> visited;
     // Очередь, основанная на связанном списке, необходима для реализации проверки возможности хода.
@@ -43,7 +43,7 @@ public class Play {
     private Play(Cell filledCell, Cell emptyCell) {
         playLogger = Logger.getLogger(Play.class.getName());
         sideLength = Cell.getGridLength();  // Длина (в ячейках) стороны квадрата игрового поля.
-        target = emptyCell;                 // "Целевая ячейка", она же ячейка, в которую нужно ходить.
+        targetCell = emptyCell;                 // "Целевая ячейка", она же ячейка, в которую нужно ходить.
         visited = new LinkedList<>();  // Инициализация списка, используемого для проверки возможности хода в ячейку.
         queue = new LinkedList<>();    // Инициализация очереди, используемой для проверки возможности хода в ячейку.
         lineDeleted = false;
@@ -254,7 +254,7 @@ public class Play {
             queue.offer(child);
             traverse( queue.poll() );
         });
-        return visited.contains(target);
+        return visited.contains(targetCell);
     }
 
     /**
