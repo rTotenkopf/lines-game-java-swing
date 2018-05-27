@@ -24,16 +24,16 @@ public class Play {
     private static Logger playLogger;
     // Длина стороны сетки игрового поля.
     private static int sideLength;
-    // Ячейка, в которую перемещаем изображение.
-    private static Cell target;
-    // Связанный список ячеек для реализации проверки возможности хода.
-    private static List<Cell> visited;
-    // Очередь, основанная на связанном списке, необходима для реализации проверки возможности хода.
-    private static Queue<Cell> queue;
     // Переменная принимает значение true, если ход (перемещение) возможен.
     private static boolean moveAbility;
+    // Ячейка, в которую перемещаем изображение.
+    private Cell target;
+    // Связанный список ячеек для реализации проверки возможности хода.
+    private List<Cell> visited;
+    // Очередь, основанная на связанном списке, необходима для реализации проверки возможности хода.
+    private Queue<Cell> queue;
     // Переменная принимает значение true, если строка была удалена.
-    private static boolean lineDeleted;
+    private boolean lineDeleted;
 
     /**
      * Конструктор класса Play, отвечающего за игровой процесс, принимает в качестве аргументов 2 ячейки:
@@ -46,16 +46,21 @@ public class Play {
         target = emptyCell;                 // "Целевая ячейка", она же ячейка, в которую нужно ходить.
         visited = new LinkedList<>();  // Инициализация списка, используемого для проверки возможности хода в ячейку.
         queue = new LinkedList<>();    // Инициализация очереди, используемой для проверки возможности хода в ячейку.
-        moveAbility = traverse(filledCell); // Получение результата выполнения метода traverse.
         lineDeleted = false;
+        moveAbility = traverse(filledCell); // Получение результата выполнения метода traverse.
 
-        if ( moveAbility ) {                           // Если ход возможен, то:
-            moveImageCell(filledCell, emptyCell);      // перемещаем изображения (выполняем ход)
-//            playLogger.info("Move complete!");    // Логируем перемещение.
-            linesSearch(); // вызов метода для поиска сформированных линий (по вертикали, горизонтали и диагонали)
-            if ( !lineDeleted ) { // Если в результате работы метода linesSearch() произошло удаление строки:
-                generateRandomImages(3); // генерируем новые изображения в пустые ячейки
-                // Повторно запускаем linesSearch() для поиска и удаления линий, сформированных случайно, методом выше
+        if ( moveAbility ) {
+            // Если ход возможен, то перемещаем изображения (выполняем ход).
+            moveImageCell(filledCell, emptyCell);
+            // Вызов метода для поиска сформированных линий (по вертикали, горизонтали и диагонали).
+            linesSearch();
+            // Если в результате работы метода linesSearch() линия НЕ была удалена:
+            if ( !lineDeleted ) {
+                // Генерируем новые изображения в пустые ячейки.
+                generateRandomImages(3);
+                // Добавляем ячейку (из которой изображение было перемещено) в список пустых ячеек.
+                Cell.emptyCells.add(filledCell);
+                // Повторно запускаем linesSearch() для поиска и удаления линий, сформированных случайно, методом выше.
                 linesSearch();
             }
         } else { // Если ход невозможен, то логируем сообщение о невозможности хода.
@@ -82,7 +87,7 @@ public class Play {
     }
 
     /**
-     * Метод в котором вызываются методы для поиска, в процессе игры, всех возможных линий на игровом.
+     * Метод в котором, в процессе игры, вызываются методы для поиска всех возможных линий на игровом поле.
      */
     private void linesSearch() {
         perpendicularSearch(false); // Поиск линий по вертикали.
@@ -268,11 +273,14 @@ public class Play {
         previousCell.setState(State.EMPTY);
         currentCell.setState(State.RELEASED);
         // Добавляем предыдущую ячейку в список свободных ячеек и удаляем из этого списка текущую ячейку.
-        Cell.emptyCells.add(previousCell);
+//        Cell.emptyCells.add(previousCell);
         Cell.emptyCells.remove(currentCell);
     }
 
-    // Заполнение изображениями N пустых случайных ячеек.
+    /**
+     * Заполнение изображениями N пустых случайных ячеек.
+     * @param cells количество ячеек для рандомного заполнения изображениями (зависит от настроек игры).
+     */
     public static void generateRandomImages(int cells) {
         for (int i = 0; i < cells; i++) {
             Cell cell = getRandomCell(Cell.emptyCells); // Получаем рандомную ячейку из массива пустых ячеек.
