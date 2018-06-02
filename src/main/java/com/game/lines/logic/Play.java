@@ -292,10 +292,10 @@ public class Play {
 
     /**
      * Заполнение изображениями N пустых случайных ячеек.
-     * @param cells количество ячеек для рандомного заполнения изображениями (зависит от настроек игры).
+     * @param amount количество ячеек для рандомного заполнения изображениями (зависит от настроек игры).
      */
-    public static void generateRandomImages(int cells) {
-        for (int i = 0; i < cells; i++) {
+    public static void generateRandomImages(int amount) {
+        for (int i = 0; i < amount; i++) {
             Cell cell = getRandomCell(Cell.emptyCells); // Получаем рандомную ячейку из массива пустых ячеек.
             int index = (int) (Math.random() * ResourceManger.BALLS.length); // Подбираем случайный индекс.
             cell.setIcon( (ImageIcon) ResourceManger.BALLS[index] ); // Устанавливаем случайное изображение в ячейку.
