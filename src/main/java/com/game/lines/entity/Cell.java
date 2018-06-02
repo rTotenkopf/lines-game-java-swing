@@ -188,14 +188,14 @@ public class Cell extends AbstractCell {
                 // Выполнение игрового хода. Метод getMove возвращает true, если ход выполнен успешно.
                 if ( !Objects.isNull(previousCell) && (previousCell.getState() == State.SELECTED) ) {
                     boolean moveComplete = Play.getMove(previousCell, currentCell);
-                    if (moveComplete) {
+                    if ( moveComplete ) {
                         previousCell.release();
-                    }
-                    // Если ход выполнен успешно, то "обнуляем" предыдущую ячейку.
-                    if (moveComplete) {
                         previousCell = null;
                     }
                 }
+//                else {
+//                    cellLogger.info("emptyCells.size() = " + emptyCells.size());
+//                }
                 break;
         }
 //        if ( this.state == State.SELECTED) { cellLogger.info("Cell selected"); }

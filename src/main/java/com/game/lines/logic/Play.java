@@ -34,6 +34,10 @@ public class Play {
     private Queue<Cell> queue;
     // Переменная принимает значение true, если строка была удалена.
     private boolean lineDeleted;
+    // Сеттер установки значения для переменной lineDeleted.
+    private void setLineDeleted(boolean lineDeleted) {
+        this.lineDeleted = lineDeleted;
+    }
 
     /**
      * Конструктор класса Play, отвечающего за игровой процесс, принимает в качестве аргументов 2 ячейки:
@@ -43,27 +47,37 @@ public class Play {
     private Play(Cell filledCell, Cell emptyCell) {
         playLogger = Logger.getLogger(Play.class.getName());
         sideLength = Cell.getGridLength();  // Длина (в ячейках) стороны квадрата игрового поля.
-        targetCell = emptyCell;                 // "Целевая ячейка", она же ячейка, в которую нужно ходить.
+        targetCell = emptyCell;             // "Целевая ячейка", она же ячейка, в которую нужно ходить.
         visited = new LinkedList<>();  // Инициализация списка, используемого для проверки возможности хода в ячейку.
         queue = new LinkedList<>();    // Инициализация очереди, используемой для проверки возможности хода в ячейку.
-        lineDeleted = false;
+        setLineDeleted(false);
         moveAbility = traverse(filledCell); // Получение результата выполнения метода traverse.
 
         if ( moveAbility ) {
-            // Если ход возможен, то перемещаем изображения (выполняем ход).
-            moveImageCell(filledCell, emptyCell);
-            // Вызов метода для поиска сформированных линий (по вертикали, горизонтали и диагонали).
-            linesSearch();
-            // Если в результате работы метода linesSearch() линия НЕ была удалена:
-            if ( !lineDeleted ) {
-                // Генерируем новые изображения в пустые ячейки.
-                generateRandomImages(3);
+            // Если ход возможен, то запускаем новый поток.
+            new Thread( () -> {
+                moveImageCell(filledCell, emptyCell); // Ход (перемещение).
+                try {
+                    Thread.sleep(500);  // Приотановка потока на 0,5 секунды.
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                // Вызов метода поиска всех возможных линий на поле.
+                linesSearch();
+                // Если в результате работы метода linesSearch() линия НЕ была удалена:
+                if ( !lineDeleted ) {
+                    // Генерируем новые изображения в пустые ячейки.
+                    generateRandomImages(3);
+                    // Повторно запускаем linesSearch() для поиска и удаления линий, сформированных случайно.
+                    linesSearch();
+                }
                 // Добавляем ячейку (из которой изображение было перемещено) в список пустых ячеек.
                 Cell.emptyCells.add(filledCell);
-                // Повторно запускаем linesSearch() для поиска и удаления линий, сформированных случайно, методом выше.
-                linesSearch();
-            }
-        } else { // Если ход невозможен, то логируем сообщение о невозможности хода.
+            })
+                    .start();
+
+        } else {
+            // Если ход невозможен, то логируем сообщение о невозможности хода.
             playLogger.info("Move impossible..");
         }
     }
@@ -228,7 +242,7 @@ public class Play {
      */
     private void deleteImagesFromCells(Collection<Cell> line) {
         playLogger.info("Line of " + line.size() + " balls deleted!");
-        lineDeleted = true; // Флаг, означающий, что срока удалена. Используется в логике других методов.
+        setLineDeleted(true); // Значение true означает, что срока удалена.
         line.forEach( cell -> { // Последовательное удаление изображений из ячеек.
             cell.setIcon(null);
             cell.setState(State.EMPTY);
@@ -272,8 +286,7 @@ public class Play {
         // Меняем состояния предыдущей и текущей ячеек.
         previousCell.setState(State.EMPTY);
         currentCell.setState(State.RELEASED);
-        // Добавляем предыдущую ячейку в список свободных ячеек и удаляем из этого списка текущую ячейку.
-//        Cell.emptyCells.add(previousCell);
+        // Удаляем из списка свободных ячеек текущую ячейку.
         Cell.emptyCells.remove(currentCell);
     }
 
