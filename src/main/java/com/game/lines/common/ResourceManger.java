@@ -28,7 +28,7 @@ public class ResourceManger {
     private static final URL IMAGE_ICON_URL ;
     // Инициализация константы.
     static {
-        IMAGE_ICON_URL = ResourceManger.class.getResource("/food/bananas.png");
+        IMAGE_ICON_URL = ResourceManger.class.getResource("/icons/bananas.png");
     }
     // Получаем изображение иконки окна игры, используя URL.
     public static Image getImage() {
