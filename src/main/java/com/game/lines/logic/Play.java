@@ -33,10 +33,14 @@ public class Play {
     // Очередь, основанная на связанном списке, необходима для реализации проверки возможности хода.
     private Queue<Cell> queue;
     // Переменная принимает значение true, если строка была удалена.
-    private boolean lineDeleted;
-    // Сеттер установки значения для переменной lineDeleted.
-    private void setLineDeleted(boolean lineDeleted) {
-        this.lineDeleted = lineDeleted;
+    private boolean lineState;
+    // Сеттер установки значения для переменной lineState.
+    private void setLineState(boolean lineState) {
+        this.lineState = lineState;
+    }
+    // Геттер переменной экземпляра - lineState.
+    private boolean getLineState() {
+        return lineState;
     }
 
     /**
@@ -50,9 +54,12 @@ public class Play {
         targetCell = emptyCell;             // "Целевая ячейка", она же ячейка, в которую нужно ходить.
         visited = new LinkedList<>();  // Инициализация списка, используемого для проверки возможности хода в ячейку.
         queue = new LinkedList<>();    // Инициализация очереди, используемой для проверки возможности хода в ячейку.
-        setLineDeleted(false);
+        setLineState(false);         // Установка значения переменной экземпляра lineState.
         moveAbility = traverse(filledCell); // Получение результата выполнения метода traverse.
+        initializeGame(filledCell, emptyCell); // Инициализация игрового процесса.
+    }
 
+    private void initializeGame(Cell filledCell, Cell emptyCell) {
         if ( moveAbility ) {
             // Если ход возможен, то запускаем новый поток.
             new Thread( () -> {
@@ -62,19 +69,21 @@ public class Play {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                // Вызов метода поиска всех возможных линий на поле.
+                // Поиск всех возможных линий на поле.
                 linesSearch();
-                // Если в результате работы метода linesSearch() линия НЕ была удалена:
-                if ( !lineDeleted ) {
-                    // Генерируем новые изображения в пустые ячейки.
-                    generateRandomImages(3);
-                    // Повторно запускаем linesSearch() для поиска и удаления линий, сформированных случайно.
-                    linesSearch();
+                // Генерируем новые изображения в случайном порядке.
+                generateRandomImages( getLineState(), 3 );
+                try {
+                    Thread.sleep(500);  // Приотановка потока на 0,5 секунды.
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
+                // Повторно запускаем linesSearch() для поиска и удаления линий, сформированных случайно.
+                linesSearch();
                 // Добавляем ячейку (из которой изображение было перемещено) в список пустых ячеек.
                 Cell.emptyCells.add(filledCell);
             })
-                    .start();
+                    .start(); // Запускаем поток.
 
         } else {
             // Если ход невозможен, то логируем сообщение о невозможности хода.
@@ -101,7 +110,7 @@ public class Play {
     }
 
     /**
-     * Метод в котором, в процессе игры, вызываются методы для поиска всех возможных линий на игровом поле.
+     * Метод который осуществляет поиск всех возможных линий на игровом поле.
      */
     private void linesSearch() {
         perpendicularSearch(false); // Поиск линий по вертикали.
@@ -122,8 +131,8 @@ public class Play {
 
     /**
      * Метод поиска перпендикулярных (горизонтальных и вертикальных) линий.
-     * @param vertical boolean-параметр, в зависисмости от значения которого будет выполяняться поиск:
-     *                   по горизонтали или вертикали.
+     * @param vertical параметр, в зависисмости от значения которого будет выполяняться поиск линий:
+     *                 по горизонтали или вертикали.
      */
     private void perpendicularSearch(boolean vertical) {
         BiPredicate<Cell, Cell> searchPredicate = (curr, next) ->
@@ -238,11 +247,11 @@ public class Play {
 
     /**
      * Удаление изображений из ячеек.
-     * @param line коллекция, содержащая ячейки, содержимое которых необходимо очистить.
+     * @param line коллекция, содержащая ячейки, изображения из которых необходимо удалить.
      */
     private void deleteImagesFromCells(Collection<Cell> line) {
         playLogger.info("Line of " + line.size() + " balls deleted!");
-        setLineDeleted(true); // Значение true означает, что срока удалена.
+        setLineState(true); // Значение true означает, что срока удалена.
         line.forEach( cell -> { // Последовательное удаление изображений из ячеек.
             cell.setIcon(null);
             cell.setState(State.EMPTY);
@@ -291,16 +300,19 @@ public class Play {
     }
 
     /**
-     * Заполнение изображениями N пустых случайных ячеек.
+     * Заполнение изображениями N пустых случайных ячеек происходит только в том случае, если линия была удалена.
+     * @param lineWasDeleted флаг события удаления линии.
      * @param amount количество ячеек для рандомного заполнения изображениями (зависит от настроек игры).
      */
-    public static void generateRandomImages(int amount) {
-        for (int i = 0; i < amount; i++) {
-            Cell cell = getRandomCell(Cell.emptyCells); // Получаем рандомную ячейку из массива пустых ячеек.
-            int index = (int) (Math.random() * ResourceManger.BALLS.length); // Подбираем случайный индекс.
-            cell.setIcon( (ImageIcon) ResourceManger.BALLS[index] ); // Устанавливаем случайное изображение в ячейку.
-            cell.setState(State.RELEASED); // Устанавливаем состояние "ячейка освобождена".
-            Cell.emptyCells.remove(cell); // Удаляем ячейку из списка пустых ячеек.
+    public static void generateRandomImages(boolean lineWasDeleted, int amount) {
+        if ( !lineWasDeleted ) {
+            for (int i = 0; i < amount; i++) {
+                Cell cell = getRandomCell(Cell.emptyCells); // Получаем рандомную ячейку из массива пустых ячеек.
+                int index = (int) (Math.random() * ResourceManger.BALLS.length); // Подбираем случайный индекс.
+                cell.setIcon((ImageIcon) ResourceManger.BALLS[index]); // Устанавливаем случайное изображение в ячейку.
+                cell.setState(State.RELEASED); // Устанавливаем состояние "ячейка освобождена".
+                Cell.emptyCells.remove(cell); // Удаляем ячейку из списка пустых ячеек.
+            }
         }
     }
 

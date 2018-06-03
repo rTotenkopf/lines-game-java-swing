@@ -38,22 +38,23 @@ public class MainFrame extends JFrame {
         grid = new Cell[gridWidth][gridHeight]; // Инициализация сетки.
         Border lineBorder = BorderFactory.createLineBorder(Color.BLACK, 1); // Установка границ ячеек сетки.
 
-        JButton startButton = new JButton("Следующий ход"); // Кнопка нового хода.
-        // Слушатель кнопки.
-        startButton.addActionListener( e -> {
-            if (Cell.emptyCells.size() < 5) {
-                System.out.println("End of game!");
-            } else {
-                Play.generateRandomImages(5);
-            }
-        });
-        // Пока просто кнопка..
-        JButton button2 = new JButton("BUTTON_2");
+//        JButton startButton = new JButton("Следующий ход"); // Кнопка нового хода.
+//        // Слушатель кнопки.
+//        startButton.addActionListener( e -> {
+//            if (Cell.emptyCells.size() < 5) {
+//                System.out.println("End of game!");
+//            } else {
+//                Play.generateRandomImages(5);
+//            }
+//        });
+//        // Пока просто кнопка..
+//        JButton button2 = new JButton("BUTTON_2");
+
         // Установка параметров панелей и добавление на них элементов.
         northPanel.setBackground(Color.YELLOW);
-        northPanel.add(startButton);
+//        northPanel.add(startButton);
         southPanel.setBackground(Color.GREEN);
-        southPanel.add(button2);
+//        southPanel.add(button2);
 
         for (int y = gridHeight; y >= 1; y--) {
             for (int x = 1; x <= gridWidth; x++) {
@@ -69,6 +70,15 @@ public class MainFrame extends JFrame {
         getContentPane().add(BorderLayout.CENTER, gridPanel);
         getContentPane().add(BorderLayout.NORTH, northPanel);
         setVisible(true); // Установка свойства "видимый".
+
+        new Thread( () -> {
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            Play.generateRandomImages(false, 5);
+        }).start();
     }
 
     /**
