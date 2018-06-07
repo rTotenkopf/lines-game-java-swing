@@ -20,13 +20,15 @@ public class MainFrame extends JFrame {
 
     // Сетка/игровое поле
     public static JLabel[][] grid;
+    public static JLabel infoLabel;
 
     // Конструктор класса, отвечающего за создание графического интерфейса.
     public MainFrame(int frameWidth, int frameHeight, int gridWidth, int gridHeight) {
         // Устанавливаем заголовок окна игры.
-        setTitle("Lines");
+        setTitle("Lines Game");
+        infoLabel = new JLabel("Начата новая игра.");
         // Устанавливаем изображение/иконку окна игры.
-        setIconImage( ResourceManger.getImage() );
+        setIconImage( new ResourceManger().getImage() );
         // Устанавливаем закрытие окна нажатием на "крестик".
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
@@ -38,23 +40,25 @@ public class MainFrame extends JFrame {
         grid = new Cell[gridWidth][gridHeight]; // Инициализация сетки.
         Border lineBorder = BorderFactory.createLineBorder(Color.BLACK, 1); // Установка границ ячеек сетки.
 
-//        JButton startButton = new JButton("Следующий ход"); // Кнопка нового хода.
-//        // Слушатель кнопки.
-//        startButton.addActionListener( e -> {
-//            if (Cell.emptyCells.size() < 5) {
-//                System.out.println("End of game!");
-//            } else {
-//                Play.generateRandomImages(5);
-//            }
-//        });
+        JButton startButton = new JButton("Следующий ход"); // Кнопка нового хода.
+        JLabel startLabel = new JLabel("Добро пожаловать в игру!");
+
+        // Слушатель кнопки.
+        startButton.addActionListener( e -> {
+            if (Cell.emptyCells.size() < 5) {
+                System.out.println("End of game!");
+            } else {
+                Play.generateRandomImages(false,5);
+            }
+        });
 //        // Пока просто кнопка..
 //        JButton button2 = new JButton("BUTTON_2");
 
         // Установка параметров панелей и добавление на них элементов.
         northPanel.setBackground(Color.YELLOW);
-//        northPanel.add(startButton);
-        southPanel.setBackground(Color.GREEN);
-//        southPanel.add(button2);
+        northPanel.add(startLabel);
+        southPanel.setBackground(Color.YELLOW);
+        southPanel.add(infoLabel);
 
         for (int y = gridHeight; y >= 1; y--) {
             for (int x = 1; x <= gridWidth; x++) {

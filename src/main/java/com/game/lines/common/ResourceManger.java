@@ -1,18 +1,13 @@
 package com.game.lines.common;
 
-import com.game.lines.run.RunLines;
-
 import javax.swing.*;
 import java.awt.*;
-import java.io.IOException;
-import java.net.URISyntaxException;
 import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
-import java.util.stream.Stream;
 
 /**
  * Класс ResourceManager управляет доступом к ресурсам проекта.
@@ -22,54 +17,46 @@ import java.util.stream.Stream;
 
 public class ResourceManger {
 
-    // Логгер процесса работы с ресурсами.
-    private static Logger resourceLogger = Logger.getLogger(ResourceManger.class.getName());
+    private String BALLS_FOLDER;
+    private String FILE_TYPE;
     // URL иконки окна игры.
-    private static final URL IMAGE_ICON_URL ;
-    // Инициализация константы.
-    static {
-        IMAGE_ICON_URL = ResourceManger.class.getResource("/icons/bananas.png");
-    }
+    private final URL IMAGE_ICON_URL;
     // Получаем изображение иконки окна игры, используя URL.
-    public static Image getImage() {
+    public Image getImage() {
         return IMAGE_ICON_URL != null ? new ImageIcon(IMAGE_ICON_URL).getImage() : null;
     }
     // Массив изображений используемых в игре.
-    public static final Object[] BALLS = ballsMap().values().toArray();
+    public final Object[] BALLS;
+    /**
+     * Конструктор класса ResourceManager.
+     */
+    public ResourceManger() {
+        Logger resourceLogger = Logger.getLogger(getClass().getName());
+        String iconFolder = "/icons/";
+        String iconName = "bananas";
+        BALLS_FOLDER = "/balls/";
+        FILE_TYPE = ".png";
+        IMAGE_ICON_URL = getClass().getResource( iconFolder + iconName + FILE_TYPE);
+        BALLS = ballsMap().values().toArray();
+    }
 
     /**
      * Key = название цвета;
      * Value = изображение;
      * @return карта изображений по цветам.
      */
-    public static Map<String, ImageIcon> ballsMap() {
-        Map<String, ImageIcon> iconMap = new HashMap<>();
-        // Ссылка на ресурс (папку с изображениями).
-        URL resourceUrl = RunLines.class.getResource("/balls/");
-        // Обход файлов, находящихся в папке ресурса.
-        if (resourceUrl != null) {
-            iconMap = getImagesFromResource( resourceUrl );
+    public Map<String, ImageIcon> ballsMap() {
+        List<String> colors = Arrays.asList("black", "blue", "green", "purple", "red", "sapphire", "yellow");
+        Map<String, ImageIcon> imageMap = new HashMap<>();
+
+        for (String color : colors) {
+            ImageIcon image = getImageByColor(color);
+            imageMap.put(color, image);
         }
-        return iconMap;
+        return imageMap;
     }
 
-    private static Map<String, ImageIcon> getImagesFromResource(URL resourceUrl) {
-        Map<String, ImageIcon> map = new HashMap<>();
-        try (Stream<Path> paths = Files.walk(Paths.get(resourceUrl.toURI()))) {
-            paths
-                    .filter(Files::isRegularFile)
-                    .forEach(file -> {
-                        // Получаем название цвета изображения, содержащееся в имени файла.
-                        String color = file.getFileName().toString().split("[.-]")[0];
-//                            resourceLogger.info(color);
-//                            resourceLogger.info(url.getFile());
-                        String image = "/" + file.getParent().getFileName() + "/" + file.getFileName();
-                        // Добавляем ImageIcon в карту, где Key = цвет, Value = ImageIcon.
-                        map.put(color, new ImageIcon( RunLines.class.getResource(image) ));
-                    });
-        } catch (URISyntaxException | IOException e) {
-            resourceLogger.warning(e.getMessage());
-        }
-        return map;
+    private ImageIcon getImageByColor(String color) {
+        return new ImageIcon(getClass().getResource(BALLS_FOLDER + color + "-ball" + FILE_TYPE));
     }
 }

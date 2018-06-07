@@ -6,7 +6,10 @@
 
     <groupId>Lines</groupId>
     <artifactId>Lines</artifactId>
+    <packaging>jar</packaging>
+    <name>lines-game</name>
     <version>1.0-SNAPSHOT</version>
+
     <build>
         <plugins>
             <plugin>
@@ -21,63 +24,24 @@
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <!--Всегда указывать версию-->
-                <version>2.8</version>
-                <executions>
-                    <execution>
-                        <id>copy</id>
-                        <phase>generate-resources</phase>
-                        <goals>
-                            <goal>copy-dependencies</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>
-                                ${project.build.directory}/lib
-                            </outputDirectory>
-                        </configuration>
-                    </execution>
-                    <!--Распаковывает все зависимости в указанную директорию,
-                    поэтому тот что в проекте lib и lib\native можешь удалить-->
-                    <execution>
-                        <id>unpack</id>
-                        <phase>generate-resources</phase>
-                        <goals>
-                            <goal>unpack-dependencies</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>
-                                ${project.build.directory}/unpack
-                            </outputDirectory>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
                 <!--Всегда указывать версию-->
                 <version>2.4</version>
                 <configuration>
+                    <finalName>lines-game-java-swing</finalName>
+                    <includes>
+                        <include>**/*.class</include>
+                        <include>**/*.properties</include>
+                        <include>**/*.png</include>
+                    </includes>
                     <archive>
                         <manifest>
-                            <classpathPrefix>lib/</classpathPrefix>
-                            <addClasspath>true</addClasspath>
-                            <mainClass>com.game.robot.run.Breakout</mainClass>
+                            <mainClass>com.game.lines.run.RunLines</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
             </plugin>
         </plugins>
     </build>
-
-    <dependencies>
-        <!-- https://mvnrepository.com/artifact/org.slick2d/slick2d-core -->
-        <dependency>
-            <groupId>org.slick2d</groupId>
-            <artifactId>slick2d-core</artifactId>
-            <version>1.0.2</version>
-        </dependency>
-    </dependencies>
 
 </project>

@@ -2,12 +2,14 @@ package com.game.lines.logic;
 
 import com.game.lines.common.ResourceManger;
 import com.game.lines.entity.Cell;
+import com.game.lines.gui.MainFrame;
 import javafx.util.Pair;
 
 import javax.swing.*;
 import java.util.*;
-import java.util.List;
-import java.util.function.*;
+import java.util.function.BiPredicate;
+import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.logging.Logger;
 
 /**
@@ -21,7 +23,7 @@ import java.util.logging.Logger;
 public class Play {
 
     // Логгер игрового процесса.
-    private static Logger playLogger;
+    private Logger playLogger;
     // Длина стороны сетки игрового поля.
     private static int sideLength;
     // Переменная принимает значение true, если ход (перемещение) возможен.
@@ -49,6 +51,8 @@ public class Play {
      * @param emptyCell пустая ячейка, в которую необходимо переместить изображение.
      */
     private Play(Cell filledCell, Cell emptyCell) {
+        JLabel gameInfo = MainFrame.infoLabel;
+        gameInfo = new JLabel("");
         playLogger = Logger.getLogger(Play.class.getName());
         sideLength = Cell.getGridLength();  // Длина (в ячейках) стороны квадрата игрового поля.
         targetCell = emptyCell;             // "Целевая ячейка", она же ячейка, в которую нужно ходить.
@@ -81,7 +85,8 @@ public class Play {
                 // Повторно запускаем linesSearch() для поиска и удаления линий, сформированных случайно.
                 linesSearch();
                 // Добавляем ячейку (из которой изображение было перемещено) в список пустых ячеек.
-                Cell.emptyCells.add(filledCell);
+//                Cell.emptyCells.add(filledCell);
+//                filledCell.setState(State.EMPTY);
             })
                     .start(); // Запускаем поток.
 
@@ -104,7 +109,7 @@ public class Play {
         if ( emptyCells > 3 ) {
             new Play(filledCell, emptyCell);
         } else {
-            playLogger.warning("End of the game!");
+            Logger.getGlobal().warning("End of the game!");
         }
         return moveAbility;
     }
@@ -289,13 +294,14 @@ public class Play {
         // Получаем изображение из предыдущей ячейки.
         String pictureColor = previousCell.getImageColor();
         // Устанавливаем изображение в пустую ячейку.
-        currentCell.setIcon(ResourceManger.ballsMap().get(pictureColor) );
+        currentCell.setIcon(new ResourceManger().ballsMap().get(pictureColor) );
         // Удаляем изображение из предыдущей ячейки.
         previousCell.setIcon(null);
         // Меняем состояния предыдущей и текущей ячеек.
         previousCell.setState(State.EMPTY);
         currentCell.setState(State.RELEASED);
-        // Удаляем из списка свободных ячеек текущую ячейку.
+        // Добавляем предыдущую ячейку в список свободных ячеек и удаляем текущую ячейку.
+        Cell.emptyCells.add(previousCell);
         Cell.emptyCells.remove(currentCell);
     }
 
@@ -306,10 +312,11 @@ public class Play {
      */
     public static void generateRandomImages(boolean lineWasDeleted, int amount) {
         if ( !lineWasDeleted ) {
+            ResourceManger rm = new ResourceManger();
             for (int i = 0; i < amount; i++) {
                 Cell cell = getRandomCell(Cell.emptyCells); // Получаем рандомную ячейку из массива пустых ячеек.
-                int index = (int) (Math.random() * ResourceManger.BALLS.length); // Подбираем случайный индекс.
-                cell.setIcon((ImageIcon) ResourceManger.BALLS[index]); // Устанавливаем случайное изображение в ячейку.
+                int index = (int) (Math.random() * rm.BALLS.length); // Подбираем случайный индекс.
+                cell.setIcon((ImageIcon) rm.BALLS[index]); // Устанавливаем случайное изображение в ячейку.
                 cell.setState(State.RELEASED); // Устанавливаем состояние "ячейка освобождена".
                 Cell.emptyCells.remove(cell); // Удаляем ячейку из списка пустых ячеек.
             }
