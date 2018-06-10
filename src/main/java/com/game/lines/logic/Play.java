@@ -24,6 +24,8 @@ public class Play {
 
     // Логгер игрового процесса.
     private Logger playLogger;
+    // Лэйбл информирования пользователя об игровом процессе.
+    private static JLabel gameInfo;
     // Длина стороны сетки игрового поля.
     private static int sideLength;
     // Переменная принимает значение true, если ход (перемещение) возможен.
@@ -51,9 +53,8 @@ public class Play {
      * @param emptyCell пустая ячейка, в которую необходимо переместить изображение.
      */
     private Play(Cell filledCell, Cell emptyCell) {
-        JLabel gameInfo = MainFrame.infoLabel;
-        gameInfo = new JLabel("");
-        playLogger = Logger.getLogger(Play.class.getName());
+        playLogger = Logger.getLogger(getClass().getName());
+        gameInfo = MainFrame.infoLabel;
         sideLength = Cell.getGridLength();  // Длина (в ячейках) стороны квадрата игрового поля.
         targetCell = emptyCell;             // "Целевая ячейка", она же ячейка, в которую нужно ходить.
         visited = new LinkedList<>();  // Инициализация списка, используемого для проверки возможности хода в ячейку.
@@ -65,6 +66,7 @@ public class Play {
 
     private void initializeGame(Cell filledCell, Cell emptyCell) {
         if ( moveAbility ) {
+            gameInfo.setText("Ход выполняется...");
             // Если ход возможен, то запускаем новый поток.
             new Thread( () -> {
                 moveImageCell(filledCell, emptyCell); // Ход (перемещение).
@@ -76,7 +78,7 @@ public class Play {
                 // Поиск всех возможных линий на поле.
                 linesSearch();
                 // Генерируем новые изображения в случайном порядке.
-                generateRandomImages( getLineState(), 3 );
+                generateRandomImages( "Ход успешно выполнен.", getLineState(), 3 );
                 try {
                     Thread.sleep(500);  // Приотановка потока на 0,5 секунды.
                 } catch (InterruptedException e) {
@@ -93,6 +95,7 @@ public class Play {
         } else {
             // Если ход невозможен, то логируем сообщение о невозможности хода.
             playLogger.info("Move impossible..");
+            gameInfo.setText("Ход в выбранную ячейку невозможен..");
         }
     }
 
@@ -110,6 +113,7 @@ public class Play {
             new Play(filledCell, emptyCell);
         } else {
             Logger.getGlobal().warning("End of the game!");
+            gameInfo.setText("Игра окончена!");
         }
         return moveAbility;
     }
@@ -156,7 +160,6 @@ public class Play {
                 if ( !color.isEmpty() ) {
                     colorSequenceMap.put(color, images);
                 }
-//                playLogger.warning("total keys in map: " + colorSequenceMap.values().size());
             }
             colorSequenceMap.values()
                     .stream().filter( element -> element.size() >= 5)
@@ -256,6 +259,7 @@ public class Play {
      */
     private void deleteImagesFromCells(Collection<Cell> line) {
         playLogger.info("Line of " + line.size() + " balls deleted!");
+        gameInfo.setText("Линия из " + line.size() + " шаров удалена!");
         setLineState(true); // Значение true означает, что срока удалена.
         line.forEach( cell -> { // Последовательное удаление изображений из ячеек.
             cell.setIcon(null);
@@ -307,11 +311,13 @@ public class Play {
 
     /**
      * Заполнение изображениями N пустых случайных ячеек происходит только в том случае, если линия была удалена.
+     * @param textInfo сообщение, переданное в метод, для отображения на экране состояния хода игры.
      * @param lineWasDeleted флаг события удаления линии.
      * @param amount количество ячеек для рандомного заполнения изображениями (зависит от настроек игры).
      */
-    public static void generateRandomImages(boolean lineWasDeleted, int amount) {
+    public static void generateRandomImages(String textInfo, boolean lineWasDeleted, int amount) {
         if ( !lineWasDeleted ) {
+            MainFrame.infoLabel.setText( textInfo );
             ResourceManger rm = new ResourceManger();
             for (int i = 0; i < amount; i++) {
                 Cell cell = getRandomCell(Cell.emptyCells); // Получаем рандомную ячейку из массива пустых ячеек.

@@ -18,15 +18,13 @@ import java.awt.*;
 
 public class MainFrame extends JFrame {
 
-    // Сетка/игровое поле
-    public static JLabel[][] grid;
-    public static JLabel infoLabel;
+    public static JLabel[][] grid; // Сетка/игровое поле
+    public static JLabel infoLabel; // Лэйбл с информированием пользователя о состоянии игры.
 
     // Конструктор класса, отвечающего за создание графического интерфейса.
     public MainFrame(int frameWidth, int frameHeight, int gridWidth, int gridHeight) {
         // Устанавливаем заголовок окна игры.
         setTitle("Lines Game");
-        infoLabel = new JLabel("Начата новая игра.");
         // Устанавливаем изображение/иконку окна игры.
         setIconImage( new ResourceManger().getImage() );
         // Устанавливаем закрытие окна нажатием на "крестик".
@@ -48,16 +46,14 @@ public class MainFrame extends JFrame {
             if (Cell.emptyCells.size() < 5) {
                 System.out.println("End of game!");
             } else {
-                Play.generateRandomImages(false,5);
+                Play.generateRandomImages("Начата новая игра.", false,5);
             }
         });
-//        // Пока просто кнопка..
-//        JButton button2 = new JButton("BUTTON_2");
-
         // Установка параметров панелей и добавление на них элементов.
         northPanel.setBackground(Color.YELLOW);
         northPanel.add(startLabel);
         southPanel.setBackground(Color.YELLOW);
+        infoLabel = new JLabel();
         southPanel.add(infoLabel);
 
         for (int y = gridHeight; y >= 1; y--) {
@@ -81,7 +77,7 @@ public class MainFrame extends JFrame {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            Play.generateRandomImages(false, 5);
+            Play.generateRandomImages("Начата новая игра.", false, 5);
         }).start();
     }
 

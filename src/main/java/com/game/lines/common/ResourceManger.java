@@ -7,7 +7,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Logger;
 
 /**
  * Класс ResourceManager управляет доступом к ресурсам проекта.
@@ -17,7 +16,9 @@ import java.util.logging.Logger;
 
 public class ResourceManger {
 
+    // Папка с изображениями.
     private String BALLS_FOLDER;
+    // Тип файла изображения.
     private String FILE_TYPE;
     // URL иконки окна игры.
     private final URL IMAGE_ICON_URL;
@@ -27,11 +28,11 @@ public class ResourceManger {
     }
     // Массив изображений используемых в игре.
     public final Object[] BALLS;
+
     /**
      * Конструктор класса ResourceManager.
      */
     public ResourceManger() {
-        Logger resourceLogger = Logger.getLogger(getClass().getName());
         String iconFolder = "/icons/";
         String iconName = "bananas";
         BALLS_FOLDER = "/balls/";

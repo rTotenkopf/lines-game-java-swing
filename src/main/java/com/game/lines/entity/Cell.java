@@ -1,5 +1,6 @@
 package com.game.lines.entity;
 
+import com.game.lines.gui.MainFrame;
 import com.game.lines.logic.Play;
 import com.game.lines.logic.State;
 import javafx.util.Pair;
@@ -25,6 +26,7 @@ public class Cell extends AbstractCell {
 
     // Логгер ячейки.
     private Logger cellLogger = Logger.getLogger(Cell.class.getName());
+    private JLabel gameInfo = MainFrame.infoLabel;
     // Карта ячеек, где Ключ - координаты, а Значение - ячейка.
     public static Map<Pair<Integer, Integer>, Cell> cellMap = new HashMap<>();
     /**
@@ -171,6 +173,7 @@ public class Cell extends AbstractCell {
             case SELECTED:
                 currentCell.release();
                 cellLogger.info("Cell released");
+                gameInfo.setText("Ячейка освобождена.");
                 break;
             // Если ячейка не была выделена, то она выбирается (выделяется цветом), с предыдущей выбранной ячейки,
             // выделение снимается.
@@ -180,6 +183,7 @@ public class Cell extends AbstractCell {
                 }
                 currentCell.select();
                 cellLogger.info("Cell selected");
+                gameInfo.setText("Ячейка выбрана.");
                 break;
             // Если ячейка пуста, то проверяется состояние предыдущей ячейки.
             // Если предыдущая ячейка была выбрана, то изображение из неё переносится в текущую (пустую) ячейку.
@@ -207,9 +211,13 @@ public class Cell extends AbstractCell {
     @Override
     public boolean equals(Object obj) {
         boolean value = false;
-        if ( !(obj instanceof JButton) ) {
-            Cell other = (Cell) obj;
-            value = (this.Xx == other.getXx() && this.Yy == other.getYy() );
+        if ( !(obj instanceof JButton) && !(obj instanceof JPanel)) {
+            try {
+                Cell other = (Cell) obj;
+                value = (this.Xx == other.getXx() && this.Yy == other.getYy() );
+            } catch (ClassCastException e) {
+                e.getMessage();
+            }
         }
         return value;
     }
