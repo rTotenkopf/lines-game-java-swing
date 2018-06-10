@@ -23,60 +23,56 @@ public class MainFrame extends JFrame {
 
     // Конструктор класса, отвечающего за создание графического интерфейса.
     public MainFrame(int frameWidth, int frameHeight, int gridWidth, int gridHeight) {
-        // Устанавливаем заголовок окна игры.
-        setTitle("Lines Game");
-        // Устанавливаем изображение/иконку окна игры.
-        setIconImage( new ResourceManger().getImage() );
-        // Устанавливаем закрытие окна нажатием на "крестик".
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        // Настройка главного окна игры.
+        setTitle("Lines Game"); // Устанавливаем заголовок окна игры.
+        setIconImage( new ResourceManger().getImage() ); // Устанавливаем изображение/иконку окна игры.
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE); // Устанавливаем закрытие окна нажатием на "крестик".
 
-        JPanel gridPanel = new JPanel();    // Панель, на которой будет располагаться игровое поле.
-        JPanel southPanel = new JPanel();   // Доп. панель.
-        JPanel northPanel = new JPanel();   // Доп. панель.
+        // Создание элементов gui.
+        JLabel startLabel = new JLabel("Добро пожаловать в игру!");
+        infoLabel = new JLabel();
+        JMenuBar menuBar = new JMenuBar();  // Панель меню.
+        JPanel gridPanel = new JPanel();    // Панель, на которой располагается игровое поле.
+        JPanel southPanel = new JPanel();   // Доп. панель, расположенная снизу экрана.
+        JPanel northPanel = new JPanel();   // Доп. панель, расположенная сверху экрана..
 
+        // Создание сетки из ячеек для игры.
         gridPanel.setLayout(new GridLayout(gridWidth, gridHeight) ); // Установка сетки на панель.
         grid = new Cell[gridWidth][gridHeight]; // Инициализация сетки.
         Border lineBorder = BorderFactory.createLineBorder(Color.BLACK, 1); // Установка границ ячеек сетки.
 
-        JButton startButton = new JButton("Следующий ход"); // Кнопка нового хода.
-        JLabel startLabel = new JLabel("Добро пожаловать в игру!");
-
-        // Слушатель кнопки.
-        startButton.addActionListener( e -> {
-            if (Cell.emptyCells.size() < 5) {
-                System.out.println("End of game!");
-            } else {
-                Play.generateRandomImages("Начата новая игра.", false,5);
-            }
-        });
         // Установка параметров панелей и добавление на них элементов.
         northPanel.setBackground(Color.YELLOW);
         northPanel.add(startLabel);
         southPanel.setBackground(Color.YELLOW);
-        infoLabel = new JLabel();
         southPanel.add(infoLabel);
 
+        // Инициализации ячеек сетки.
         for (int y = gridHeight; y >= 1; y--) {
             for (int x = 1; x <= gridWidth; x++) {
                 Cell createdCell = new Cell(x, y); // Создание нового объекта ячейки на сетке.
                 initializeCell( createdCell, gridPanel, lineBorder ); // Вызов метода инициализации ячейки.
             }
         }
-        pack(); // Установка соответствующего размер фрейма.
-        setLocation(500, 100); // Установка положения фрейма на экране пользователя.
-        setSize(frameWidth, frameHeight); // Установка размера фрейма.
+        pack(); // Установка соответствующего размера окна программы.
+        setLocation(500, 100); // Установка положения окна на экране пользователя.
+        setSize(frameWidth, frameHeight); // Установка размера.
+
         // Добавление панелей на главный фрейм с заданием необходимого расположения.
         getContentPane().add(BorderLayout.SOUTH, southPanel);
         getContentPane().add(BorderLayout.CENTER, gridPanel);
         getContentPane().add(BorderLayout.NORTH, northPanel);
         setVisible(true); // Установка свойства "видимый".
 
+        // Инициализация игры, генерации первых N изображений в ячейки.
+        // Задержка в 1с необходима, чтобы все элементы gui успели отрисоваться перед началом новой игры.
         new Thread( () -> {
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+            // Рандом изображений.
             Play.generateRandomImages("Начата новая игра.", false, 5);
         }).start();
     }
