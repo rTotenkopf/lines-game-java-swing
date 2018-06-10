@@ -173,7 +173,7 @@ public class Cell extends AbstractCell {
             case SELECTED:
                 currentCell.release();
                 cellLogger.info("Cell released");
-                gameInfo.setText("Ячейка освобождена.");
+                gameInfo.setText("Шар освобожден.");
                 break;
             // Если ячейка не была выделена, то она выбирается (выделяется цветом), с предыдущей выбранной ячейки,
             // выделение снимается.
@@ -183,12 +183,13 @@ public class Cell extends AbstractCell {
                 }
                 currentCell.select();
                 cellLogger.info("Cell selected");
-                gameInfo.setText("Ячейка выбрана.");
+                gameInfo.setText("Шар выбран.");
                 break;
             // Если ячейка пуста, то проверяется состояние предыдущей ячейки.
             // Если предыдущая ячейка была выбрана, то изображение из неё переносится в текущую (пустую) ячейку.
             // Таким образом, осуществляется игровой ход (перемещение изображения).
             case EMPTY:
+                gameInfo.setText("Выберите шар!");
                 // Выполнение игрового хода. Метод getMove возвращает true, если ход выполнен успешно.
                 if ( !Objects.isNull(previousCell) && (previousCell.getState() == State.SELECTED) ) {
                     boolean moveComplete = Play.getMove(previousCell, currentCell);
