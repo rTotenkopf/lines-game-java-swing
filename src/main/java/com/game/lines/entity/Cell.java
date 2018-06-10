@@ -173,7 +173,7 @@ public class Cell extends AbstractCell {
             case SELECTED:
                 currentCell.release();
                 cellLogger.info("Cell released");
-                gameInfo.setText("Шар освобожден.");
+                gameInfo.setText("Ячейка освобождена.");
                 break;
             // Если ячейка не была выделена, то она выбирается (выделяется цветом), с предыдущей выбранной ячейки,
             // выделение снимается.
