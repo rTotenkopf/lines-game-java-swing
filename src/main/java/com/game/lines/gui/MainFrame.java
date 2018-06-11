@@ -20,6 +20,8 @@ public class MainFrame extends JFrame {
 
     public static JLabel[][] grid; // Сетка/игровое поле
     public static JLabel infoLabel; // Лэйбл с информированием пользователя о состоянии игры.
+    public static JLabel pointsLabel;
+    public static JLabel ballsLabel;
 
     // Конструктор класса, отвечающего за создание графического интерфейса.
     public MainFrame(int frameWidth, int frameHeight, int gridWidth, int gridHeight) {
@@ -29,9 +31,11 @@ public class MainFrame extends JFrame {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE); // Устанавливаем закрытие окна нажатием на "крестик".
 
         // Создание элементов gui.
-        JLabel startLabel = new JLabel("Добро пожаловать в игру!");
         infoLabel = new JLabel();
-        JMenuBar menuBar = new JMenuBar();  // Панель меню.
+        pointsLabel = new JLabel("Очки: 0");
+        ballsLabel = new JLabel("Шары: 0");
+        JPanel pointsPanel = new JPanel();
+        JPanel ballsPanel = new JPanel();
         JPanel gridPanel = new JPanel();    // Панель, на которой располагается игровое поле.
         JPanel southPanel = new JPanel();   // Доп. панель, расположенная снизу экрана.
         JPanel northPanel = new JPanel();   // Доп. панель, расположенная сверху экрана..
@@ -42,8 +46,14 @@ public class MainFrame extends JFrame {
         Border lineBorder = BorderFactory.createLineBorder(Color.BLACK, 1); // Установка границ ячеек сетки.
 
         // Установка параметров панелей и добавление на них элементов.
+        pointsPanel.setBackground(Color.YELLOW);
+        pointsPanel.add(pointsLabel);
+        ballsPanel.setBackground(Color.YELLOW);
+        ballsPanel.add(ballsLabel);
         northPanel.setBackground(Color.YELLOW);
-        northPanel.add(startLabel);
+        northPanel.setLayout(new BorderLayout());
+        northPanel.add(pointsPanel, BorderLayout.WEST);
+        northPanel.add(ballsPanel, BorderLayout.EAST);
         southPanel.setBackground(Color.YELLOW);
         southPanel.add(infoLabel);
 

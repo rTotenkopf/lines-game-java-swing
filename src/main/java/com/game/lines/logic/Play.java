@@ -26,6 +26,12 @@ public class Play {
     private Logger playLogger;
     // Лэйбл информирования пользователя об игровом процессе.
     private static JLabel gameInfo;
+    // Лэйбл счетчика очков в игре.
+    private static JLabel pointsLabel;
+    // Счетчик очков в игре.
+    private static int pointsCounter;
+    // Лэйбл счетчика шаров, удаленных с поля.
+    private static JLabel ballsLabel;
     // Длина стороны сетки игрового поля.
     private static int sideLength;
     // Переменная принимает значение true, если ход (перемещение) возможен.
@@ -38,6 +44,15 @@ public class Play {
     private Queue<Cell> queue;
     // Переменная принимает значение true, если строка была удалена.
     private boolean lineState;
+
+    private static void setPointsCounter(int pointsCounter) {
+        Play.pointsCounter = pointsCounter;
+    }
+
+    private static int getPointsCounter() {
+        return pointsCounter;
+    }
+
     // Сеттер установки значения для переменной lineState.
     private void setLineState(boolean lineState) {
         this.lineState = lineState;
@@ -55,11 +70,13 @@ public class Play {
     private Play(Cell filledCell, Cell emptyCell) {
         playLogger = Logger.getLogger(getClass().getName());
         gameInfo = MainFrame.infoLabel;
+        pointsLabel = MainFrame.pointsLabel;
+        ballsLabel = MainFrame.ballsLabel;
         sideLength = Cell.getGridLength();  // Длина (в ячейках) стороны квадрата игрового поля.
         targetCell = emptyCell;             // "Целевая ячейка", она же ячейка, в которую нужно ходить.
-        visited = new LinkedList<>();  // Инициализация списка, используемого для проверки возможности хода в ячейку.
-        queue = new LinkedList<>();    // Инициализация очереди, используемой для проверки возможности хода в ячейку.
-        setLineState(false);         // Установка значения переменной экземпляра lineState.
+        visited = new LinkedList<>();       // Инициализация списка, используемого для проверки возможности хода в ячейку.
+        queue = new LinkedList<>();         // Инициализация очереди, используемой для проверки возможности хода в ячейку.
+        setLineState(false);                // Установка значения переменной экземпляра lineState.
         moveAbility = traverse(filledCell); // Получение результата выполнения метода traverse.
         initializeGame(filledCell, emptyCell); // Инициализация игрового процесса.
     }
@@ -266,6 +283,7 @@ public class Play {
             cell.setState(State.EMPTY);
             Cell.emptyCells.add(cell);
         });
+        accuralPoints(line.size()); // Начисление очков.
         line.clear(); // Очистка коллекции.
     }
 
@@ -327,6 +345,18 @@ public class Play {
                 Cell.emptyCells.remove(cell); // Удаляем ячейку из списка пустых ячеек.
             }
         }
+    }
+
+    /**
+     * Начисление очков за удаленную линию, исходя из количества шаров в ней.
+     * Чем больше шаров, тем выше коэффициент начисления очков.
+     * @param lineSize количество шаров.
+     */
+    private static void accuralPoints(int lineSize) {
+        double ratio = 2.1 + (double) (lineSize - 5) / 10;
+        int pointsValue = getPointsCounter() + (int) (lineSize * ratio);
+        setPointsCounter(pointsValue);
+        pointsLabel.setText("Очки: " + String.valueOf(getPointsCounter()));
     }
 
     /**
