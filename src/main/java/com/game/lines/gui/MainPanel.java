@@ -10,47 +10,75 @@ import javax.swing.border.Border;
 import java.awt.*;
 
 /**
- * Класс MainPanel нужен для создания главного окна программы с отрисовкой всех необходимых виджетов и
- * игрового поля.
- *
+ * Класс MainPanel отвечает за создание главного окна программы и отрисовку всех необходимых виджетов.
  * @author Eugene Ivanov on 31.03.18
  */
 
 public class MainPanel extends JFrame {
 
-    public static JLabel[][] grid; // Сетка/игровое поле
-    public static JLabel infoLabel; // Лэйбл с информированием пользователя о состоянии игры.
-    public static JLabel pointsLabel;
-    public static JLabel ballsLabel;
+    public static JLabel[][] grid;    // Сетка/игровое поле
+    public static JLabel infoLabel;   // Информация о состоянии игры.
+    public static JLabel pointsLabel; // Информация об очках.
+    public static JLabel ballsLabel;  // Информация о количестве удаленных шаров.
 
-    // Конструктор класса, отвечающего за создание графического интерфейса.
+    /**
+     * Конструктор класса MainPanel.
+     * @param frameWidth ширина фрейма.
+     * @param frameHeight высота фрейма.
+     * @param gridWidth ширина сетки.
+     * @param gridHeight высота сетки.
+     */
     public MainPanel(int frameWidth, int frameHeight, int gridWidth, int gridHeight) {
         // Настройка главного окна игры.
         setTitle("Lines Game"); // Устанавливаем заголовок окна игры.
         setIconImage( new ResourceManger().getImage() ); // Устанавливаем изображение/иконку окна игры.
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE); // Устанавливаем закрытие окна нажатием на "крестик".
+
         String startPhrase = "Начата новая игра."; // Фраза, которая выводится на экран в начале игры.
+        infoLabel = new JLabel(startPhrase); // Инициализация информационного виджета.
+        JPanel gridPanel = new JPanel();    // Инициализация панели/сетки, на которой располагается игровое поле.
 
-        // Создание элементов gui.
-        infoLabel = new JLabel(startPhrase);
+        createGrid(gridWidth, gridHeight, gridPanel);
+        createGui(frameWidth, frameHeight, infoLabel, gridPanel);
+    }
+
+    /**
+     * Создание сетки.
+     * @param gridWidth ширина сетки.
+     * @param gridHeight высота сетки.
+     * @param gridPanel панель, содержащая сетку из ячеек.
+     */
+    private void createGrid(int gridWidth, int gridHeight, JPanel gridPanel) {
+        gridPanel.setLayout(new GridLayout(gridWidth, gridHeight) ); // Установка сетки на панель.
+        grid = new Cell[gridWidth][gridHeight]; // Инициализация сетки.
+        Border lineBorder = BorderFactory.createLineBorder(Color.BLACK, 1); // Установка границ ячеек сетки.
+        // Создание и инициализация ячеек сетки.
+        for (int y = gridHeight; y >= 1; y--) {
+            for (int x = 1; x <= gridWidth; x++) {
+                Cell createdCell = new Cell(x, y); // Создание новой ячейки на сетке.
+                initializeCell( createdCell, gridPanel, lineBorder ); // Вызов метода инициализации ячейки.
+            }
+        }
+    }
+
+    /**
+     * Создание gui с добавлением на него сетки из ячеек.
+     * @param frameWidth ширина фрейма.
+     * @param frameHeight высота фрейма.
+     * @param infoLabel элемент, который содержит информацию о ходе игры.
+     * @param gridPanel панель, содержащая сетку из ячеек.
+     */
+    private void createGui(int frameWidth, int frameHeight, JLabel infoLabel, JPanel gridPanel) {
         infoLabel.setFont(new Font("MyfFont", Font.BOLD, 16));
-
         pointsLabel = new JLabel("Очки: 0");
         pointsLabel.setFont(new Font("MyfFont", Font.BOLD, 16));
-
         ballsLabel = new JLabel("0 : Шары");
         ballsLabel.setFont(new Font("MyfFont", Font.BOLD, 16));
 
         JPanel pointsPanel = new JPanel();
         JPanel ballsPanel = new JPanel();
-        JPanel gridPanel = new JPanel();    // Панель, на которой располагается игровое поле.
         JPanel southPanel = new JPanel();   // Доп. панель, расположенная снизу экрана.
         JPanel northPanel = new JPanel();   // Доп. панель, расположенная сверху экрана..
-
-        // Создание сетки из ячеек для игры.
-        gridPanel.setLayout(new GridLayout(gridWidth, gridHeight) ); // Установка сетки на панель.
-        grid = new Cell[gridWidth][gridHeight]; // Инициализация сетки.
-        Border lineBorder = BorderFactory.createLineBorder(Color.BLACK, 1); // Установка границ ячеек сетки.
 
         // Установка параметров панелей и добавление на них элементов.
         pointsPanel.setBackground(Color.YELLOW);
@@ -64,13 +92,6 @@ public class MainPanel extends JFrame {
         southPanel.setBackground(Color.YELLOW);
         southPanel.add(infoLabel);
 
-        // Инициализации ячеек сетки.
-        for (int y = gridHeight; y >= 1; y--) {
-            for (int x = 1; x <= gridWidth; x++) {
-                Cell createdCell = new Cell(x, y); // Создание нового объекта ячейки на сетке.
-                initializeCell( createdCell, gridPanel, lineBorder ); // Вызов метода инициализации ячейки.
-            }
-        }
         pack(); // Установка соответствующего размера окна программы.
         setLocation(500, 100); // Установка положения окна на экране пользователя.
         setSize(frameWidth, frameHeight); // Установка размера.
@@ -79,23 +100,22 @@ public class MainPanel extends JFrame {
         getContentPane().add(BorderLayout.SOUTH, southPanel);
         getContentPane().add(BorderLayout.CENTER, gridPanel);
         getContentPane().add(BorderLayout.NORTH, northPanel);
-        setVisible(true); // Установка свойства "видимый".
+        setVisible(true);
 
-        // Инициализация игры, генерации первых N изображений в ячейки.
-        // Задержка в 1с необходима, чтобы все элементы gui успели отрисоваться перед началом новой игры.
+        // Инициация игрового процесса.
         new Thread( () -> {
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            // Рандом изображений.
-            Play.generateRandomImages(startPhrase, false, 5);
+            // Рандом изображений в сетку.
+            Play.generateRandomImages(infoLabel.getText(), false, 5);
         }).start();
     }
 
     /**
-     * Метод инициализации ячейки.
+     * Метод, в котором происходит инициализация созданной ячейки.
      * @param newCell новая ячейка.
      * @param gridPanel панель-сетка, где будет располагаться ячейка.
      * @param lineBorder границы ячейки.
