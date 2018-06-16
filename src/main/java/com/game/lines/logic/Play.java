@@ -2,7 +2,7 @@ package com.game.lines.logic;
 
 import com.game.lines.common.ResourceManger;
 import com.game.lines.entity.Cell;
-import com.game.lines.gui.MainFrame;
+import com.game.lines.gui.MainPanel;
 import javafx.util.Pair;
 
 import javax.swing.*;
@@ -79,9 +79,9 @@ public class Play {
      */
     private Play(Cell filledCell, Cell emptyCell) {
         playLogger = Logger.getLogger(getClass().getName());
-        gameInfo = MainFrame.infoLabel;
-        pointsLabel = MainFrame.pointsLabel;
-        ballsLabel = MainFrame.ballsLabel;
+        gameInfo = MainPanel.infoLabel;
+        pointsLabel = MainPanel.pointsLabel;
+        ballsLabel = MainPanel.ballsLabel;
         sideLength = Cell.getGridLength();  // Длина (в ячейках) стороны квадрата игрового поля.
         targetCell = emptyCell;             // "Целевая ячейка", она же ячейка, в которую нужно ходить.
         visited = new LinkedList<>();       // Инициализация списка, используемого для проверки возможности хода в ячейку.
@@ -345,7 +345,7 @@ public class Play {
      */
     public static void generateRandomImages(String textInfo, boolean lineWasDeleted, int amount) {
         if ( !lineWasDeleted ) {
-            MainFrame.infoLabel.setText( textInfo );
+            MainPanel.infoLabel.setText( textInfo );
             ResourceManger rm = new ResourceManger();
             for (int i = 0; i < amount; i++) {
                 Cell cell = getRandomCell(Cell.emptyCells); // Получаем рандомную ячейку из массива пустых ячеек.

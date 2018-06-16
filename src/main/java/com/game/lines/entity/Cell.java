@@ -1,6 +1,6 @@
 package com.game.lines.entity;
 
-import com.game.lines.gui.MainFrame;
+import com.game.lines.gui.MainPanel;
 import com.game.lines.logic.Play;
 import com.game.lines.logic.State;
 import javafx.util.Pair;
@@ -26,7 +26,7 @@ public class Cell extends AbstractCell {
 
     // Логгер ячейки.
     private Logger cellLogger = Logger.getLogger(Cell.class.getName());
-    private JLabel gameInfo = MainFrame.infoLabel;
+    private JLabel gameInfo = MainPanel.infoLabel;
     // Карта ячеек, где Ключ - координаты, а Значение - ячейка.
     public static Map<Pair<Integer, Integer>, Cell> cellMap = new HashMap<>();
     /**
