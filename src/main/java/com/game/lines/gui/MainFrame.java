@@ -29,11 +29,18 @@ public class MainFrame extends JFrame {
         setTitle("Lines Game"); // Устанавливаем заголовок окна игры.
         setIconImage( new ResourceManger().getImage() ); // Устанавливаем изображение/иконку окна игры.
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE); // Устанавливаем закрытие окна нажатием на "крестик".
+        String startPhrase = "Начата новая игра."; // Фраза, которая выводится на экран в начале игры.
 
         // Создание элементов gui.
-        infoLabel = new JLabel();
+        infoLabel = new JLabel(startPhrase);
+        infoLabel.setFont(new Font("MyfFont", Font.BOLD, 16));
+
         pointsLabel = new JLabel("Очки: 0");
-        ballsLabel = new JLabel("Шары: 0");
+        pointsLabel.setFont(new Font("MyfFont", Font.BOLD, 16));
+
+        ballsLabel = new JLabel("0 : Шары");
+        ballsLabel.setFont(new Font("MyfFont", Font.BOLD, 16));
+
         JPanel pointsPanel = new JPanel();
         JPanel ballsPanel = new JPanel();
         JPanel gridPanel = new JPanel();    // Панель, на которой располагается игровое поле.
@@ -83,7 +90,7 @@ public class MainFrame extends JFrame {
                 e.printStackTrace();
             }
             // Рандом изображений.
-            Play.generateRandomImages("Начата новая игра.", false, 5);
+            Play.generateRandomImages(startPhrase, false, 5);
         }).start();
     }
 

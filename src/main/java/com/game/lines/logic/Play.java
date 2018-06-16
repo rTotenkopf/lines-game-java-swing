@@ -26,12 +26,14 @@ public class Play {
     private Logger playLogger;
     // Лэйбл информирования пользователя об игровом процессе.
     private static JLabel gameInfo;
-    // Лэйбл счетчика очков в игре.
+    // Лэйбл для отображения счетчика очков в игре.
     private static JLabel pointsLabel;
     // Счетчик очков в игре.
     private static int pointsCounter;
-    // Лэйбл счетчика шаров, удаленных с поля.
+    // Лэйбл для отображения счетчика шаров, удаленных с поля.
     private static JLabel ballsLabel;
+    // Счетчик удаленных шаров.
+    private static int ballsCounter;
     // Длина стороны сетки игрового поля.
     private static int sideLength;
     // Переменная принимает значение true, если ход (перемещение) возможен.
@@ -45,6 +47,7 @@ public class Play {
     // Переменная принимает значение true, если строка была удалена.
     private boolean lineState;
 
+    // Сеттеры и геттеры для переменных класса Play.
     private static void setPointsCounter(int pointsCounter) {
         Play.pointsCounter = pointsCounter;
     }
@@ -53,11 +56,18 @@ public class Play {
         return pointsCounter;
     }
 
-    // Сеттер установки значения для переменной lineState.
     private void setLineState(boolean lineState) {
         this.lineState = lineState;
     }
-    // Геттер переменной экземпляра - lineState.
+
+    public static void setBallsCounter(int ballsCounter) {
+        Play.ballsCounter = ballsCounter;
+    }
+
+    private static int getBallsCounter() {
+        return ballsCounter;
+    }
+
     private boolean getLineState() {
         return lineState;
     }
@@ -355,8 +365,11 @@ public class Play {
     private static void accuralPoints(int lineSize) {
         double ratio = 2.1 + (double) (lineSize - 5) / 10;
         int pointsValue = getPointsCounter() + (int) (lineSize * ratio);
+        int ballsValue =  getBallsCounter() + lineSize;
         setPointsCounter(pointsValue);
+        setBallsCounter(ballsValue);
         pointsLabel.setText("Очки: " + String.valueOf(getPointsCounter()));
+        ballsLabel.setText(String.valueOf(getBallsCounter()) + ": Шары");
     }
 
     /**
