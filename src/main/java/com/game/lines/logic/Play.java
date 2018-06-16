@@ -2,6 +2,7 @@ package com.game.lines.logic;
 
 import com.game.lines.common.ResourceManger;
 import com.game.lines.entity.Cell;
+import com.game.lines.gui.EndGamePanel;
 import com.game.lines.gui.MainPanel;
 import javafx.util.Pair;
 
@@ -140,6 +141,7 @@ public class Play {
             new Play(filledCell, emptyCell);
         } else {
             Logger.getGlobal().warning("End of the game!");
+            new EndGamePanel();
             gameInfo.setText("Игра окончена!");
         }
         return moveAbility;

@@ -30,7 +30,7 @@ public class MainPanel extends JFrame {
      */
     public MainPanel(int frameWidth, int frameHeight, int gridWidth, int gridHeight) {
         // Настройка главного окна игры.
-        setTitle("Lines Game"); // Устанавливаем заголовок окна игры.
+        super("Lines Game"); // Устанавливаем заголовок окна игры.
         setIconImage( new ResourceManger().getImage() ); // Устанавливаем изображение/иконку окна игры.
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE); // Устанавливаем закрытие окна нажатием на "крестик".
 
@@ -92,6 +92,14 @@ public class MainPanel extends JFrame {
         southPanel.setBackground(Color.YELLOW);
         southPanel.add(infoLabel);
 
+        // =====================TEST=======
+        JButton testButton = new JButton("Тест завершения игры");
+        testButton.addActionListener( e -> {
+            new EndGamePanel();
+        });
+        northPanel.add(testButton, BorderLayout.CENTER);
+        // =====================TEST=======
+
         pack(); // Установка соответствующего размера окна программы.
         setLocation(500, 100); // Установка положения окна на экране пользователя.
         setSize(frameWidth, frameHeight); // Установка размера.
@@ -101,6 +109,7 @@ public class MainPanel extends JFrame {
         getContentPane().add(BorderLayout.CENTER, gridPanel);
         getContentPane().add(BorderLayout.NORTH, northPanel);
         setVisible(true);
+        setResizable(false);
 
         // Инициация игрового процесса.
         new Thread( () -> {
