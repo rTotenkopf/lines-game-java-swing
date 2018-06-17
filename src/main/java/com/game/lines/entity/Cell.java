@@ -26,6 +26,7 @@ public class Cell extends AbstractCell {
 
     // Логгер ячейки.
     private Logger cellLogger = Logger.getLogger(Cell.class.getName());
+    // Ссылка на элемент Gui, которая необходима для отображения информации о ходе игры.
     private JLabel gameInfo = MainPanel.infoLabel;
     // Карта ячеек, где Ключ - координаты, а Значение - ячейка.
     public static Map<Pair<Integer, Integer>, Cell> cellMap = new HashMap<>();
@@ -190,9 +191,9 @@ public class Cell extends AbstractCell {
             // Таким образом, осуществляется игровой ход (перемещение изображения).
             case EMPTY:
                 gameInfo.setText("Выберите шар!");
-                // Выполнение игрового хода. Метод getMove возвращает true, если ход выполнен успешно.
+                // Выполнение игрового хода. Метод moveInit возвращает true, если ход выполнен успешно.
                 if ( !Objects.isNull(previousCell) && (previousCell.getState() == State.SELECTED) ) {
-                    boolean moveComplete = Play.getMove(previousCell, currentCell);
+                    boolean moveComplete = Play.moveInit(previousCell, currentCell);
                     if ( moveComplete ) {
                         previousCell.release();
                         previousCell = null;

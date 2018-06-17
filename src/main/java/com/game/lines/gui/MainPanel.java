@@ -8,6 +8,8 @@ import com.game.lines.logic.State;
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 /**
  * Класс MainPanel отвечает за создание главного окна программы и отрисовку всех необходимых виджетов.
@@ -22,17 +24,16 @@ public class MainPanel extends JFrame {
     public static JLabel ballsLabel;  // Информация о количестве удаленных шаров.
 
     /**
-     * Конструктор класса MainPanel.
+     * Конструктор класса MainPanel, который отвечает за создание и настройку GUI главного окна игры.
      * @param frameWidth ширина фрейма.
      * @param frameHeight высота фрейма.
      * @param gridWidth ширина сетки.
      * @param gridHeight высота сетки.
      */
     public MainPanel(int frameWidth, int frameHeight, int gridWidth, int gridHeight) {
-        // Настройка главного окна игры.
         super("Lines Game"); // Устанавливаем заголовок окна игры.
         setIconImage( new ResourceManger().getImage() ); // Устанавливаем изображение/иконку окна игры.
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE); // Устанавливаем закрытие окна нажатием на "крестик".
+        windowClosingSetUp(); // Настраиваем закрытие окна игры.
 
         String startPhrase = "Начата новая игра."; // Фраза, которая выводится на экран в начале игры.
         infoLabel = new JLabel(startPhrase); // Инициализация информационного виджета.
@@ -40,6 +41,31 @@ public class MainPanel extends JFrame {
 
         createGrid(gridWidth, gridHeight, gridPanel);
         createGui(frameWidth, frameHeight, infoLabel, gridPanel);
+    }
+
+    /**
+     * Предварительная обработка действия закрытия окна (добавление модального окна, появляющегося
+     * при попытке закрытия приложения и спрашивающего подтверждение для этого действия).
+     */
+    private void windowClosingSetUp() {
+        setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                UIManager.put("OptionPane.yesButtonText", "Продолжить игру");
+                UIManager.put("OptionPane.noButtonText", "Завершить игру");
+
+                int res = JOptionPane.showConfirmDialog(
+                        MainPanel.this,
+                        "Вы уверены, что хотите выйти из игры?",
+                        "",
+                        JOptionPane.YES_NO_OPTION);
+
+                if ( res == JOptionPane.NO_OPTION ) {
+                    System.exit(0);
+                }
+            }
+        });
     }
 
     /**
@@ -94,9 +120,7 @@ public class MainPanel extends JFrame {
 
         // =====================TEST=======
         JButton testButton = new JButton("Тест завершения игры");
-        testButton.addActionListener( e -> {
-            new EndGamePanel();
-        });
+        testButton.addActionListener( e -> EndGameDialog.init());
         northPanel.add(testButton, BorderLayout.CENTER);
         // =====================TEST=======
 

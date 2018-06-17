@@ -12,13 +12,13 @@ public class RunLines {
 
     public static void main(String[] args) {
         // 7 X 7
-//        new MainPanel(   395,470, 7, 7);
+        new MainPanel(   395,470, 7, 7);
 
         // 8 X 8
 //        new MainPanel(   480,555, 8, 8);
 
         // 9 X 9
-        new MainPanel(   565, 640, 9, 9);
+//        new MainPanel(   565, 640, 9, 9);
 
         // 10 X 10
 //        new MainPanel(   600,630, 10, 10);

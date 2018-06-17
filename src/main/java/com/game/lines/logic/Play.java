@@ -2,7 +2,7 @@ package com.game.lines.logic;
 
 import com.game.lines.common.ResourceManger;
 import com.game.lines.entity.Cell;
-import com.game.lines.gui.EndGamePanel;
+import com.game.lines.gui.EndGameDialog;
 import com.game.lines.gui.MainPanel;
 import javafx.util.Pair;
 
@@ -61,7 +61,7 @@ public class Play {
         this.lineState = lineState;
     }
 
-    public static void setBallsCounter(int ballsCounter) {
+    private static void setBallsCounter(int ballsCounter) {
         Play.ballsCounter = ballsCounter;
     }
 
@@ -89,10 +89,26 @@ public class Play {
         queue = new LinkedList<>();         // Инициализация очереди, используемой для проверки возможности хода в ячейку.
         setLineState(false);                // Установка значения переменной экземпляра lineState.
         moveAbility = traverse(filledCell); // Получение результата выполнения метода traverse.
-        initializeGame(filledCell, emptyCell); // Инициализация игрового процесса.
+        makeMove(filledCell, emptyCell);    // Вызов метода для исполнения одного игорового хода.
     }
 
-    private void initializeGame(Cell filledCell, Cell emptyCell) {
+    /**
+     * Выполнение хода.
+     * Если значение переменной {@link #moveAbility} == true, то выполняется ход.
+     * Создается новый поток, в котором выполняется перемещение ячеек, затем происходит остановка потока
+     * на 0,5 секунды, для того чтобы, втечение этих 0,5 секунд, была видна вся удаляемая линия.
+     * Удалением всех сформированных линий из 5 и более шаров, занимается метод {@link #linesSearch}.
+     * Затем вызывается метод {@link #checkGameEndingCondition}, который выполняет проверку условия:
+     * "Должна ли завершиться игра, при N свободных ячейках, оставшихся на игровом поле?"
+     * Далее поток вновь приостанавливается на 0,5 секунды, для того чтобы дать игроку увидеть, какие линии
+     * будут удалены повторным вызовом {@link #linesSearch}.
+     * (метод вызывается повторно, потому что необходимо удалить также линии, которые были сфомированы рандомно,
+     * т.е. случайным образом, когда сгенерированные методом {@link #generateRandomImages} изображения, выстраиваются
+     * в линии без прямого воздействия игрока.
+     * @param filledCell ячейка с изображением.
+     * @param emptyCell пустая ячейка.
+     */
+    private void makeMove(Cell filledCell, Cell emptyCell) {
         if ( moveAbility ) {
             gameInfo.setText("Ход выполняется...");
             // Если ход возможен, то запускаем новый поток.
@@ -106,7 +122,8 @@ public class Play {
                 // Поиск всех возможных линий на поле.
                 linesSearch();
                 // Генерируем новые изображения в случайном порядке.
-                generateRandomImages( "Ход успешно выполнен.", getLineState(), 3 );
+                generateRandomImages("Ход успешно выполнен.", lineState, 3);
+                checkGameEndingCondition();
                 try {
                     Thread.sleep(500);  // Приотановка потока на 0,5 секунды.
                 } catch (InterruptedException e) {
@@ -127,6 +144,15 @@ public class Play {
         }
     }
 
+    // Метод проверки условия, при выполнении которого игра должна завершиться.
+    private static void checkGameEndingCondition() {
+        if ( Cell.emptyCells.size() <= 3 ) {
+            Logger.getGlobal().warning("End of the game!");
+            EndGameDialog.init();
+            gameInfo.setText("Игра окончена!");
+        }
+    }
+
     /**
      * Метод отвечает за один игровой ход (перемещение изображения в пустую ячейку) и инициализирует игру
      * вызовом конструктора класса.
@@ -135,15 +161,8 @@ public class Play {
      * @param emptyCell пустая ячейка, в которую необходимо переместить изображение.
      * @return значение boolean-типа означающее возможность или невозможность хода в выбранную ячейку.
      */
-    public static boolean getMove(Cell filledCell, Cell emptyCell) {
-        int emptyCells = Cell.emptyCells.size();
-        if ( emptyCells > 3 ) {
-            new Play(filledCell, emptyCell);
-        } else {
-            Logger.getGlobal().warning("End of the game!");
-            new EndGamePanel();
-            gameInfo.setText("Игра окончена!");
-        }
+    public static boolean moveInit(Cell filledCell, Cell emptyCell) {
+        new Play(filledCell, emptyCell);
         return moveAbility;
     }
 
