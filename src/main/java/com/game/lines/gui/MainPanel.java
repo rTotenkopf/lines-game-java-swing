@@ -120,7 +120,14 @@ public class MainPanel extends JFrame {
 
         // =====================TEST=======
         JButton testButton = new JButton("Тест завершения игры");
-        testButton.addActionListener( e -> EndGameDialog.init());
+        testButton.addActionListener( e -> {
+//            EndGameModal.init();
+            JDialog dialog = new JDialog(MainPanel.this, "Modal window", true);
+            dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+            dialog.setSize(300, 220);
+            dialog.setLocationRelativeTo(MainPanel.this);
+            dialog.setVisible(true);
+        });
         northPanel.add(testButton, BorderLayout.CENTER);
         // =====================TEST=======
 
