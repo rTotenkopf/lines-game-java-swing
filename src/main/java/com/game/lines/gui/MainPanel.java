@@ -52,18 +52,7 @@ public class MainPanel extends JFrame {
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                UIManager.put("OptionPane.yesButtonText", "Продолжить игру");
-                UIManager.put("OptionPane.noButtonText", "Завершить игру");
-
-                int res = JOptionPane.showConfirmDialog(
-                        MainPanel.this,
-                        "Вы уверены, что хотите выйти из игры?",
-                        "",
-                        JOptionPane.YES_NO_OPTION);
-
-                if ( res == JOptionPane.NO_OPTION ) {
-                    System.exit(0);
-                }
+                OptionModal.getOptionPane();
             }
         });
     }
@@ -74,7 +63,7 @@ public class MainPanel extends JFrame {
      * @param gridHeight высота сетки.
      * @param gridPanel панель, содержащая сетку из ячеек.
      */
-    private void createGrid(int gridWidth, int gridHeight, JPanel gridPanel) {
+    final private void createGrid(int gridWidth, int gridHeight, JPanel gridPanel) {
         gridPanel.setLayout(new GridLayout(gridWidth, gridHeight) ); // Установка сетки на панель.
         grid = new Cell[gridWidth][gridHeight]; // Инициализация сетки.
         Border lineBorder = BorderFactory.createLineBorder(Color.BLACK, 1); // Установка границ ячеек сетки.
@@ -121,12 +110,8 @@ public class MainPanel extends JFrame {
         // =====================TEST=======
         JButton testButton = new JButton("Тест завершения игры");
         testButton.addActionListener( e -> {
-//            EndGameModal.init();
-            JDialog dialog = new JDialog(MainPanel.this, "Modal window", true);
-            dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-            dialog.setSize(300, 220);
-            dialog.setLocationRelativeTo(MainPanel.this);
-            dialog.setVisible(true);
+            EndingModal.init();
+
         });
         northPanel.add(testButton, BorderLayout.CENTER);
         // =====================TEST=======
@@ -139,8 +124,8 @@ public class MainPanel extends JFrame {
         getContentPane().add(BorderLayout.SOUTH, southPanel);
         getContentPane().add(BorderLayout.CENTER, gridPanel);
         getContentPane().add(BorderLayout.NORTH, northPanel);
-        setVisible(true);
         setResizable(false);
+        setVisible(true);
 
         // Инициация игрового процесса.
         new Thread( () -> {

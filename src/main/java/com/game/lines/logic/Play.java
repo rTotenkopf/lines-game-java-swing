@@ -2,7 +2,7 @@ package com.game.lines.logic;
 
 import com.game.lines.common.ResourceManger;
 import com.game.lines.entity.Cell;
-import com.game.lines.gui.EndGameModal;
+import com.game.lines.gui.EndingModal;
 import com.game.lines.gui.MainPanel;
 import javafx.util.Pair;
 
@@ -148,7 +148,7 @@ public class Play {
     private static void checkGameEndingCondition() {
         if ( Cell.emptyCells.size() <= 3 ) {
             Logger.getGlobal().warning("End of the game!");
-            EndGameModal.init();
+            EndingModal.init();
             gameInfo.setText("Игра окончена!");
         }
     }
