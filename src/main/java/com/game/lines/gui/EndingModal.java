@@ -1,5 +1,7 @@
 package com.game.lines.gui;
 
+import com.game.lines.logic.Play;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -9,20 +11,20 @@ import java.awt.*;
 
 public class EndingModal extends JDialog {
 
-    static JPanel messagePane;
-    JButton newGameBtn;
-    JButton exitBtn;
+    private static Color paneColor;
+    private static int points = Play.getPointsCounter();
 
     /**
      * Конструктор класса EndingModal.
      */
     private EndingModal() {
-        super(MainPanel.getFrames()[0], "Игра окончена!", true);
+        super(MainPanel.getFrames()[0], "Игра окончена", true);
+        paneColor = new Color(0, 230, 150);
         setDefaultCloseOperation(HIDE_ON_CLOSE);
-        getContentPane().setBackground(Color.YELLOW);
+        getContentPane().setBackground(paneColor);
         addComponentsToPane(getContentPane());
         pack();
-        setSize(300, 220);
+        setSize(350, 280);
         setLocationRelativeTo(MainPanel.getFrames()[0]);
         setResizable(false);
         setVisible(true);
@@ -30,24 +32,32 @@ public class EndingModal extends JDialog {
 
     private static void addComponentsToPane(Container pane) {
         pane.setLayout(new BoxLayout(pane, BoxLayout.Y_AXIS));
-        addRigidArea(pane);
-        messagePane = new JPanel();
-        messagePane.add( addLabel("Игра окончена!", pane));
+        JPanel messagePane = new JPanel();
+        messagePane.setBackground(paneColor);
+        messagePane.add(addLabel(pane));
         pane.add(messagePane);
         addRigidArea(pane);
-        addAButton(String.format("    %s    ", "Новая игра")   , pane).addActionListener( event -> {
+        addAButton(String.format("   %s    ",  "Новая игра")   , pane).addActionListener( event -> {
             // do nothing
         });
 
         addRigidArea(pane);
-        addAButton(String.format(" %s "      , "Выход из игры"), pane).addActionListener( event -> {
-            OptionModal.getOptionPane();
-        } );
+        addAButton(String.format(" %s "      , "Выход из игры"), pane)
+                .addActionListener( event -> OptionModal.getOptionPane());
         addRigidArea(pane);
     }
 
-    private static JLabel addLabel(String text, Container container) {
-        JLabel label = new JLabel(text);
+    private static JLabel addLabel(Container container) {
+        String labelText =
+                "<html>" +
+                "<h1 align=\"center\" color=\"purple\">" + "Поздравляем!</h1>" +
+                "<h2 align=\"center\" color=\"#A0522D\">" + "Вы набрали " + points + " очков.</h2>" +
+                "<font face=\"verdana\" size=4 color=\"navy\">" +
+                "<b>На поле не осталось свободных <br> ячеек.</b> <br>" +
+                "<b>Выберите дальнейшее действие:</b>" +
+                "</html>";
+        JLabel label = new JLabel(labelText);
+        label.setFont(new Font("", Font.PLAIN, 17));
         label.setAlignmentX(Component.CENTER_ALIGNMENT);
         container.add(label);
         return label;

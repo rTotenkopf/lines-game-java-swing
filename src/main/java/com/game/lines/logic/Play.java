@@ -53,7 +53,7 @@ public class Play {
         Play.pointsCounter = pointsCounter;
     }
 
-    private static int getPointsCounter() {
+    public static int getPointsCounter() {
         return pointsCounter;
     }
 
@@ -122,7 +122,7 @@ public class Play {
                 // Поиск всех возможных линий на поле.
                 linesSearch();
                 // Генерируем новые изображения в случайном порядке.
-                generateRandomImages("Ход успешно выполнен.", lineState, 3);
+                generateRandomImages("Ход успешно выполнен.", getLineState(), 3);
                 checkGameEndingCondition();
                 try {
                     Thread.sleep(500);  // Приотановка потока на 0,5 секунды.
