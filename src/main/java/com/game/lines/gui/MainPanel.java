@@ -84,7 +84,7 @@ public class MainPanel extends JFrame {
      * @param gridPanel панель, содержащая сетку из ячеек.
      */
     private void createGui(int frameWidth, int frameHeight, JLabel infoLabel, JPanel gridPanel) {
-        Font labelFont = new Font("", Font.BOLD, 18);
+        Font labelFont = new Font("", Font.BOLD, 16);
         infoLabel.setFont(labelFont);
         pointsLabel = new JLabel("Очки: 0");
         pointsLabel.setFont(labelFont);
