@@ -84,11 +84,12 @@ public class MainPanel extends JFrame {
      * @param gridPanel панель, содержащая сетку из ячеек.
      */
     private void createGui(int frameWidth, int frameHeight, JLabel infoLabel, JPanel gridPanel) {
-        infoLabel.setFont(new Font("MyfFont", Font.BOLD, 16));
+        Font labelFont = new Font("", Font.BOLD, 18);
+        infoLabel.setFont(labelFont);
         pointsLabel = new JLabel("Очки: 0");
-        pointsLabel.setFont(new Font("MyfFont", Font.BOLD, 16));
+        pointsLabel.setFont(labelFont);
         ballsLabel = new JLabel("0 : Шары");
-        ballsLabel.setFont(new Font("MyfFont", Font.BOLD, 16));
+        ballsLabel.setFont(labelFont);
 
         JPanel pointsPanel = new JPanel();
         JPanel ballsPanel = new JPanel();
