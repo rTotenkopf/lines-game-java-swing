@@ -364,7 +364,7 @@ public class Play {
      * @param lineWasDeleted флаг события удаления линии.
      * @param amount количество ячеек для рандомного заполнения изображениями (зависит от настроек игры).
      */
-    public static void generateRandomImages(String textInfo, boolean lineWasDeleted, int amount) {
+    private static void generateRandomImages(String textInfo, boolean lineWasDeleted, int amount) {
         if ( !lineWasDeleted ) {
             MainPanel.infoLabel.setText( textInfo );
             ResourceManger rm = new ResourceManger();
@@ -378,6 +378,11 @@ public class Play {
         }
     }
 
+    /**
+     * Старт новой игры при нажатии на кнопку "Новая игра" в модальном диалоге, за который отвечает класс
+     * {@link EndingModal}.
+     * Происходит сброс всех игровых параметров и коллекций. Инициируются новый игровой процесс.
+     */
     public static void startNewGame() {
         setBallsCounter(0);
         setPointsCounter(0);
@@ -394,6 +399,7 @@ public class Play {
 
     /**
      * Инициализация игрового поцесса в начале игры.
+     * В отдельном потоке, с задержкой в 1 секунду, в случайные ячейки генерируется 5 изображений случайного цвета.
      */
     public static void initGameProcess() {
         new Thread( () -> {
