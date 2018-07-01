@@ -410,7 +410,7 @@ public class Play {
             }
             // Рандом изображений в сетку.
             MainPanel.infoLabel.setText("Начата новая игра.");
-            Play.generateRandomImages(MainPanel.infoLabel.getText(), false, 5);
+            generateRandomImages(MainPanel.infoLabel.getText(), false, 5);
         }).start();
     }
 
