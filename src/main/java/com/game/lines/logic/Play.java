@@ -378,6 +378,36 @@ public class Play {
         }
     }
 
+    public static void startNewGame() {
+        setBallsCounter(0);
+        setPointsCounter(0);
+        Cell.emptyCells.clear();
+
+        Cell.cellMap.values().forEach( cell -> {
+            cell.release();
+            cell.setState(State.EMPTY);
+            cell.setIcon(null);
+            Cell.emptyCells.add(cell);
+        });
+        initGameProcess();
+    }
+
+    /**
+     * Инициализация игрового поцесса в начале игры.
+     */
+    public static void initGameProcess() {
+        new Thread( () -> {
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            // Рандом изображений в сетку.
+            MainPanel.infoLabel.setText("Начата новая игра.");
+            Play.generateRandomImages(MainPanel.infoLabel.getText(), false, 5);
+        }).start();
+    }
+
     /**
      * Начисление очков за удаленную линию, исходя из количества шаров в ней.
      * Чем больше шаров, тем выше коэффициент начисления очков.

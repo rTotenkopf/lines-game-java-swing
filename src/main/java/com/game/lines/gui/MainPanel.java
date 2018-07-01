@@ -35,8 +35,7 @@ public class MainPanel extends JFrame {
         setIconImage( new ResourceManger().getImage() ); // Устанавливаем изображение/иконку окна игры.
         windowClosingSetUp(); // Настраиваем закрытие окна игры.
 
-        String startPhrase = "Начата новая игра."; // Фраза, которая выводится на экран в начале игры.
-        infoLabel = new JLabel(startPhrase); // Инициализация информационного виджета.
+        infoLabel = new JLabel("Начата новая игра."); // Инициализация информационного виджета.
         JPanel gridPanel = new JPanel();    // Инициализация панели/сетки, на которой располагается игровое поле.
 
         createGrid(gridWidth, gridHeight, gridPanel);
@@ -129,15 +128,7 @@ public class MainPanel extends JFrame {
         setVisible(true);
 
         // Инициация игрового процесса.
-        new Thread( () -> {
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            // Рандом изображений в сетку.
-            Play.generateRandomImages(infoLabel.getText(), false, 5);
-        }).start();
+        Play.initGameProcess();
     }
 
     /**

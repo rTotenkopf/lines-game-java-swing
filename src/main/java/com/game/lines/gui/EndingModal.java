@@ -13,12 +13,14 @@ public class EndingModal extends JDialog {
 
     private static Color paneColor;
     private static int points = Play.getPointsCounter();
+    private static EndingModal modal;
 
     /**
      * Конструктор класса EndingModal.
      */
     private EndingModal() {
         super(MainPanel.getFrames()[0], "Игра окончена", true);
+        modal = this;
         paneColor = new Color(0, 230, 150);
         setDefaultCloseOperation(HIDE_ON_CLOSE);
         getContentPane().setBackground(paneColor);
@@ -38,7 +40,8 @@ public class EndingModal extends JDialog {
         pane.add(messagePane);
         addRigidArea(pane);
         addAButton(String.format("   %s    ",  "Новая игра")   , pane).addActionListener( event -> {
-            // do nothing
+            Play.startNewGame();
+            modal.dispose();
         });
 
         addRigidArea(pane);
