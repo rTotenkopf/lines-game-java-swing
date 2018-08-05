@@ -36,7 +36,7 @@
                     </includes>
                     <archive>
                         <manifest>
-                            <mainClass>com.game.lines.run.RunLines</mainClass>
+                            <mainClass>com.game.lines.Application</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
