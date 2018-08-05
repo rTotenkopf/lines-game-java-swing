@@ -22,6 +22,8 @@ public class ResourceManger {
     private String FILE_TYPE;
     // URL иконки окна игры.
     private final URL IMAGE_ICON_URL;
+    // Суффикс имени изображения.
+    private final String SUFFIX;
     // Получаем изображение иконки окна игры, используя URL.
     public Image getImageIcon() {
         return IMAGE_ICON_URL != null ? new ImageIcon(IMAGE_ICON_URL).getImage() : null;
@@ -33,11 +35,12 @@ public class ResourceManger {
      * Конструктор класса ResourceManager.
      */
     public ResourceManger() {
-        String iconFolder = "/icons/";
+        String iconFolder = "/images/icons/";
         String iconName = "bananas";
-        BALLS_FOLDER = "/balls/";
+        BALLS_FOLDER = "/images/balls/";
         FILE_TYPE = ".png";
         IMAGE_ICON_URL = getClass().getResource( iconFolder + iconName + FILE_TYPE);
+        SUFFIX = "-ball";
         BALLS = ballsMap().values().toArray();
     }
 
@@ -58,6 +61,6 @@ public class ResourceManger {
     }
 
     private ImageIcon getImageByColor(String color) {
-        return new ImageIcon(getClass().getResource(BALLS_FOLDER + color + "-ball" + FILE_TYPE));
+        return new ImageIcon(getClass().getResource(BALLS_FOLDER + color + SUFFIX + FILE_TYPE));
     }
 }
