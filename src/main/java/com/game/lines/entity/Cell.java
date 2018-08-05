@@ -12,6 +12,8 @@ import java.util.*;
 import java.util.List;
 import java.util.logging.Logger;
 
+import static com.game.lines.logic.State.*;
+
 /**
  * Класс Cell хранит в себе состояние ячейки игрового поля: координаты, игровое состояние и т.д., а также
  * предоставляет необходимые методы для работы с ячейкой.
@@ -79,7 +81,7 @@ public class Cell extends AbstractCell {
     public void select() {
         if ( containsImage() ) {
             setBorder(BorderFactory.createLineBorder(Color.RED, 5));
-            setState(State.SELECTED);
+            setState(SELECTED);
             // Ячейке, нажатой в прошлый раз, присваивается текущая нажатая ячейка.
             previousCell = this;
         }
@@ -89,7 +91,7 @@ public class Cell extends AbstractCell {
     @Override
     public void release() {
         if ( containsImage() ) {
-            setState(State.RELEASED);
+            setState(RELEASED);
         }
         setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
     }
@@ -192,7 +194,7 @@ public class Cell extends AbstractCell {
             case EMPTY:
                 gameInfo.setText("Выберите шар!");
                 // Выполнение игрового хода. Метод moveInit возвращает true, если ход выполнен успешно.
-                if ( !Objects.isNull(previousCell) && (previousCell.getState() == State.SELECTED) ) {
+                if ( !Objects.isNull(previousCell) && (previousCell.getState() == SELECTED) ) {
                     boolean moveComplete = Play.moveInit(previousCell, currentCell);
                     if ( moveComplete ) {
                         previousCell.release();

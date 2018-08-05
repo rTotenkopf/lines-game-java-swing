@@ -1,6 +1,5 @@
 package com.game.lines.logic;
 
-import com.game.lines.common.ResourceManger;
 import com.game.lines.entity.Cell;
 import com.game.lines.gui.EndingModal;
 import com.game.lines.gui.MainPanel;
@@ -12,6 +11,10 @@ import java.util.function.BiPredicate;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.logging.Logger;
+
+import static com.game.lines.common.ResourceManger.*;
+import static com.game.lines.logic.State.*;
+import static com.game.lines.entity.Cell.*;
 
 /**
  * Класс Play отвечает за игровую логику игры Lines: перемещение шара из ячейки в ячейку (проверка возможности
@@ -199,7 +202,7 @@ public class Play {
             Map<String, List<Cell>>  colorSequenceMap = new HashMap<>();
 
             for (int y = 1; y <= sideLength; y++) {
-                Cell nextCell = vertical ? Cell.cellMap.get(new Pair<>(x, y)) : Cell.cellMap.get(new Pair<>(y, x));
+                Cell nextCell = vertical ? cellMap.get(new Pair<>(x, y)) : cellMap.get(new Pair<>(y, x));
                 String color = nextCell.containsImage() ? nextCell.getImageColor() : "";
 
                 List<Cell> images = color.isEmpty() ? null : colorSequenceMap.get(color);
@@ -258,7 +261,7 @@ public class Play {
                               Map<String, List<Cell>> sequenceMap) {
 
         int y = isOpposite ? oppositeFunction.apply(x) : function.apply(x);
-        Cell nextCell = Cell.cellMap.get(new Pair<>(x, y));
+        Cell nextCell = cellMap.get(new Pair<>(x, y));
         String color = nextCell.containsImage() ? nextCell.getImageColor() : "";
 
         List<Cell> images = color.isEmpty() ? null : sequenceMap.get(color);
@@ -311,8 +314,8 @@ public class Play {
         setLineState(true); // Значение true означает, что срока удалена.
         line.forEach( cell -> { // Последовательное удаление изображений из ячеек.
             cell.setIcon(null);
-            cell.setState(State.EMPTY);
-            Cell.emptyCells.add(cell);
+            cell.setState(EMPTY);
+            emptyCells.add(cell);
         });
         accuralPoints(line.size()); // Начисление очков.
         line.clear(); // Очистка коллекции.
@@ -329,7 +332,7 @@ public class Play {
     private boolean traverse(Cell node) {
         Function<Cell, List<Cell>> findNeighbors = (cell) ->
                 Objects.isNull(cell) ? Collections.emptyList() : cell.getNeighbors();
-        Predicate<Cell> predicate = child -> child.getState() == State.EMPTY && !visited.contains(child);
+        Predicate<Cell> predicate = child -> child.getState() == EMPTY && !visited.contains(child);
         findNeighbors.apply(node).stream().filter(predicate).forEach( child -> {
             visited.add(child);
             queue.offer(child);
@@ -347,19 +350,19 @@ public class Play {
         // Получаем изображение из предыдущей ячейки.
         String pictureColor = previousCell.getImageColor();
         // Устанавливаем изображение в пустую ячейку.
-        currentCell.setIcon(new ResourceManger().ballsMap().get(pictureColor) );
+        currentCell.setIcon(ballsMap().get(pictureColor) );
         // Удаляем изображение из предыдущей ячейки.
         previousCell.setIcon(null);
         // Меняем состояния предыдущей и текущей ячеек.
-        previousCell.setState(State.EMPTY);
-        currentCell.setState(State.RELEASED);
+        previousCell.setState(EMPTY);
+        currentCell.setState(RELEASED);
         // Добавляем предыдущую ячейку в список свободных ячеек и удаляем текущую ячейку.
-        Cell.emptyCells.add(previousCell);
-        Cell.emptyCells.remove(currentCell);
+        emptyCells.add(previousCell);
+        emptyCells.remove(currentCell);
     }
 
     /**
-     * Заполнение изображениями N пустых случайных ячеек происходит только в том случае, если линия была удалена.
+     * Рандом изображений в ячейки. Происходит только в начале игры и когда линия НЕ была удалена в процессе игры.
      * @param textInfo сообщение, переданное в метод, для отображения на экране состояния хода игры.
      * @param lineWasDeleted флаг события удаления линии.
      * @param amount количество ячеек для рандомного заполнения изображениями (зависит от настроек игры).
@@ -367,13 +370,12 @@ public class Play {
     private static void generateRandomImages(String textInfo, boolean lineWasDeleted, int amount) {
         if ( !lineWasDeleted ) {
             MainPanel.infoLabel.setText( textInfo );
-            ResourceManger rm = new ResourceManger();
             for (int i = 0; i < amount; i++) {
-                Cell cell = getRandomCell(Cell.emptyCells); // Получаем рандомную ячейку из массива пустых ячеек.
-                int index = (int) (Math.random() * rm.BALLS.length); // Подбираем случайный индекс.
-                cell.setIcon((ImageIcon) rm.BALLS[index]); // Устанавливаем случайное изображение в ячейку.
-                cell.setState(State.RELEASED); // Устанавливаем состояние "ячейка освобождена".
-                Cell.emptyCells.remove(cell); // Удаляем ячейку из списка пустых ячеек.
+                Cell cell = getRandomCell( emptyCells ); // Получаем рандомную ячейку из массива пустых ячеек.
+                int index = (int) (Math.random() * BALLS.length); // Подбираем случайный индекс.
+                cell.setIcon((ImageIcon) BALLS[index]); // Устанавливаем случайное изображение в ячейку.
+                cell.setState(RELEASED); // Устанавливаем состояние "ячейка освобождена".
+                emptyCells.remove(cell); // Удаляем ячейку из списка пустых ячеек.
             }
         }
     }
@@ -386,13 +388,13 @@ public class Play {
     public static void startNewGame() {
         setBallsCounter(0);
         setPointsCounter(0);
-        Cell.emptyCells.clear();
+        emptyCells.clear();
 
-        Cell.cellMap.values().forEach( cell -> {
+        cellMap.values().forEach( cell -> {
             cell.release();
-            cell.setState(State.EMPTY);
+            cell.setState(EMPTY);
             cell.setIcon(null);
-            Cell.emptyCells.add(cell);
+            emptyCells.add(cell);
         });
         initGameProcess();
     }

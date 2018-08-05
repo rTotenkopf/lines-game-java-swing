@@ -1,12 +1,18 @@
 package com.game.lines.common;
 
+import com.game.lines.Application;
+
 import javax.swing.*;
 import java.awt.*;
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.Arrays;
-import java.util.HashMap;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
+import java.util.stream.Stream;
 
 /**
  * Класс ResourceManager управляет доступом к ресурсам проекта.
@@ -17,41 +23,56 @@ import java.util.Map;
 public class ResourceManger {
 
     // Папка с изображениями.
-    private String BALLS_FOLDER;
-    // Тип файла изображения.
-    private String FILE_TYPE;
+    private static final String BALLS_FOLDER;
+    // Папка с иконкой.
+    private static final String ICON_FOLDER;
+    // Имя изображения иконки.
+    private static final String ICON_NAME;
+    // Тип файла.
+    private static final String FILE_TYPE;
+    // Суффикс имени файла.
+    private static final String SUFFIX;
     // URL иконки окна игры.
-    private final URL IMAGE_ICON_URL;
-    // Суффикс имени изображения.
-    private final String SUFFIX;
+    private static final URL IMAGE_ICON_URL;
     // Получаем изображение иконки окна игры, используя URL.
     public Image getImageIcon() {
         return IMAGE_ICON_URL != null ? new ImageIcon(IMAGE_ICON_URL).getImage() : null;
     }
-    // Массив изображений используемых в игре.
-    public final Object[] BALLS;
+    // Массив изображений шаров, используемых в игре.
+    public static final Object[] BALLS;
 
-    /**
-     * Конструктор класса ResourceManager.
-     */
-    public ResourceManger() {
-        String iconFolder = "/images/icons/";
-        String iconName = "bananas";
+    // Блок статической инициализации констант класса.
+    static {
         BALLS_FOLDER = "/images/balls/";
+        ICON_FOLDER = "/images/icons/";
+        ICON_NAME = "bananas";
         FILE_TYPE = ".png";
-        IMAGE_ICON_URL = getClass().getResource( iconFolder + iconName + FILE_TYPE);
-        SUFFIX = "-ball";
+        SUFFIX  = "-ball";
+        IMAGE_ICON_URL = Application.class.getResource(ICON_FOLDER + ICON_NAME + FILE_TYPE);
         BALLS = ballsMap().values().toArray();
     }
 
     /**
-     * Key = название цвета;
-     * Value = изображение;
+     * Key - название цвета;
+     * Value - изображение;
      * @return карта изображений по цветам.
      */
-    public Map<String, ImageIcon> ballsMap() {
-        List<String> colors = Arrays.asList("black", "blue", "green", "purple", "red", "sapphire", "yellow");
+    public static Map<String, ImageIcon> ballsMap() {
+        List<String> colors = new ArrayList<>();
         Map<String, ImageIcon> imageMap = new HashMap<>();
+        URL resourceUrl = Application.class.getResource( BALLS_FOLDER );
+
+        try (Stream<Path> paths = Files.walk(Paths.get( resourceUrl.toURI() ))) {
+            paths
+                    .filter(Files::isRegularFile)
+                    .forEach(file -> {
+                        // Получаем название цвета изображения, содержащееся в имени файла.
+                        String color = file.getFileName().toString().split("[.-]")[0];
+                        colors.add(color);
+                    });
+        } catch (URISyntaxException | IOException e) {
+            e.getMessage();
+        }
 
         for (String color : colors) {
             ImageIcon image = getImageByColor(color);
@@ -60,7 +81,7 @@ public class ResourceManger {
         return imageMap;
     }
 
-    private ImageIcon getImageByColor(String color) {
-        return new ImageIcon(getClass().getResource(BALLS_FOLDER + color + SUFFIX + FILE_TYPE));
+    private static ImageIcon getImageByColor(String color) {
+        return new ImageIcon(Application.class.getResource(BALLS_FOLDER + color + SUFFIX + FILE_TYPE));
     }
 }
