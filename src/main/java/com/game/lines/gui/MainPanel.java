@@ -32,7 +32,7 @@ public class MainPanel extends JFrame {
      */
     public MainPanel(int frameWidth, int frameHeight, int gridWidth, int gridHeight) {
         super("Lines Game"); // Устанавливаем заголовок окна игры.
-        setIconImage( new ResourceManger().getImage() ); // Устанавливаем изображение/иконку окна игры.
+        setIconImage( new ResourceManger().getImageIcon() ); // Устанавливаем изображение/иконку окна игры.
         windowClosingSetUp(); // Настраиваем закрытие окна игры.
 
         infoLabel = new JLabel("Начата новая игра."); // Инициализация информационного виджета.

@@ -23,7 +23,7 @@ public class ResourceManger {
     // URL иконки окна игры.
     private final URL IMAGE_ICON_URL;
     // Получаем изображение иконки окна игры, используя URL.
-    public Image getImage() {
+    public Image getImageIcon() {
         return IMAGE_ICON_URL != null ? new ImageIcon(IMAGE_ICON_URL).getImage() : null;
     }
     // Массив изображений используемых в игре.
