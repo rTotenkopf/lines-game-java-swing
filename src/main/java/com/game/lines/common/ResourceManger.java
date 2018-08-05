@@ -34,10 +34,6 @@ public class ResourceManger {
     private static final String SUFFIX;
     // URL иконки окна игры.
     private static final URL IMAGE_ICON_URL;
-    // Получаем изображение иконки окна игры, используя URL.
-    public Image getImageIcon() {
-        return IMAGE_ICON_URL != null ? new ImageIcon(IMAGE_ICON_URL).getImage() : null;
-    }
     // Массив изображений шаров, используемых в игре.
     public static final Object[] BALLS;
 
@@ -50,6 +46,11 @@ public class ResourceManger {
         SUFFIX  = "-ball";
         IMAGE_ICON_URL = Application.class.getResource(ICON_FOLDER + ICON_NAME + FILE_TYPE);
         BALLS = ballsMap().values().toArray();
+    }
+
+    // Получаем изображение иконки окна игры, используя URL.
+    public Image getImageIcon() {
+        return IMAGE_ICON_URL != null ? new ImageIcon(IMAGE_ICON_URL).getImage() : null;
     }
 
     /**
