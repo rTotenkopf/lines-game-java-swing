@@ -62,7 +62,7 @@ public class MainPanel extends JFrame {
      * @param gridHeight высота сетки.
      * @param gridPanel панель, содержащая сетку из ячеек.
      */
-    final private void createGrid(int gridWidth, int gridHeight, JPanel gridPanel) {
+    private void createGrid(int gridWidth, int gridHeight, JPanel gridPanel) {
         gridPanel.setLayout(new GridLayout(gridWidth, gridHeight) ); // Установка сетки на панель.
         grid = new Cell[gridWidth][gridHeight]; // Инициализация сетки.
         Border lineBorder = BorderFactory.createLineBorder(Color.BLACK, 1); // Установка границ ячеек сетки.
