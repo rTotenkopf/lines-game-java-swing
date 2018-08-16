@@ -191,18 +191,18 @@ public class Play {
 
     /**
      * Метод поиска перпендикулярных (горизонтальных и вертикальных) линий.
-     * @param vertical параметр, в зависисмости от значения которого будет выполяняться поиск линий:
+     * @param isVertical параметр, в зависисмости от значения которого будет выполяняться поиск линий:
      *                 по горизонтали или вертикали.
      */
-    private void perpendicularSearch(boolean vertical) {
+    private void perpendicularSearch(boolean isVertical) {
         BiPredicate<Cell, Cell> searchPredicate = (curr, next) ->
-                vertical ? (curr.getYy() + 1 == next.getYy()) : (curr.getXx() + 1 == next.getXx());
+                isVertical ? (curr.getYy() + 1 == next.getYy()) : (curr.getXx() + 1 == next.getXx());
 
         for (int x = 1; x <= sideLength; x++) {
             Map<String, List<Cell>>  colorSequenceMap = new HashMap<>();
 
             for (int y = 1; y <= sideLength; y++) {
-                Cell nextCell = vertical ? cellMap.get(new Pair<>(x, y)) : cellMap.get(new Pair<>(y, x));
+                Cell nextCell = isVertical ? cellMap.get(new Pair<>(x, y)) : cellMap.get(new Pair<>(y, x));
                 String color = nextCell.containsImage() ? nextCell.getImageColor() : "";
 
                 List<Cell> images = color.isEmpty() ? null : colorSequenceMap.get(color);
