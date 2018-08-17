@@ -28,9 +28,9 @@ public class Cell extends AbstractCell {
 
     // Логгер ячейки.
     private Logger cellLogger = Logger.getLogger(Cell.class.getName());
-    // Ссылка на элемент Gui, которая необходима для отображения информации о ходе игры.
+    // Ссылка на элемент GUI, которая необходима для отображения информации о ходе игры.
     private JLabel gameInfo = MainPanel.infoLabel;
-    // Карта ячеек, где Ключ - координаты, а Значение - ячейка.
+    // Карта ячеек, где ключ - это координаты, а значение - ячейка.
     public static Map<Pair<Integer, Integer>, Cell> cellMap = new HashMap<>();
     /**
      * Список пустых ячеек (состояние которых {@link State#EMPTY} либо {@link this#containsImage() == false})
@@ -108,7 +108,9 @@ public class Cell extends AbstractCell {
     // TODO: очень длинный метод
     /**
      * Реализация абстрактного метода {@link AbstractCell#getNeighbors()}.
-     * @return {@link List} ячеек, находящихся по соседству от данной ячейки.
+     * В методе выполняется поиск "соседей" для любой ячейки. "Соседями" считаются ячейки, находящиеся возле данной
+     * ячейки, за исключением тех, что находятся рядом по-диагонали.
+     * @return список, содержащий ячейки, находящиеся по соседству от данной ячейки.
      */
     public List<Cell> getNeighbors() {
         List<Cell> neighborsList = new LinkedList<>();
@@ -162,15 +164,14 @@ public class Cell extends AbstractCell {
     }
 
     /**
-     * Метод обрабатывает событие нажатия мышью на ячейку.
+     * Метод обрабатывает клик мыши по ячейке.
      * В зависимости от состояния конкретной ячейки, выполняется выделение или снятие выделения с ячейки,
      * а также инициируется игровой ход (перемещение изображения из одной ячейки в другую).
-     * @param e событие нажатия.
+     * @param e событие нажатия на ячейку.
      */
     @Override
     public void mousePressed(MouseEvent e) {
         Cell currentCell = this;
-
         switch ( currentCell.getState() ) {
             // Если ячейка уже выбрана (выделена цветом), то при нажатии на неё - выделение снимается.
             case SELECTED:
