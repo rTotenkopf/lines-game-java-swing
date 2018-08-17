@@ -22,13 +22,13 @@ import java.util.stream.Stream;
 
 public class ResourceManger {
 
-    // Папка с изображениями.
+    // Название папки с изображениями.
     private static final String BALLS_FOLDER;
-    // Папка с иконкой.
+    // Название папки с иконкой.
     private static final String ICON_FOLDER;
     // Имя изображения иконки.
     private static final String ICON_NAME;
-    // Тип файла.
+    // Название типа (расширения) файла.
     private static final String FILE_TYPE;
     // Суффикс имени файла.
     private static final String SUFFIX;
