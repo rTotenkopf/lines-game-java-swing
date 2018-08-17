@@ -309,7 +309,7 @@ public class Play {
      * @param line коллекция, содержащая ячейки, изображения из которых необходимо удалить.
      */
     private void deleteImagesFromCells(Collection<Cell> line) {
-        playLogger.info("Line of " + line.size() + " images was deleted!");
+        playLogger.info("Line of " + line.size() + " balls was deleted!");
         gameInfo.setText("Линия из " + line.size() + " шаров удалена!");
         setLineState(true); // Значение true означает, что срока удалена.
         line.forEach( cell -> { // Последовательное удаление изображений из ячеек.
