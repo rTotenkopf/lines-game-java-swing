@@ -4,15 +4,11 @@ import com.game.lines.Application;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.IOException;
-import java.net.URISyntaxException;
 import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Stream;
+import java.util.Map;
 
 /**
  * Класс ResourceManager управляет доступом к ресурсам проекта.
@@ -20,7 +16,7 @@ import java.util.stream.Stream;
  * @author Eugene Ivanov on 01.04.18
  */
 
-public class ResourceManger {
+public class ResourceManager {
 
     // Название папки с изображениями.
     private static final String BALLS_FOLDER;
@@ -48,33 +44,19 @@ public class ResourceManger {
         BALLS = ballsMap().values().toArray();
     }
 
-    // Получаем изображение иконки окна игры, используя URL.
+    // Получаем изображение иконки окна игры, используя его URL.
     public Image getImageIcon() {
         return IMAGE_ICON_URL != null ? new ImageIcon(IMAGE_ICON_URL).getImage() : null;
     }
 
     /**
      * Key - название цвета;
-     * Value - изображение;
-     * @return карта изображений по цветам.
+     * Value - изображение шара;
+     * @return карта изображений шаров по цветам.
      */
     public static Map<String, ImageIcon> ballsMap() {
-        List<String> colors = new ArrayList<>();
         Map<String, ImageIcon> imageMap = new HashMap<>();
-        URL resourceUrl = Application.class.getResource( BALLS_FOLDER );
-
-        try (Stream<Path> paths = Files.walk(Paths.get( resourceUrl.toURI() ))) {
-            paths
-                    .filter(Files::isRegularFile)
-                    .forEach(file -> {
-                        // Получаем название цвета изображения, содержащееся в имени файла.
-                        String color = file.getFileName().toString().split("[.-]")[0];
-                        colors.add(color);
-                    });
-        } catch (URISyntaxException | IOException e) {
-            e.getMessage();
-        }
-
+        List<String> colors = Arrays.asList("black", "blue", "gray", "green", "pink", "purple", "red", "sapphire", "yellow");
         for (String color : colors) {
             ImageIcon image = getImageByColor(color);
             imageMap.put(color, image);

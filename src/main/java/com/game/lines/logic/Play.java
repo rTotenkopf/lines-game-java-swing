@@ -12,7 +12,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.logging.Logger;
 
-import static com.game.lines.common.ResourceManger.*;
+import static com.game.lines.common.ResourceManager.*;
 import static com.game.lines.logic.State.*;
 import static com.game.lines.entity.Cell.*;
 
