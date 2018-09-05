@@ -2,7 +2,6 @@ package com.game.lines.gui;
 
 import com.game.lines.common.ResourceManager;
 import com.game.lines.entity.Cell;
-import com.game.lines.logic.Play;
 import com.game.lines.logic.State;
 
 import javax.swing.*;
