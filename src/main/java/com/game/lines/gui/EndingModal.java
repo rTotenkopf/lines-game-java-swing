@@ -22,7 +22,7 @@ public class EndingModal extends JDialog {
         super(MainPanel.getFrames()[0], "Игра окончена", true);
         modal = this;
         paneColor = new Color(0, 230, 150);
-        setDefaultCloseOperation(HIDE_ON_CLOSE);
+        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         getContentPane().setBackground(paneColor);
         addComponentsToPane(getContentPane());
         pack();
