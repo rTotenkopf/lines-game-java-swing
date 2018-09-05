@@ -6,10 +6,11 @@ import javax.swing.*;
  * @author Eugene Ivanov on 18.06.18
  */
 
-public class OptionModal {
+class OptionModal {
 
     /**
-     * Конструктор класса OptionModal.
+     * Конструктор класса OptionModal. Здесь производится настройка модального окна, возницкающего при попытке закрыть
+     * главное окно игры.
      */
     private OptionModal() {
         UIManager.put("OptionPane.yesButtonText", "Продолжить игру");
@@ -26,7 +27,7 @@ public class OptionModal {
         }
     }
 
-    public static void getOptionPane() {
+    static void getOptionPane() {
         new OptionModal();
     }
 }
