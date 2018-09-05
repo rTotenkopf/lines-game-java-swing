@@ -31,7 +31,7 @@ public class MainPanel extends JFrame {
      * @param gridHeight высота сетки.
      */
     public MainPanel(int frameWidth, int frameHeight, int gridWidth, int gridHeight) {
-        super("Lines Game"); // Устанавливаем заголовок окна - название игры.
+        super("Lines"); // Устанавливаем заголовок окна - название игры.
         setIconImage( ResourceManager.getImageIcon() ); // Устанавливаем изображение/иконку окна игры.
         windowClosingSetUp(); // Настраиваем закрытие окна игры.
 
@@ -39,7 +39,7 @@ public class MainPanel extends JFrame {
         JPanel gridPanel = new JPanel();    // Инициализация панели/сетки, на которой располагается игровое поле.
 
         createGrid(gridWidth, gridHeight, gridPanel);
-        createGui(frameWidth, frameHeight, infoLabel, gridPanel);
+        MainPanelGui.getInstance().create(this, frameWidth, frameHeight, infoLabel, gridPanel);
     }
 
     /**
@@ -73,62 +73,6 @@ public class MainPanel extends JFrame {
                 initializeCell( createdCell, gridPanel, lineBorder ); // Вызов метода инициализации ячейки.
             }
         }
-    }
-
-    /**
-     * Создание gui с добавлением на него сетки из ячеек.
-     * @param frameWidth ширина фрейма.
-     * @param frameHeight высота фрейма.
-     * @param infoLabel элемент, который содержит информацию о ходе игры.
-     * @param gridPanel панель, содержащая сетку из ячеек.
-     */
-    private void createGui(int frameWidth, int frameHeight, JLabel infoLabel, JPanel gridPanel) {
-        Font labelFont = new Font("", Font.BOLD, 16);
-        infoLabel.setFont(labelFont);
-        pointsLabel = new JLabel("Очки: 0");
-        pointsLabel.setFont(labelFont);
-        ballsLabel = new JLabel("0 : Шары");
-        ballsLabel.setFont(labelFont);
-
-        JPanel pointsPanel = new JPanel();
-        JPanel ballsPanel = new JPanel();
-        JPanel southPanel = new JPanel();   // Доп. панель, расположенная снизу экрана.
-        JPanel northPanel = new JPanel();   // Доп. панель, расположенная сверху экрана..
-
-        // Установка параметров панелей и добавление на них элементов.
-        pointsPanel.setBackground(Color.YELLOW);
-        pointsPanel.add(pointsLabel);
-        ballsPanel.setBackground(Color.YELLOW);
-        ballsPanel.add(ballsLabel);
-        northPanel.setBackground(Color.YELLOW);
-        northPanel.setLayout(new BorderLayout());
-        northPanel.add(pointsPanel, BorderLayout.WEST);
-        northPanel.add(ballsPanel, BorderLayout.EAST);
-        southPanel.setBackground(Color.YELLOW);
-        southPanel.add(infoLabel);
-
-        // =====================TEST=======
-        JButton testButton = new JButton("Тест завершения игры");
-        testButton.addActionListener( e -> {
-            EndingModal.init();
-
-        });
-        northPanel.add(testButton, BorderLayout.CENTER);
-        // =====================TEST=======
-
-        pack(); // Установка соответствующего размера окна программы.
-        setLocation(500, 100); // Установка положения окна на экране пользователя.
-        setSize(frameWidth, frameHeight); // Установка размера.
-
-        // Добавление панелей на главный фрейм с заданием необходимого расположения.
-        getContentPane().add(BorderLayout.SOUTH, southPanel);
-        getContentPane().add(BorderLayout.CENTER, gridPanel);
-        getContentPane().add(BorderLayout.NORTH, northPanel);
-        setResizable(false);
-        setVisible(true);
-
-        // Инициация игрового процесса.
-        Play.initGameProcess();
     }
 
     /**
