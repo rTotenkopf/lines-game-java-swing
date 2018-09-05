@@ -31,7 +31,7 @@ public class MainPanel extends JFrame {
      * @param gridHeight высота сетки.
      */
     public MainPanel(int frameWidth, int frameHeight, int gridWidth, int gridHeight) {
-        super("Lines Game"); // Устанавливаем заголовок окна игры.
+        super("Lines Game"); // Устанавливаем заголовок окна - название игры.
         setIconImage( ResourceManager.getImageIcon() ); // Устанавливаем изображение/иконку окна игры.
         windowClosingSetUp(); // Настраиваем закрытие окна игры.
 
