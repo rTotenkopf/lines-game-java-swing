@@ -45,7 +45,7 @@ public class ResourceManager {
     }
 
     // Получаем изображение иконки окна игры, используя его URL.
-    public Image getImageIcon() {
+    public static Image getImageIcon() {
         return IMAGE_ICON_URL != null ? new ImageIcon(IMAGE_ICON_URL).getImage() : null;
     }
 
