@@ -1,19 +1,18 @@
 package com.game.lines.entity;
 
 import com.game.lines.gui.Grid;
-import com.game.lines.gui.MainPanel;
 import com.game.lines.logic.Play;
-import com.game.lines.logic.State;
 import javafx.util.Pair;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
-import java.util.*;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.logging.Logger;
+import java.util.Objects;
 
-import static com.game.lines.logic.State.*;
+import static com.game.lines.logic.State.RELEASED;
+import static com.game.lines.logic.State.SELECTED;
 
 /**
  * Класс Cell абстрагирует отдельную ячейку игрового поля, её координаты, игровое состояние и т.д., а также
@@ -27,47 +26,13 @@ import static com.game.lines.logic.State.*;
 
 public class Cell extends AbstractCell {
 
-    // Логгер ячейки.
-    private Logger cellLogger = Logger.getLogger(Cell.class.getName());
-    // Ссылка на элемент GUI, которая необходима для отображения информации о ходе игры.
-    private JLabel gameInfo = MainPanel.infoLabel;
-    // Карта ячеек, где ключ - это координаты, а значение - ячейка.
-    public static Map<Pair<Integer, Integer>, Cell> cellMap = new HashMap<>();
     /**
-     * Список пустых ячеек (состояние которых {@link State#EMPTY} либо {@link this#containsImage() == false})
-     * которые могут быть заполнены изображениями.
-     */
-    public static List<Cell> emptyCells = new ArrayList<>();
-    private static Cell previousCell; // Предыдущая нажатая ячейка.
-    private int Xx; // Положение ячейки по оси координат X.
-    private int Yy; // Положение ячейки по оси координат Y.
-    private State state; // Состояние ячейки.
-
-    // Сеттеры и геттеры полей класса.
-    public int getXx() {
-        return Xx;
-    }
-
-    public int getYy() {
-        return Yy;
-    }
-
-    public void setState(State state) {
-        this.state = state;
-    }
-
-    public State getState() {
-        return state;
-    }
-
-    /**
-     * Конструктор класса.
      * @param x координата X.
      * @param y координата Y.
      */
     public Cell(int x, int y) {
-        this.Xx = x;
-        this.Yy = y;
+        setXx(x);
+        setYy(y);
     }
 
     /**
@@ -95,15 +60,6 @@ public class Cell extends AbstractCell {
             setState(RELEASED);
         }
         setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
-    }
-
-    /**
-     * Реализация абстрактного метода {@link AbstractCell#getCoordinates()}.
-     * @return объект {@link Pair} c координатами ячейки X {@link #Xx}, и Y {@link #Yy}.
-     */
-    @Override
-    public Pair<Integer, Integer> getCoordinates() {
-        return new Pair<>(getXx(), getYy());
     }
 
     // TODO: очень длинный метод
@@ -211,29 +167,5 @@ public class Cell extends AbstractCell {
 //        if ( this.state == State.SELECTED) { cellLogger.info("Cell selected"); }
 //        if ( this.state == State.RELEASED) { cellLogger.info("Cell released"); }
 //        if ( this.state == State.EMPTY )   { cellLogger.info("Cell is empty"); }
-    }
-
-    // Переопределение методов equals() и hashCode().
-    @Override
-    public boolean equals(Object obj) {
-        boolean value = false;
-        if ( !(obj instanceof JButton) && !(obj instanceof JPanel)) {
-            try {
-                Cell other = (Cell) obj;
-                value = (this.Xx == other.getXx() && this.Yy == other.getYy() );
-            } catch (ClassCastException e) {
-                e.getMessage();
-            }
-        }
-        return value;
-    }
-
-    @Override
-    public int hashCode() {
-        int prime = 31;
-        int result = 1;
-        result = prime + result + this.Xx;
-        result = prime + result + this.Yy;
-        return result;
     }
 }
