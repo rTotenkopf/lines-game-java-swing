@@ -1,6 +1,5 @@
 package com.game.lines.entity;
 
-import com.game.lines.gui.MainPanel;
 import com.game.lines.logic.Clickable;
 import javafx.util.Pair;
 
@@ -17,16 +16,9 @@ import java.util.List;
 
 abstract class AbstractCell extends JLabel implements Clickable {
 
-    // Конструктор класса, в котором реализуется слушатель нажатий мыши,
+    // Конструктор класса, в котором добавляется слушатель нажатий мыши,
     AbstractCell() {
         addMouseListener(this);
-    }
-
-    /**
-     * @return длину стороны сетки/игрового поля.
-     */
-    public static int getGridLength() {
-        return MainPanel.grid.length;
     }
 
     /**

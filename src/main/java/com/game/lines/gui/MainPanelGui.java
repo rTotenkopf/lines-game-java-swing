@@ -16,15 +16,12 @@ class MainPanelGui {
      * @param panel панель игры.
      * @param width ширина фрейма.
      * @param height высота фрейма.
-     * @param label элемент, который содержит информацию о ходе игры.
      * @param grid панель, содержащая сетку из ячеек.
      */
-    void create(MainPanel panel, int width, int height, JLabel label, JPanel grid) {
+    void createGui(MainPanel panel, int width, int height, JLabel infoLabel, JLabel pointsLabel, JLabel ballsLabel, JPanel grid) {
         Font labelFont = new Font("", Font.BOLD, 16);
-        label.setFont(labelFont);
-        JLabel pointsLabel = new JLabel("Очки: 0");
+        infoLabel.setFont(labelFont);
         pointsLabel.setFont(labelFont);
-        JLabel ballsLabel = new JLabel("0 : Шары");
         ballsLabel.setFont(labelFont);
 
         JPanel pointsPanel = new JPanel();
@@ -42,7 +39,7 @@ class MainPanelGui {
         northPanel.add(pointsPanel, BorderLayout.WEST);
         northPanel.add(ballsPanel, BorderLayout.EAST);
         southPanel.setBackground(Color.YELLOW);
-        southPanel.add(label);
+        southPanel.add(infoLabel);
 
         // =====================TEST=======
         JButton testButton = new JButton("Тест завершения игры");
@@ -64,7 +61,7 @@ class MainPanelGui {
         panel.setResizable(false);
         panel.setVisible(true);
 
-        // Инициация игрового процесса.
+        // После построение GUI игры, происходит инициализация игрового процесса.
         Play.initGameProcess();
     }
 }

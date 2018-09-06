@@ -1,5 +1,6 @@
 package com.game.lines.entity;
 
+import com.game.lines.gui.Grid;
 import com.game.lines.gui.MainPanel;
 import com.game.lines.logic.Play;
 import com.game.lines.logic.State;
@@ -114,7 +115,7 @@ public class Cell extends AbstractCell {
      */
     public List<Cell> getNeighbors() {
         List<Cell> neighborsList = new LinkedList<>();
-        int gridLength = getGridLength();
+        int gridLength = Grid.getGridLength();
         // Поиск соседей для ячеек, располагающихся не у края поля.
         if ( (getXx() > 1 && getXx() < gridLength) && (getYy() > 1 && getYy() < gridLength) ) {
             neighborsList.add(cellMap.get(new Pair<>(getXx(), getYy() - 1) ));

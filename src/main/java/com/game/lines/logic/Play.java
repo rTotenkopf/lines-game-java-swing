@@ -2,6 +2,7 @@ package com.game.lines.logic;
 
 import com.game.lines.entity.Cell;
 import com.game.lines.gui.EndingModal;
+import com.game.lines.gui.Grid;
 import com.game.lines.gui.MainPanel;
 import javafx.util.Pair;
 
@@ -86,7 +87,7 @@ public class Play {
         gameInfo = MainPanel.infoLabel;
         pointsLabel = MainPanel.pointsLabel;
         ballsLabel = MainPanel.ballsLabel;
-        sideLength = Cell.getGridLength();  // Длина (в ячейках) стороны квадрата игрового поля.
+        sideLength = Grid.getGridLength();  // Длина (в ячейках) стороны квадрата игрового поля.
         targetCell = emptyCell;             // "Целевая ячейка", она же ячейка, в которую нужно ходить.
         visited = new LinkedList<>();       // Инициализация списка, используемого для проверки возможности хода в ячейку.
         queue = new LinkedList<>();         // Инициализация очереди, используемой для проверки возможности хода в ячейку.
