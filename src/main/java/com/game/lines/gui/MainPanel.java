@@ -13,9 +13,21 @@ import java.awt.event.WindowEvent;
 
 public class MainPanel extends JFrame {
 
-    public static JLabel infoLabel;   // Информация о состоянии игры.
-    public static JLabel pointsLabel; // Информация об очках.
-    public static JLabel ballsLabel;  // Информация о количестве удаленных шаров.
+    private static JLabel infoLabel;   // Информация о состоянии игры.
+    private static JLabel pointsLabel; // Информация об очках.
+    private static JLabel ballsLabel;  // Информация о количестве удаленных шаров.
+
+    public static JLabel getInfoLabel() {
+        return infoLabel;
+    }
+
+    public static JLabel getPointsLabel() {
+        return pointsLabel;
+    }
+
+    public static JLabel getBallsLabel() {
+        return ballsLabel;
+    }
 
     /**
      * Конструктор класса MainPanel, который отвечает за создание и настройку GUI главного окна игры.
@@ -33,7 +45,7 @@ public class MainPanel extends JFrame {
         ballsLabel = new JLabel("0 : Шары");          // Виджет количества удаленных шаров.
         JPanel gridPanel = new JPanel();                   // Инициализация сетки (игрового поля).
         Grid.getInstance().createGrid(gridWidth, gridHeight, gridPanel);
-        MainPanelGui.getInstance().createGui(this, frameWidth, frameHeight, infoLabel, pointsLabel, ballsLabel, gridPanel);
+        MainPanelGui.getInstance().createGui(this, frameWidth, frameHeight, getInfoLabel(), getPointsLabel(), getBallsLabel(), gridPanel);
     }
 
     /**
