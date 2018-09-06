@@ -25,7 +25,7 @@ abstract class AbstractCell extends JLabel implements Clickable {
     private int Xx; // Положение ячейки по оси координат X.
     private int Yy; // Положение ячейки по оси координат Y.
     Logger cellLogger = Logger.getLogger(Cell.class.getName()); // Логгер ячейки.
-    JLabel gameInfo = MainPanel.infoLabel; // Ссылка на элемент GUI, необходима для отображения информации о ходе игры.
+    JLabel gameInfo = MainPanel.getInfoLabel(); // Ссылка на элемент GUI, необходима для отображения информации о ходе игры.
     // Карта ячеек, где ключ - это координаты, а значение - ячейка.
     public static Map<Pair<Integer, Integer>, Cell> cellMap = new HashMap<>();
     /**

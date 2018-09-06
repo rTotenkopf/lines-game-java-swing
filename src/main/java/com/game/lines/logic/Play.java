@@ -84,9 +84,9 @@ public class Play {
      */
     private Play(Cell filledCell, Cell emptyCell) {
         playLogger = Logger.getLogger(getClass().getName());
-        gameInfo = MainPanel.infoLabel;
-        pointsLabel = MainPanel.pointsLabel;
-        ballsLabel = MainPanel.ballsLabel;
+        gameInfo = MainPanel.getInfoLabel();
+        pointsLabel = MainPanel.getPointsLabel();
+        ballsLabel = MainPanel.getBallsLabel();
         sideLength = Grid.getGridLength();  // Длина (в ячейках) стороны квадрата игрового поля.
         targetCell = emptyCell;             // "Целевая ячейка", она же ячейка, в которую нужно ходить.
         visited = new LinkedList<>();       // Инициализация списка, используемого для проверки возможности хода в ячейку.
@@ -370,7 +370,7 @@ public class Play {
      */
     private static void generateRandomImages(String textInfo, boolean lineWasDeleted, int amount) {
         if ( !lineWasDeleted ) {
-            MainPanel.infoLabel.setText( textInfo );
+            MainPanel.getInfoLabel().setText( textInfo );
             for (int i = 0; i < amount; i++) {
                 Cell cell = getRandomCell( emptyCells ); // Получаем рандомную ячейку из массива пустых ячеек.
                 int index = (int) (Math.random() * BALLS.length); // Подбираем случайный индекс.
@@ -412,8 +412,8 @@ public class Play {
                 e.printStackTrace();
             }
             // Рандом изображений в сетку.
-            MainPanel.infoLabel.setText("Начата новая игра.");
-            generateRandomImages(MainPanel.infoLabel.getText(), false, 5);
+            MainPanel.getInfoLabel().setText("Начата новая игра.");
+            generateRandomImages(MainPanel.getInfoLabel().getText(), false, 5);
         }).start();
     }
 
