@@ -7,9 +7,6 @@ import java.awt.*;
 
 class MainPanelGui {
 
-    public static JLabel pointsLabel;
-    public static JLabel ballsLabel;
-
     static MainPanelGui getInstance() {
         return new MainPanelGui();
     }
@@ -25,9 +22,9 @@ class MainPanelGui {
     void create(MainPanel panel, int width, int height, JLabel label, JPanel grid) {
         Font labelFont = new Font("", Font.BOLD, 16);
         label.setFont(labelFont);
-        pointsLabel = new JLabel("Очки: 0");
+        JLabel pointsLabel = new JLabel("Очки: 0");
         pointsLabel.setFont(labelFont);
-        ballsLabel = new JLabel("0 : Шары");
+        JLabel ballsLabel = new JLabel("0 : Шары");
         ballsLabel.setFont(labelFont);
 
         JPanel pointsPanel = new JPanel();
