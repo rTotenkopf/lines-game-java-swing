@@ -3,7 +3,7 @@ package com.game.lines.logic;
 import com.game.lines.entity.Cell;
 import com.game.lines.gui.EndingModal;
 import com.game.lines.gui.Grid;
-import com.game.lines.gui.MainPanel;
+import com.game.lines.gui.MainPanelGui;
 import javafx.util.Pair;
 
 import javax.swing.*;
@@ -29,8 +29,6 @@ public class Play {
 
     // Логгер игрового процесса.
     private Logger playLogger;
-    // Лэйбл информирования пользователя об игровом процессе.
-    private static JLabel gameInfo;
     // Лэйбл для отображения счетчика очков в игре.
     private static JLabel pointsLabel;
     // Счетчик очков в игре.
@@ -84,9 +82,8 @@ public class Play {
      */
     private Play(Cell filledCell, Cell emptyCell) {
         playLogger = Logger.getLogger(getClass().getName());
-        gameInfo = MainPanel.getInfoLabel();
-        pointsLabel = MainPanel.getPointsLabel();
-        ballsLabel = MainPanel.getBallsLabel();
+        pointsLabel = MainPanelGui.getPointsLabel();
+        ballsLabel = MainPanelGui.getBallsLabel();
         sideLength = Grid.getGridLength();  // Длина (в ячейках) стороны квадрата игрового поля.
         targetCell = emptyCell;             // "Целевая ячейка", она же ячейка, в которую нужно ходить.
         visited = new LinkedList<>();       // Инициализация списка, используемого для проверки возможности хода в ячейку.
@@ -114,7 +111,7 @@ public class Play {
      */
     private void makeMove(Cell filledCell, Cell emptyCell) {
         if ( moveAbility ) {
-            gameInfo.setText("Ход выполняется...");
+            MainPanelGui.getInfoLabel().setText("Ход выполняется...");
             // Если ход возможен, то запускаем новый поток.
             new Thread( () -> {
                 moveImageCell(filledCell, emptyCell); // Ход (перемещение).
@@ -144,7 +141,7 @@ public class Play {
         } else {
             // Если ход невозможен, то логируем сообщение о невозможности хода.
             playLogger.info("Move impossible..");
-            gameInfo.setText("Ход в выбранную ячейку невозможен..");
+            MainPanelGui.getInfoLabel().setText("Ход в выбранную ячейку невозможен..");
         }
     }
 
@@ -153,7 +150,7 @@ public class Play {
         if ( Cell.emptyCells.size() <= 3 ) {
             Logger.getGlobal().warning("End of the game!");
             EndingModal.init();
-            gameInfo.setText("Игра окончена!");
+            MainPanelGui.getInfoLabel().setText("Игра окончена!");
         }
     }
 
@@ -311,7 +308,7 @@ public class Play {
      */
     private void deleteImagesFromCells(Collection<Cell> line) {
         playLogger.info("Line of " + line.size() + " balls was deleted!");
-        gameInfo.setText("Линия из " + line.size() + " шаров удалена!");
+        MainPanelGui.getInfoLabel().setText("Линия из " + line.size() + " шаров удалена!");
         setLineState(true); // Значение true означает, что срока удалена.
         line.forEach( cell -> { // Последовательное удаление изображений из ячеек.
             cell.setIcon(null);
@@ -370,7 +367,7 @@ public class Play {
      */
     private static void generateRandomImages(String textInfo, boolean lineWasDeleted, int amount) {
         if ( !lineWasDeleted ) {
-            MainPanel.getInfoLabel().setText( textInfo );
+            MainPanelGui.getInfoLabel().setText( textInfo );
             for (int i = 0; i < amount; i++) {
                 Cell cell = getRandomCell( emptyCells ); // Получаем рандомную ячейку из массива пустых ячеек.
                 int index = (int) (Math.random() * BALLS.length); // Подбираем случайный индекс.
@@ -412,8 +409,8 @@ public class Play {
                 e.printStackTrace();
             }
             // Рандом изображений в сетку.
-            MainPanel.getInfoLabel().setText("Начата новая игра.");
-            generateRandomImages(MainPanel.getInfoLabel().getText(), false, 5);
+            MainPanelGui.getInfoLabel().setText("Начата новая игра.");
+            generateRandomImages(MainPanelGui.getInfoLabel().getText(), false, 5);
         }).start();
     }
 

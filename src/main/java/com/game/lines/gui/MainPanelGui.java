@@ -5,7 +5,23 @@ import com.game.lines.logic.Play;
 import javax.swing.*;
 import java.awt.*;
 
-class MainPanelGui {
+public class MainPanelGui {
+
+    private static JLabel infoLabel;   // Информация о состоянии игры.
+    private static JLabel pointsLabel; // Информация об очках.
+    private static JLabel ballsLabel;  // Информация о количестве удаленных шаров.
+
+    public static JLabel getInfoLabel() {
+        return infoLabel;
+    }
+
+    public static JLabel getPointsLabel() {
+        return pointsLabel;
+    }
+
+    public static JLabel getBallsLabel() {
+        return ballsLabel;
+    }
 
     static MainPanelGui getInstance() {
         return new MainPanelGui();
@@ -18,7 +34,10 @@ class MainPanelGui {
      * @param height высота фрейма.
      * @param grid панель, содержащая сетку из ячеек.
      */
-    void createGui(MainPanel panel, int width, int height, JLabel infoLabel, JLabel pointsLabel, JLabel ballsLabel, JPanel grid) {
+    void createGui(MainPanel panel, int width, int height, JPanel grid) {
+        infoLabel = new JLabel("Начата новая игра."); // Виджет состояния игры.
+        pointsLabel = new JLabel("Очки: 0");          // Виджет очков во время игры.
+        ballsLabel = new JLabel("0 : Шары");          // Виджет количества удаленных шаров.
         Font labelFont = new Font("", Font.BOLD, 16);
         infoLabel.setFont(labelFont);
         pointsLabel.setFont(labelFont);
@@ -43,10 +62,7 @@ class MainPanelGui {
 
         // =====================TEST=======
         JButton testButton = new JButton("Тест завершения игры");
-        testButton.addActionListener( e -> {
-            EndingModal.init();
-
-        });
+        testButton.addActionListener( e -> EndingModal.init());
         northPanel.add(testButton, BorderLayout.CENTER);
         // =====================TEST=======
 

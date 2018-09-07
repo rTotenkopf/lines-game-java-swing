@@ -13,22 +13,6 @@ import java.awt.event.WindowEvent;
 
 public class MainPanel extends JFrame {
 
-    private static JLabel infoLabel;   // Информация о состоянии игры.
-    private static JLabel pointsLabel; // Информация об очках.
-    private static JLabel ballsLabel;  // Информация о количестве удаленных шаров.
-
-    public static JLabel getInfoLabel() {
-        return infoLabel;
-    }
-
-    public static JLabel getPointsLabel() {
-        return pointsLabel;
-    }
-
-    public static JLabel getBallsLabel() {
-        return ballsLabel;
-    }
-
     /**
      * Конструктор класса MainPanel, который отвечает за создание и настройку GUI главного окна игры.
      * @param frameWidth ширина фрейма.
@@ -40,12 +24,9 @@ public class MainPanel extends JFrame {
         super("Lines");                               // Устанавливаем заголовок окна - название игры.
         setIconImage( ResourceManager.getImageIcon() );    // Устанавливаем изображение/иконку окна игры.
         windowClosingSetUp();                              // Настраиваем закрытие окна игры.
-        infoLabel = new JLabel("Начата новая игра."); // Виджет состояния игры.
-        pointsLabel = new JLabel("Очки: 0");          // Виджет очков во время игры.
-        ballsLabel = new JLabel("0 : Шары");          // Виджет количества удаленных шаров.
         JPanel gridPanel = new JPanel();                   // Инициализация сетки (игрового поля).
         Grid.getInstance().createGrid(gridWidth, gridHeight, gridPanel);
-        MainPanelGui.getInstance().createGui(this, frameWidth, frameHeight, getInfoLabel(), getPointsLabel(), getBallsLabel(), gridPanel);
+        MainPanelGui.getInstance().createGui(this, frameWidth, frameHeight, gridPanel);
     }
 
     /**

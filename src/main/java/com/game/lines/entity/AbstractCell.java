@@ -1,6 +1,5 @@
 package com.game.lines.entity;
 
-import com.game.lines.gui.MainPanel;
 import com.game.lines.logic.Clickable;
 import com.game.lines.logic.State;
 import javafx.util.Pair;
@@ -14,8 +13,7 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 /**
- * Абстрактный класс, который реализует часть логики класса Cell и "выполняет контракт"
- * с интерфейсом MouseListener, реализуя методы, обязательные для реализации, но не нужные для работы приложения.
+ * Абстрактный класс AbstractCell, которорый реализует интерфейс MouseListener.
  *
  * @author Eugene Ivanov on 11.04.18
  */
@@ -25,7 +23,6 @@ abstract class AbstractCell extends JLabel implements Clickable {
     private int Xx; // Положение ячейки по оси координат X.
     private int Yy; // Положение ячейки по оси координат Y.
     Logger cellLogger = Logger.getLogger(Cell.class.getName()); // Логгер ячейки.
-    JLabel gameInfo = MainPanel.getInfoLabel(); // Ссылка на элемент GUI, необходима для отображения информации о ходе игры.
     // Карта ячеек, где ключ - это координаты, а значение - ячейка.
     public static Map<Pair<Integer, Integer>, Cell> cellMap = new HashMap<>();
     /**
