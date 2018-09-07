@@ -381,6 +381,7 @@ public class Play {
         setBallsCounter(0);
         setPointsCounter(0);
         emptyCells.clear();
+        MainPanelGui.setDefaultLabelsInfo();
 
         cellMap.values().forEach( cell -> {
             cell.release();

@@ -27,6 +27,11 @@ public class MainPanelGui {
         return new MainPanelGui();
     }
 
+    public static void setDefaultLabelsInfo() {
+        pointsLabel.setText("Очки: 0");
+        ballsLabel.setText("0 : Шары");
+    }
+
     /**
      * Создание gui с добавлением на него сетки из ячеек.
      * @param panel панель игры.
