@@ -80,7 +80,7 @@ public class Play {
         playLogger = Logger.getLogger(getClass().getName());
         sideLength = Grid.getGridLength();  // Длина (в ячейках) стороны квадрата игрового поля.
         targetCell = emptyCell;             // "Целевая ячейка", она же ячейка, в которую нужно ходить.
-        visited = new LinkedList<>();       // Инициализация списка, используемого для проверки возможности хода в ячейку.
+        visited = new ArrayList<>();        // Инициализация списка, используемого для проверки возможности хода в ячейку.
         queue = new LinkedList<>();         // Инициализация очереди, используемой для проверки возможности хода в ячейку.
         setLineState(false);                // Установка значения переменной экземпляра lineState.
         moveAbility = traverse(filledCell); // Получение результата выполнения метода traverse.
