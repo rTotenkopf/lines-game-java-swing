@@ -77,6 +77,7 @@ public class MainPanelGui {
         panel.setResizable(false);
         panel.setVisible(true);
 
+        // TODO: написать отдельный класс, в котором будет инициализация игры.
         // После построение GUI игры, происходит инициализация игрового процесса.
         Play.initGameProcess();
     }
