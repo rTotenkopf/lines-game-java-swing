@@ -1,6 +1,7 @@
 package com.game.lines.entity;
 
 import com.game.lines.gui.Grid;
+import com.game.lines.gui.MainPanelGui;
 import com.game.lines.logic.Play;
 import javafx.util.Pair;
 
@@ -17,7 +18,7 @@ import static com.game.lines.logic.State.SELECTED;
 /**
  * Класс Cell абстрагирует отдельную ячейку игрового поля, её координаты, игровое состояние и т.д., а также
  * предоставляет необходимые методы для работы с ячейкой.
- * В поля класса {@link #cellMap} и {@link #emptyCells} хранится информация о всех ячейках в игре.
+ * Поля класса {@link #cellMap} и {@link #emptyCells} хранят информация о всех ячейках в игре.
  * Класс наследует {@link AbstractCell}, который реализует интерфейс {@link com.game.lines.logic.Clickable}.
  * Действия над ячейками выполняются с помощью кликов мыши.
  *
@@ -134,7 +135,7 @@ public class Cell extends AbstractCell {
             case SELECTED:
                 currentCell.release();
                 cellLogger.info("Cell released");
-                gameInfo.setText("Ячейка освобождена.");
+                MainPanelGui.getInfoLabel().setText("Ячейка освобождена.");
                 break;
             // Если ячейка не была выделена, то она выбирается (выделяется цветом), с предыдущей выбранной ячейки,
             // выделение снимается.
@@ -144,13 +145,13 @@ public class Cell extends AbstractCell {
                 }
                 currentCell.select();
                 cellLogger.info("Cell selected");
-                gameInfo.setText("Шар выбран.");
+                MainPanelGui.getInfoLabel().setText("Шар выбран.");
                 break;
             // Если ячейка пуста, то проверяется состояние предыдущей ячейки.
             // Если предыдущая ячейка была выбрана, то изображение из неё переносится в текущую (пустую) ячейку.
             // Таким образом, осуществляется игровой ход (перемещение изображения).
             case EMPTY:
-                gameInfo.setText("Выберите шар!");
+                MainPanelGui.getInfoLabel().setText("Выберите шар!");
                 // Выполнение игрового хода. Метод moveInit возвращает true, если ход выполнен успешно.
                 if ( !Objects.isNull(previousCell) && (previousCell.getState() == SELECTED) ) {
                     boolean moveComplete = Play.moveInit(previousCell, currentCell);
