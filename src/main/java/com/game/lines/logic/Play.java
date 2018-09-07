@@ -29,12 +29,8 @@ public class Play {
 
     // Логгер игрового процесса.
     private Logger playLogger;
-    // Лэйбл для отображения счетчика очков в игре.
-    private static JLabel pointsLabel;
     // Счетчик очков в игре.
     private static int pointsCounter;
-    // Лэйбл для отображения счетчика шаров, удаленных с поля.
-    private static JLabel ballsLabel;
     // Счетчик удаленных шаров.
     private static int ballsCounter;
     // Длина стороны сетки игрового поля.
@@ -82,8 +78,6 @@ public class Play {
      */
     private Play(Cell filledCell, Cell emptyCell) {
         playLogger = Logger.getLogger(getClass().getName());
-        pointsLabel = MainPanelGui.getPointsLabel();
-        ballsLabel = MainPanelGui.getBallsLabel();
         sideLength = Grid.getGridLength();  // Длина (в ячейках) стороны квадрата игрового поля.
         targetCell = emptyCell;             // "Целевая ячейка", она же ячейка, в которую нужно ходить.
         visited = new LinkedList<>();       // Инициализация списка, используемого для проверки возможности хода в ячейку.
@@ -425,8 +419,8 @@ public class Play {
         int ballsValue =  getBallsCounter() + lineSize;
         setPointsCounter(pointsValue);
         setBallsCounter(ballsValue);
-        pointsLabel.setText("Очки: " + String.valueOf(getPointsCounter()));
-        ballsLabel.setText(String.valueOf(getBallsCounter()) + ": Шары");
+        MainPanelGui.getPointsLabel().setText("Очки: " + String.valueOf(getPointsCounter()));
+        MainPanelGui.getBallsLabel().setText(String.valueOf(getBallsCounter()) + ": Шары");
     }
 
     /**
