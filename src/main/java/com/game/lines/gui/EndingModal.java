@@ -12,7 +12,6 @@ import java.awt.*;
 public class EndingModal extends JDialog {
 
     private static Color paneColor;
-    private static int points = Play.getPointsCounter();
     private static EndingModal modal;
 
     /**
@@ -54,7 +53,7 @@ public class EndingModal extends JDialog {
         String labelText =
                 "<html>" +
                 "<h1 align=\"center\" color=\"purple\">" + "Поздравляем!</h1>" +
-                "<h2 align=\"center\" color=\"#A0522D\">" + "Вы набрали " + points + " очков.</h2>" +
+                "<h2 align=\"center\" color=\"#A0522D\">" + "Вы набрали " + Play.getPointsCounter() + " очков.</h2>" +
                 "<font face=\"verdana\" size=4 color=\"navy\">" +
                 "<b>На поле не осталось свободных <br> ячеек.</b> <br>" +
                 "<b>Выберите дальнейшее действие:</b>" +
