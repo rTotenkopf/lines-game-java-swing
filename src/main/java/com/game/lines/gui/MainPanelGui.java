@@ -11,6 +11,14 @@ public class MainPanelGui {
     private static JLabel pointsLabel; // Информация об очках.
     private static JLabel ballsLabel;  // Информация о количестве удаленных шаров.
 
+    private static final String DEFAULT_POINTS_VALUE;
+    private static final String DEFAULT_BALLS_VALUE;
+
+    static {
+        DEFAULT_POINTS_VALUE = "Очки: 0";
+        DEFAULT_BALLS_VALUE = "0 : Шары";
+    }
+
     public static JLabel getInfoLabel() {
         return infoLabel;
     }
@@ -28,8 +36,8 @@ public class MainPanelGui {
     }
 
     public static void setDefaultLabelsInfo() {
-        pointsLabel.setText("Очки: 0");
-        ballsLabel.setText("0 : Шары");
+        pointsLabel.setText(DEFAULT_POINTS_VALUE);
+        ballsLabel.setText(DEFAULT_BALLS_VALUE);
     }
 
     /**
@@ -41,8 +49,8 @@ public class MainPanelGui {
      */
     void createGui(MainPanel panel, int width, int height, JPanel grid) {
         infoLabel = new JLabel("Начата новая игра."); // Виджет состояния игры.
-        pointsLabel = new JLabel("Очки: 0");          // Виджет очков во время игры.
-        ballsLabel = new JLabel("0 : Шары");          // Виджет количества удаленных шаров.
+        pointsLabel = new JLabel(DEFAULT_POINTS_VALUE);          // Виджет очков во время игры.
+        ballsLabel = new JLabel(DEFAULT_BALLS_VALUE);          // Виджет количества удаленных шаров.
         Font labelFont = new Font("", Font.BOLD, 16);
         infoLabel.setFont(labelFont);
         pointsLabel.setFont(labelFont);
