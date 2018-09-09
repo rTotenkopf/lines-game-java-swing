@@ -24,7 +24,7 @@ abstract class AbstractCell extends JLabel implements Clickable {
     private int Yy; // Положение ячейки по оси координат Y.
     Logger cellLogger = Logger.getLogger(Cell.class.getName()); // Логгер ячейки.
     // Карта ячеек, где ключ - это координаты, а значение - ячейка.
-    public static Map<Pair<Integer, Integer>, Cell> cellMap = new HashMap<>();
+    private static Map<Pair<Integer, Integer>, Cell> cellMap = new HashMap<>();
     /**
      * Список пустых ячеек (состояние которых {@link State#EMPTY} либо {@link Cell#containsImage()}  == false})
      * которые могут быть заполнены изображениями.
@@ -39,6 +39,10 @@ abstract class AbstractCell extends JLabel implements Clickable {
     }
 
     // Сеттеры и геттеры полей класса.
+    public static Map<Pair<Integer, Integer>, Cell> getCellMap() {
+        return cellMap;
+    }
+
     public State getState() {
         return state;
     }

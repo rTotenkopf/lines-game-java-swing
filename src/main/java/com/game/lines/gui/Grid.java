@@ -7,6 +7,8 @@ import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
 
+import static com.game.lines.entity.Cell.getCellMap;
+
 /**
  * Класс MainPanelGui отвечает за создание графического интерфейса приложения.
  *
@@ -52,7 +54,7 @@ public class Grid {
         int x = newCell.getXx();
         int y = newCell.getYy();
 //        newCell.setText("(" + (x) + "," + (y) + ")");
-        Cell.cellMap.put(newCell.getCoordinates(), newCell); // Добавление ячейки в карту ячеек.
+        getCellMap().put(newCell.getCoordinates(), newCell); // Добавление ячейки в карту ячеек.
         newCell.setBorder(lineBorder); // Установка границ ячейки.
         newCell.setVerticalAlignment(SwingConstants.CENTER); // Установка вертикальной центровки.
         newCell.setHorizontalAlignment(SwingConstants.CENTER); // Установка горизонтальной центровки.

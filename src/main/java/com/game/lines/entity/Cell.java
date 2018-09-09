@@ -75,47 +75,47 @@ public class Cell extends AbstractCell {
         int gridLength = Grid.getGridLength();
         // Поиск соседей для ячеек, располагающихся не у края поля.
         if ( (getXx() > 1 && getXx() < gridLength) && (getYy() > 1 && getYy() < gridLength) ) {
-            neighborsList.add(cellMap.get(new Pair<>(getXx(), getYy() - 1) ));
-            neighborsList.add(cellMap.get(new Pair<>(getXx(), getYy() + 1) ));
-            neighborsList.add(cellMap.get(new Pair<>(getXx() - 1, getYy()) ));
-            neighborsList.add(cellMap.get(new Pair<>(getXx() + 1, getYy()) ));
+            neighborsList.add(getCellMap().get(new Pair<>(getXx(), getYy() - 1) ));
+            neighborsList.add(getCellMap().get(new Pair<>(getXx(), getYy() + 1) ));
+            neighborsList.add(getCellMap().get(new Pair<>(getXx() - 1, getYy()) ));
+            neighborsList.add(getCellMap().get(new Pair<>(getXx() + 1, getYy()) ));
         }
         // Поиск соседей для ячеек, занимающих крайний нижний или крайний верхний ряд,
         // (за исключением крайних правой и левой ячеек).
         else if ( getXx() > 1 && getXx() < gridLength ) {
-            neighborsList.add(cellMap.get(new Pair<>(getXx() - 1, getYy()) ));
-            neighborsList.add(cellMap.get(new Pair<>(getXx() + 1, getYy()) ));
+            neighborsList.add(getCellMap().get(new Pair<>(getXx() - 1, getYy()) ));
+            neighborsList.add(getCellMap().get(new Pair<>(getXx() + 1, getYy()) ));
             if ( getYy() == 1 ) {
-                neighborsList.add(cellMap.get(new Pair<>(getXx(), getYy() + 1)));
+                neighborsList.add(getCellMap().get(new Pair<>(getXx(), getYy() + 1)));
             } else if ( getYy() == gridLength ) {
-                neighborsList.add(cellMap.get(new Pair<>(getXx(), getYy() - 1)));
+                neighborsList.add(getCellMap().get(new Pair<>(getXx(), getYy() - 1)));
             }
         }
         // Поиск соседей для ячеек, занимающих крайний левый и крайний правый ряд,
         // (за исключением крайних нижней и верхней ячеек).
         else if ( getYy() > 1 && getYy() < gridLength ) {
-            neighborsList.add(cellMap.get(new Pair<>(getXx(), getYy() + 1) ));
-            neighborsList.add(cellMap.get(new Pair<>(getXx(), getYy() - 1) ));
+            neighborsList.add(getCellMap().get(new Pair<>(getXx(), getYy() + 1) ));
+            neighborsList.add(getCellMap().get(new Pair<>(getXx(), getYy() - 1) ));
             if ( getXx() == 1 ) {
-                neighborsList.add(cellMap.get(new Pair<>(getXx() + 1, getYy()) ));
+                neighborsList.add(getCellMap().get(new Pair<>(getXx() + 1, getYy()) ));
             } else if ( getXx() == gridLength ) {
-                neighborsList.add(cellMap.get(new Pair<>(getXx() - 1, getYy()) ));
+                neighborsList.add(getCellMap().get(new Pair<>(getXx() - 1, getYy()) ));
             }
         }
         // Поиск соседей для ячеек, находящихся "в углах" игрового поля.
         else if ( getXx() == 1 ) {
-            neighborsList.add(cellMap.get(new Pair<>(getXx() + 1, getYy()) ));
+            neighborsList.add(getCellMap().get(new Pair<>(getXx() + 1, getYy()) ));
             if ( getYy() == 1 ) {
-                neighborsList.add(cellMap.get(new Pair<>(getXx(), getYy() + 1) ));
+                neighborsList.add(getCellMap().get(new Pair<>(getXx(), getYy() + 1) ));
             } else if ( getYy() == gridLength ) {
-                neighborsList.add(cellMap.get(new Pair<>(getXx(), getYy() - 1) ));
+                neighborsList.add(getCellMap().get(new Pair<>(getXx(), getYy() - 1) ));
             }
         } else if ( getXx() == gridLength ) {
-            neighborsList.add(cellMap.get(new Pair<>(getXx() - 1, getYy()) ));
+            neighborsList.add(getCellMap().get(new Pair<>(getXx() - 1, getYy()) ));
             if ( getYy() == 1 ) {
-                neighborsList.add(cellMap.get(new Pair<>(getXx(), getYy() + 1) ));
+                neighborsList.add(getCellMap().get(new Pair<>(getXx(), getYy() + 1) ));
             } else if (getYy() == gridLength) {
-                neighborsList.add(cellMap.get(new Pair<>(getXx(), getYy() - 1) ));
+                neighborsList.add(getCellMap().get(new Pair<>(getXx(), getYy() - 1) ));
             }
         }
         return neighborsList;

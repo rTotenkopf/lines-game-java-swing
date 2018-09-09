@@ -194,7 +194,7 @@ public class Play {
             Map<String, List<Cell>>  colorSequenceMap = new HashMap<>();
 
             for (int y = 1; y <= sideLength; y++) {
-                Cell nextCell = isVertical ? cellMap.get(new Pair<>(x, y)) : cellMap.get(new Pair<>(y, x));
+                Cell nextCell = isVertical ? getCellMap().get(new Pair<>(x, y)) : getCellMap().get(new Pair<>(y, x));
                 String color = nextCell.containsImage() ? nextCell.getImageColor() : "";
 
                 List<Cell> images = color.isEmpty() ? null : colorSequenceMap.get(color);
@@ -253,7 +253,7 @@ public class Play {
                               Map<String, List<Cell>> sequenceMap) {
 
         int y = isOpposite ? oppositeFunction.apply(x) : function.apply(x);
-        Cell nextCell = cellMap.get(new Pair<>(x, y));
+        Cell nextCell = getCellMap().get(new Pair<>(x, y));
         String color = nextCell.containsImage() ? nextCell.getImageColor() : "";
 
         List<Cell> images = color.isEmpty() ? null : sequenceMap.get(color);
@@ -383,7 +383,7 @@ public class Play {
         emptyCells.clear();
         MainPanelGui.setDefaultLabelsInfo();
 
-        cellMap.values().forEach( cell -> {
+        getCellMap().values().forEach( cell -> {
             cell.release();
             cell.setState(EMPTY);
             cell.setIcon(null);
