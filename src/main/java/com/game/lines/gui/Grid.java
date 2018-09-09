@@ -7,6 +7,12 @@ import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
 
+/**
+ * Класс MainPanelGui отвечает за создание графического интерфейса приложения.
+ *
+ * @author Eugene Ivanov on 07.09.18
+ */
+
 public class Grid {
 
     private static JLabel[][] grid;

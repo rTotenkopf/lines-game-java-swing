@@ -5,6 +5,12 @@ import com.game.lines.logic.Play;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * Класс MainPanelGui отвечает за создание графического интерфейса приложения.
+ *
+ * @author Eugene Ivanov on 09.09.18
+ */
+
 public class MainPanelGui {
 
     private static JLabel infoLabel;   // Информация о состоянии игры.
