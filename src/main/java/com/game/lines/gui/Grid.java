@@ -7,7 +7,7 @@ import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
 
-import static com.game.lines.entity.Cell.getCellMap;
+import static com.game.lines.entity.Cell.*;
 
 /**
  * Класс MainPanelGui отвечает за создание графического интерфейса приложения.
@@ -63,6 +63,6 @@ public class Grid {
         gridPanel.add(newCell); // Добавление ячейки на сетку.
         newCell.setState(State.EMPTY); // Установка состояния ячейки.
         grid[--x][--y] = newCell; // Инициализация ячейки.
-        Cell.emptyCells.add(newCell); // Добавление ячейки в список пустых ячеек.
+        getEmptyCells().add(newCell); // Добавление ячейки в список пустых ячеек.
     }
 }

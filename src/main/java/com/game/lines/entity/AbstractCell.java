@@ -29,7 +29,7 @@ abstract class AbstractCell extends JLabel implements Clickable {
      * Список пустых ячеек (состояние которых {@link State#EMPTY} либо {@link Cell#containsImage()}  == false})
      * которые могут быть заполнены изображениями.
      */
-    public static List<Cell> emptyCells = new ArrayList<>();
+    private static List<Cell> emptyCells = new ArrayList<>();
     static Cell previousCell; // Предыдущая нажатая ячейка.
     private State state; // Состояние ячейки.
 
@@ -41,6 +41,10 @@ abstract class AbstractCell extends JLabel implements Clickable {
     // Сеттеры и геттеры полей класса.
     public static Map<Pair<Integer, Integer>, Cell> getCellMap() {
         return cellMap;
+    }
+
+    public static List<Cell> getEmptyCells() {
+        return emptyCells;
     }
 
     public State getState() {

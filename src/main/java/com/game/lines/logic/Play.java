@@ -141,7 +141,7 @@ public class Play {
 
     // Метод проверки условия, при выполнении которого игра должна завершиться.
     private static void checkGameEndingCondition() {
-        if ( Cell.emptyCells.size() <= 3 ) {
+        if ( getEmptyCells().size() <= 3 ) {
             Logger.getGlobal().warning("End of the game!");
             EndingModal.init();
             MainPanelGui.getInfoLabel().setText("Игра окончена!");
@@ -307,7 +307,7 @@ public class Play {
         line.forEach( cell -> { // Последовательное удаление изображений из ячеек.
             cell.setIcon(null);
             cell.setState(EMPTY);
-            emptyCells.add(cell);
+            getEmptyCells().add(cell);
         });
         accuralPoints(line.size()); // Начисление очков.
         line.clear(); // Очистка коллекции.
@@ -349,8 +349,8 @@ public class Play {
         previousCell.setState(EMPTY);
         currentCell.setState(RELEASED);
         // Добавляем предыдущую ячейку в список свободных ячеек и удаляем текущую ячейку.
-        emptyCells.add(previousCell);
-        emptyCells.remove(currentCell);
+        getEmptyCells().add(previousCell);
+        getEmptyCells().remove(currentCell);
     }
 
     /**
@@ -363,11 +363,11 @@ public class Play {
         if ( !lineWasDeleted ) {
             MainPanelGui.getInfoLabel().setText( textInfo );
             for (int i = 0; i < amount; i++) {
-                Cell cell = getRandomCell( emptyCells ); // Получаем рандомную ячейку из массива пустых ячеек.
+                Cell cell = getRandomCell( getEmptyCells() ); // Получаем рандомную ячейку из массива пустых ячеек.
                 int index = (int) (Math.random() * BALLS.length); // Подбираем случайный индекс.
                 cell.setIcon((ImageIcon) BALLS[index]); // Устанавливаем случайное изображение в ячейку.
                 cell.setState(RELEASED); // Устанавливаем состояние "ячейка освобождена".
-                emptyCells.remove(cell); // Удаляем ячейку из списка пустых ячеек.
+                getEmptyCells().remove(cell); // Удаляем ячейку из списка пустых ячеек.
             }
         }
     }
@@ -380,14 +380,14 @@ public class Play {
     public static void startNewGame() {
         setBallsCounter(0);
         setPointsCounter(0);
-        emptyCells.clear();
+        getEmptyCells().clear();
         MainPanelGui.setDefaultLabelsInfo();
 
         getCellMap().values().forEach( cell -> {
             cell.release();
             cell.setState(EMPTY);
             cell.setIcon(null);
-            emptyCells.add(cell);
+            getEmptyCells().add(cell);
         });
         initGameProcess();
     }
