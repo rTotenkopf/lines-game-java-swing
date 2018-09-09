@@ -1,5 +1,6 @@
 package com.game.lines.gui;
 
+import com.game.lines.logic.GameHelper;
 import com.game.lines.logic.Play;
 
 import javax.swing.*;
@@ -98,6 +99,6 @@ public class MainPanelGui {
 
         // TODO: написать отдельный класс, в котором будет инициализация игры.
         // После построение GUI игры, происходит инициализация игрового процесса.
-        Play.initGameProcess();
+        GameHelper.initGameProcess();
     }
 }

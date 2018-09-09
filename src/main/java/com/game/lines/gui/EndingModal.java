@@ -1,5 +1,6 @@
 package com.game.lines.gui;
 
+import com.game.lines.logic.GameHelper;
 import com.game.lines.logic.Play;
 
 import javax.swing.*;
@@ -39,7 +40,7 @@ public class EndingModal extends JDialog {
         pane.add(messagePane);
         addRigidArea(pane);
         addAButton(String.format("   %s    ",  "Новая игра")   , pane).addActionListener( event -> {
-            Play.startNewGame();
+            GameHelper.startNewGame();
             modal.dispose();
         });
 

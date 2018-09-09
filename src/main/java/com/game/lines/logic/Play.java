@@ -47,7 +47,7 @@ public class Play {
     private boolean lineState;
 
     // Сеттеры и геттеры для переменных класса Play.
-    private static void setPointsCounter(int pointsCounter) {
+    static void setPointsCounter(int pointsCounter) {
         Play.pointsCounter = pointsCounter;
     }
 
@@ -59,11 +59,11 @@ public class Play {
         this.lineState = lineState;
     }
 
-    private static void setBallsCounter(int ballsCounter) {
+    static void setBallsCounter(int ballsCounter) {
         Play.ballsCounter = ballsCounter;
     }
 
-    private static int getBallsCounter() {
+    static int getBallsCounter() {
         return ballsCounter;
     }
 
@@ -93,13 +93,13 @@ public class Play {
      * Создается новый поток, в котором выполняется перемещение ячеек, затем происходит остановка потока
      * на 0,5 секунды, для того чтобы, втечение этих 0,5 секунд, была видна вся удаляемая линия.
      * Удалением всех сформированных линий из 5 и более шаров, занимается метод {@link #linesSearch}.
-     * Затем вызывается метод {@link #checkGameEndingCondition}, который выполняет проверку условия:
+     * Затем вызывается метод {@link GameHelper#checkGameEndingCondition()}, который выполняет проверку условия:
      * "Должна ли завершиться игра, при N свободных ячейках, оставшихся на игровом поле?"
      * Далее поток вновь приостанавливается на 0,5 секунды, для того чтобы дать игроку увидеть, какие линии
      * будут удалены повторным вызовом {@link #linesSearch}.
      * (метод вызывается повторно, потому что необходимо удалить также линии, которые были сфомированы рандомно,
-     * т.е. случайным образом, когда сгенерированные методом {@link #generateRandomImages} изображения, выстраиваются
-     * в линии без прямого воздействия игрока.
+     * т.е. случайным образом, когда сгенерированные методом {@link GameHelper#generateRandomImages(String, boolean, int)}
+     * изображения, выстраиваются в линии без прямого воздействия игрока.
      * @param filledCell ячейка с изображением.
      * @param emptyCell пустая ячейка.
      */
@@ -117,8 +117,8 @@ public class Play {
                 // Поиск всех возможных линий на поле.
                 linesSearch();
                 // Генерируем новые изображения в случайном порядке.
-                generateRandomImages("Ход успешно выполнен.", getLineState(), 3);
-                checkGameEndingCondition();
+                GameHelper.generateRandomImages("Ход успешно выполнен.", getLineState(), 3);
+                GameHelper.checkGameEndingCondition();
                 try {
                     Thread.sleep(500);  // Приотановка потока на 0,5 секунды.
                 } catch (InterruptedException e) {
@@ -136,15 +136,6 @@ public class Play {
             // Если ход невозможен, то логируем сообщение о невозможности хода.
             playLogger.info("Move impossible..");
             MainPanelGui.getInfoLabel().setText("Ход в выбранную ячейку невозможен..");
-        }
-    }
-
-    // Метод проверки условия, при выполнении которого игра должна завершиться.
-    private static void checkGameEndingCondition() {
-        if ( getEmptyCells().size() <= 3 ) {
-            Logger.getGlobal().warning("End of the game!");
-            EndingModal.init();
-            MainPanelGui.getInfoLabel().setText("Игра окончена!");
         }
     }
 
@@ -309,7 +300,7 @@ public class Play {
             cell.setState(EMPTY);
             getEmptyCells().add(cell);
         });
-        accuralPoints(line.size()); // Начисление очков.
+        GameHelper.accuralPoints(line.size()); // Начисление очков.
         line.clear(); // Очистка коллекции.
     }
 
@@ -351,86 +342,5 @@ public class Play {
         // Добавляем предыдущую ячейку в список свободных ячеек и удаляем текущую ячейку.
         getEmptyCells().add(previousCell);
         getEmptyCells().remove(currentCell);
-    }
-
-    /**
-     * Рандом изображений в ячейки. Происходит только в начале игры и когда линия НЕ была удалена в процессе игры.
-     * @param textInfo сообщение, переданное в метод, для отображения на экране состояния хода игры.
-     * @param lineWasDeleted флаг события удаления линии.
-     * @param amount количество ячеек для рандомного заполнения изображениями (зависит от настроек игры).
-     */
-    private static void generateRandomImages(String textInfo, boolean lineWasDeleted, int amount) {
-        if ( !lineWasDeleted ) {
-            MainPanelGui.getInfoLabel().setText( textInfo );
-            for (int i = 0; i < amount; i++) {
-                Cell cell = getRandomCell( getEmptyCells() ); // Получаем рандомную ячейку из массива пустых ячеек.
-                int index = (int) (Math.random() * BALLS.length); // Подбираем случайный индекс.
-                cell.setIcon((ImageIcon) BALLS[index]); // Устанавливаем случайное изображение в ячейку.
-                cell.setState(RELEASED); // Устанавливаем состояние "ячейка освобождена".
-                getEmptyCells().remove(cell); // Удаляем ячейку из списка пустых ячеек.
-            }
-        }
-    }
-
-    /**
-     * Старт новой игры при нажатии на кнопку "Новая игра" в модальном диалоге, за который отвечает класс
-     * {@link EndingModal}.
-     * Происходит сброс всех игровых параметров и коллекций. Инициируются новый игровой процесс.
-     */
-    public static void startNewGame() {
-        setBallsCounter(0);
-        setPointsCounter(0);
-        getEmptyCells().clear();
-        MainPanelGui.setDefaultLabelsInfo();
-
-        getCellMap().values().forEach( cell -> {
-            cell.release();
-            cell.setState(EMPTY);
-            cell.setIcon(null);
-            getEmptyCells().add(cell);
-        });
-        initGameProcess();
-    }
-
-    /**
-     * Инициализация игрового поцесса в начале игры.
-     * В отдельном потоке, с задержкой в 1 секунду, в случайные ячейки генерируется 5 изображений случайного цвета.
-     */
-    public static void initGameProcess() {
-        new Thread( () -> {
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            // Рандом изображений в сетку.
-            MainPanelGui.getInfoLabel().setText("Начата новая игра.");
-            generateRandomImages(MainPanelGui.getInfoLabel().getText(), false, 5);
-        }).start();
-    }
-
-    /**
-     * Начисление очков за удаленную линию, исходя из количества шаров в ней.
-     * Чем больше шаров, тем выше коэффициент начисления очков.
-     * @param lineSize количество шаров.
-     */
-    private static void accuralPoints(int lineSize) {
-        double ratio = 2.1 + (double) (lineSize - 5) / 10;
-        int pointsValue = getPointsCounter() + (int) (lineSize * ratio);
-        int ballsValue =  getBallsCounter() + lineSize;
-        setPointsCounter(pointsValue);
-        setBallsCounter(ballsValue);
-        MainPanelGui.getPointsLabel().setText("Очки: " + String.valueOf(getPointsCounter()));
-        MainPanelGui.getBallsLabel().setText(String.valueOf(getBallsCounter()) + ": Шары");
-    }
-
-    /**
-     * Получение случайной пустой ячейки.
-     * @param freeCells список пустых ячеек.
-     * @return случайная пустая ячейка.
-     */
-    private static Cell getRandomCell(List<Cell> freeCells) {
-        int index = (int) (Math.random() * freeCells.size() );
-        return freeCells.get(index);
     }
 }

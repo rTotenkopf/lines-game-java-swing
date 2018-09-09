@@ -18,7 +18,7 @@ import java.util.logging.Logger;
  * @author Eugene Ivanov on 11.04.18
  */
 
-abstract class AbstractCell extends JLabel implements Clickable {
+public abstract class AbstractCell extends JLabel implements Clickable {
 
     private int Xx; // Положение ячейки по оси координат X.
     private int Yy; // Положение ячейки по оси координат Y.
