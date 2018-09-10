@@ -65,7 +65,7 @@ public class GameHelper {
      * @param lineWasDeleted флаг события удаления линии.
      * @param amount количество ячеек для рандомного заполнения изображениями (зависит от настроек игры).
      */
-    protected static void generateRandomImages(String textInfo, boolean lineWasDeleted, int amount) {
+    static void generateRandomImages(String textInfo, boolean lineWasDeleted, int amount) {
         if ( !lineWasDeleted ) {
             MainPanelGui.getInfoLabel().setText( textInfo );
             for (int i = 0; i < amount; i++) {
@@ -93,7 +93,7 @@ public class GameHelper {
      * Чем больше шаров, тем выше коэффициент начисления очков.
      * @param lineSize количество шаров.
      */
-    protected static void accuralPoints(int lineSize) {
+    static void accuralPoints(int lineSize) {
         double ratio = 2.1 + (double) (lineSize - 5) / 10;
         int pointsValue = getPointsCounter() + (int) (lineSize * ratio);
         int ballsValue =  getBallsCounter() + lineSize;
@@ -104,7 +104,7 @@ public class GameHelper {
     }
 
     // Метод проверки условия, при выполнении которого игра должна завершиться.
-    protected static void checkGameEndingCondition() {
+    static void checkGameEndingCondition() {
         if ( getEmptyCells().size() <= 3 ) {
             Logger.getGlobal().warning("End of the game!");
             EndingModal.init();
