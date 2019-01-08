@@ -1,7 +1,7 @@
-package com.game.lines.entity;
+package com.game.lines.model;
 
 import com.game.lines.gui.Grid;
-import com.game.lines.gui.MainPanelGui;
+import com.game.lines.gui.GuiManager;
 import com.game.lines.logic.Play;
 import javafx.util.Pair;
 
@@ -135,7 +135,7 @@ public class Cell extends AbstractCell {
             case SELECTED:
                 currentCell.release();
                 cellLogger.info("Cell released");
-                MainPanelGui.getInfoLabel().setText("Ячейка освобождена.");
+                GuiManager.getInfoLabel().setText("Ячейка освобождена.");
                 break;
             // Если ячейка не была выделена, то она выбирается (выделяется цветом), с предыдущей выбранной ячейки,
             // выделение снимается.
@@ -145,13 +145,13 @@ public class Cell extends AbstractCell {
                 }
                 currentCell.select();
                 cellLogger.info("Cell selected");
-                MainPanelGui.getInfoLabel().setText("Шар выбран.");
+                GuiManager.getInfoLabel().setText("Шар выбран.");
                 break;
             // Если ячейка пуста, то проверяется состояние предыдущей ячейки.
             // Если предыдущая ячейка была выбрана, то изображение из неё переносится в текущую (пустую) ячейку.
             // Таким образом, осуществляется игровой ход (перемещение изображения).
             case EMPTY:
-                MainPanelGui.getInfoLabel().setText("Выберите шар!");
+                GuiManager.getInfoLabel().setText("Выберите шар!");
                 // Выполнение игрового хода. Метод moveInit возвращает true, если ход выполнен успешно.
                 if ( !Objects.isNull(previousCell) && (previousCell.getState() == SELECTED) ) {
                     boolean moveComplete = Play.moveInit(previousCell, currentCell);

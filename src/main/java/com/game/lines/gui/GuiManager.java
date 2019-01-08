@@ -1,18 +1,17 @@
 package com.game.lines.gui;
 
 import com.game.lines.logic.GameHelper;
-import com.game.lines.logic.Play;
 
 import javax.swing.*;
 import java.awt.*;
 
 /**
- * Класс MainPanelGui отвечает за создание графического интерфейса приложения.
+ * Класс GuiManager отвечает за создание графического интерфейса приложения.
  *
  * @author Eugene Ivanov on 09.09.18
  */
 
-public class MainPanelGui {
+public class GuiManager {
 
     private static JLabel infoLabel;   // Информация о состоянии игры.
     private static JLabel pointsLabel; // Информация об очках.
@@ -38,8 +37,8 @@ public class MainPanelGui {
         return ballsLabel;
     }
 
-    static MainPanelGui getInstance() {
-        return new MainPanelGui();
+    static GuiManager getInstance() {
+        return new GuiManager();
     }
 
     public static void setDefaultLabelsInfo() {
@@ -54,7 +53,7 @@ public class MainPanelGui {
      * @param height высота фрейма.
      * @param grid панель, содержащая сетку из ячеек.
      */
-    void createGui(MainPanel panel, int width, int height, JPanel grid) {
+    void createGui(GameInitializer panel, int width, int height, JPanel grid) {
         infoLabel = new JLabel("Начата новая игра."); // Виджет состояния игры.
         pointsLabel = new JLabel(DEFAULT_POINTS_VALUE);          // Виджет очков во время игры.
         ballsLabel = new JLabel(DEFAULT_BALLS_VALUE);          // Виджет количества удаленных шаров.

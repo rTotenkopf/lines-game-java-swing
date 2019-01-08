@@ -6,7 +6,7 @@ import javax.swing.*;
  * @author Eugene Ivanov on 18.06.18
  */
 
-class OptionModal {
+final class OptionModal {
 
     /**
      * Конструктор класса OptionModal. Здесь производится настройка модального окна, возницкающего при попытке закрыть
@@ -17,7 +17,7 @@ class OptionModal {
         UIManager.put("OptionPane.noButtonText", "Завершить игру");
 
         int res = JOptionPane.showConfirmDialog(
-                MainPanel.getFrames()[0],
+                GameInitializer.getFrames()[0],
                 "Вы уверены, что хотите выйти из игры?",
                 "",
                 JOptionPane.YES_NO_OPTION);

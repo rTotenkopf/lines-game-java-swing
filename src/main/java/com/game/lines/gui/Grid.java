@@ -1,17 +1,15 @@
 package com.game.lines.gui;
 
-import com.game.lines.entity.Cell;
+import com.game.lines.model.Cell;
 import com.game.lines.logic.State;
 
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
 
-import static com.game.lines.entity.Cell.*;
+import static com.game.lines.model.Cell.*;
 
 /**
- * Класс MainPanelGui отвечает за создание графического интерфейса приложения.
- *
  * @author Eugene Ivanov on 07.09.18
  */
 

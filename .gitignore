@@ -1,5 +1,4 @@
+.idea/
 *.iml
-/.idea/
-/.idea/workspace.xml
-/target
+target/
 /.directory

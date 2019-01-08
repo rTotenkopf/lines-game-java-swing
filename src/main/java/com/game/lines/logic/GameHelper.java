@@ -1,17 +1,17 @@
 package com.game.lines.logic;
 
-import com.game.lines.entity.Cell;
+import com.game.lines.gui.GuiManager;
+import com.game.lines.model.Cell;
 import com.game.lines.gui.EndingModal;
-import com.game.lines.gui.MainPanelGui;
 
 import javax.swing.*;
 
 import java.util.List;
 import java.util.logging.Logger;
 
-import static com.game.lines.common.ResourceManager.BALLS;
-import static com.game.lines.entity.AbstractCell.getCellMap;
-import static com.game.lines.entity.AbstractCell.getEmptyCells;
+import static com.game.lines.util.ResourceManager.BALLS;
+import static com.game.lines.model.AbstractCell.getCellMap;
+import static com.game.lines.model.AbstractCell.getEmptyCells;
 import static com.game.lines.logic.State.EMPTY;
 import static com.game.lines.logic.State.RELEASED;
 import static com.game.lines.logic.Play.*;
@@ -31,7 +31,7 @@ public class GameHelper {
         setBallsCounter(0);
         setPointsCounter(0);
         getEmptyCells().clear();
-        MainPanelGui.setDefaultLabelsInfo();
+        GuiManager.setDefaultLabelsInfo();
 
         getCellMap().values().forEach( cell -> {
             cell.release();
@@ -54,8 +54,8 @@ public class GameHelper {
                 e.printStackTrace();
             }
             // Рандом изображений в сетку.
-            MainPanelGui.getInfoLabel().setText("Начата новая игра.");
-            generateRandomImages(MainPanelGui.getInfoLabel().getText(), false, 5);
+            GuiManager.getInfoLabel().setText("Начата новая игра.");
+            generateRandomImages(GuiManager.getInfoLabel().getText(), false, 5);
         }).start();
     }
 
@@ -67,7 +67,7 @@ public class GameHelper {
      */
     static void generateRandomImages(String textInfo, boolean lineWasDeleted, int amount) {
         if ( !lineWasDeleted ) {
-            MainPanelGui.getInfoLabel().setText( textInfo );
+            GuiManager.getInfoLabel().setText( textInfo );
             for (int i = 0; i < amount; i++) {
                 Cell cell = getRandomCell( getEmptyCells() ); // Получаем рандомную ячейку из массива пустых ячеек.
                 int index = (int) (Math.random() * BALLS.length); // Подбираем случайный индекс.
@@ -99,8 +99,8 @@ public class GameHelper {
         int ballsValue =  getBallsCounter() + lineSize;
         setPointsCounter(pointsValue);
         setBallsCounter(ballsValue);
-        MainPanelGui.getPointsLabel().setText("Очки: " + String.valueOf(getPointsCounter()));
-        MainPanelGui.getBallsLabel().setText(String.valueOf(getBallsCounter()) + ": Шары");
+        GuiManager.getPointsLabel().setText("Очки: " + String.valueOf(getPointsCounter()));
+        GuiManager.getBallsLabel().setText(String.valueOf(getBallsCounter()) + ": Шары");
     }
 
     // Метод проверки условия, при выполнении которого игра должна завершиться.
@@ -108,7 +108,7 @@ public class GameHelper {
         if ( getEmptyCells().size() <= 3 ) {
             Logger.getGlobal().warning("End of the game!");
             EndingModal.init();
-            MainPanelGui.getInfoLabel().setText("Игра окончена!");
+            GuiManager.getInfoLabel().setText("Игра окончена!");
         }
     }
 }

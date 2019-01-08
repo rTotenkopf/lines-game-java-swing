@@ -1,21 +1,19 @@
 package com.game.lines.logic;
 
-import com.game.lines.entity.Cell;
-import com.game.lines.gui.EndingModal;
+import com.game.lines.gui.GuiManager;
+import com.game.lines.model.Cell;
 import com.game.lines.gui.Grid;
-import com.game.lines.gui.MainPanelGui;
 import javafx.util.Pair;
 
-import javax.swing.*;
 import java.util.*;
 import java.util.function.BiPredicate;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.logging.Logger;
 
-import static com.game.lines.common.ResourceManager.*;
+import static com.game.lines.util.ResourceManager.*;
 import static com.game.lines.logic.State.*;
-import static com.game.lines.entity.Cell.*;
+import static com.game.lines.model.Cell.*;
 
 /**
  * Класс Play отвечает за игровую логику игры Lines: перемещение шара из ячейки в ячейку (проверка возможности
@@ -105,7 +103,7 @@ public class Play {
      */
     private void makeMove(Cell filledCell, Cell emptyCell) {
         if ( moveAbility ) {
-            MainPanelGui.getInfoLabel().setText("Ход выполняется...");
+            GuiManager.getInfoLabel().setText("Ход выполняется...");
             // Если ход возможен, то запускаем новый поток.
             new Thread( () -> {
                 moveImageCell(filledCell, emptyCell); // Ход (перемещение).
@@ -135,7 +133,7 @@ public class Play {
         } else {
             // Если ход невозможен, то логируем сообщение о невозможности хода.
             playLogger.info("Move impossible..");
-            MainPanelGui.getInfoLabel().setText("Ход в выбранную ячейку невозможен..");
+            GuiManager.getInfoLabel().setText("Ход в выбранную ячейку невозможен..");
         }
     }
 
@@ -293,7 +291,7 @@ public class Play {
      */
     private void deleteImagesFromCells(Collection<Cell> line) {
         playLogger.info("Line of " + line.size() + " balls was deleted!");
-        MainPanelGui.getInfoLabel().setText("Линия из " + line.size() + " шаров удалена!");
+        GuiManager.getInfoLabel().setText("Линия из " + line.size() + " шаров удалена!");
         setLineState(true); // Значение true означает, что срока удалена.
         line.forEach( cell -> { // Последовательное удаление изображений из ячеек.
             cell.setIcon(null);

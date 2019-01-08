@@ -19,7 +19,7 @@ public class EndingModal extends JDialog {
      * Конструктор класса EndingModal.
      */
     private EndingModal() {
-        super(MainPanel.getFrames()[0], "Игра окончена", true);
+        super(GameInitializer.getFrames()[0], "Игра окончена", true);
         modal = this;
         paneColor = new Color(0, 230, 150);
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
@@ -27,7 +27,7 @@ public class EndingModal extends JDialog {
         addComponentsToPane(getContentPane());
         pack();
         setSize(350, 280);
-        setLocationRelativeTo(MainPanel.getFrames()[0]);
+        setLocationRelativeTo(GameInitializer.getFrames()[0]);
         setResizable(false);
         setVisible(true);
     }

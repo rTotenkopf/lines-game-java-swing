@@ -1,4 +1,4 @@
-package com.game.lines.entity;
+package com.game.lines.model;
 
 import com.game.lines.logic.Clickable;
 import com.game.lines.logic.State;

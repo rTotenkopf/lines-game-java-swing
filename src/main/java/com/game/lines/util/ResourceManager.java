@@ -1,4 +1,4 @@
-package com.game.lines.common;
+package com.game.lines.util;
 
 import com.game.lines.Application;
 
