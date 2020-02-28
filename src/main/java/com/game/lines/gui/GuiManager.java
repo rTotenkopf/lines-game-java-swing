@@ -12,10 +12,9 @@ import java.awt.*;
  */
 
 public class GuiManager {
-
-    private static JLabel infoLabel;   // Информация о состоянии игры.
-    private static JLabel pointsLabel; // Информация об очках.
-    private static JLabel ballsLabel;  // Информация о количестве удаленных шаров.
+    private static JLabel infoLabel;   // информация о состоянии игры
+    private static JLabel pointsLabel; // информация об очках
+    private static JLabel ballsLabel;  // информация о количестве удаленных шаров
 
     private static final String DEFAULT_POINTS_VALUE;
     private static final String DEFAULT_BALLS_VALUE;

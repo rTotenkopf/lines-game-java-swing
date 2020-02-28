@@ -16,12 +16,7 @@ import static com.game.lines.logic.State.EMPTY;
 import static com.game.lines.logic.State.RELEASED;
 import static com.game.lines.logic.Play.*;
 
-/**
- * @author Eugene Ivanov on 09.09.18
- */
-
 public class GameHelper {
-
     /**
      * Старт новой игры при нажатии на кнопку "Новая игра" в модальном диалоге, за который отвечает класс
      * {@link EndingModal}.
@@ -53,17 +48,18 @@ public class GameHelper {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            // Рандом изображений в сетку.
+            // вставка рандомных изображений в сетку
             GuiManager.getInfoLabel().setText("Начата новая игра.");
             generateRandomImages(GuiManager.getInfoLabel().getText(), false, 5);
         }).start();
     }
 
     /**
-     * Рандом изображений в ячейки. Происходит только в начале игры и когда линия НЕ была удалена в процессе игры.
-     * @param textInfo сообщение, переданное в метод, для отображения на экране состояния хода игры.
-     * @param lineWasDeleted флаг события удаления линии.
-     * @param amount количество ячеек для рандомного заполнения изображениями (зависит от настроек игры).
+     * Вставка изображений в ячейки. Происходит только в начале игры и когда линия не была удалена в процессе игры.
+     *
+     * @param textInfo       сообщение, переданное в метод, для отображения на экране состояния хода игры
+     * @param lineWasDeleted флаг события удаления линии
+     * @param amount         количество ячеек для рандомного заполнения изображениями (зависит от настроек игры)
      */
     static void generateRandomImages(String textInfo, boolean lineWasDeleted, int amount) {
         if ( !lineWasDeleted ) {
@@ -80,6 +76,7 @@ public class GameHelper {
 
     /**
      * Получение случайной пустой ячейки.
+     *
      * @param freeCells список пустых ячеек.
      * @return случайная пустая ячейка.
      */
@@ -103,7 +100,9 @@ public class GameHelper {
         GuiManager.getBallsLabel().setText(String.valueOf(getBallsCounter()) + ": Шары");
     }
 
-    // Метод проверки условия, при выполнении которого игра должна завершиться.
+    /**
+     *  Проверка условия, при выполнении которого игра должна завершиться.
+     */
     static void checkGameEndingCondition() {
         if ( getEmptyCells().size() <= 3 ) {
             Logger.getGlobal().warning("End of the game!");

@@ -2,12 +2,6 @@ package com.game.lines;
 
 import com.game.lines.gui.GameInitializer;
 
-/**
- * Класс Application содержит главный метод для запуска приложения.
- *
- * @author Eugene Ivanov on 31.03.18
- */
-
 public class Application {
 
     public static void main(String[] args) {
@@ -28,6 +22,5 @@ public class Application {
 
         // 12 X 12
 //        new GameInitializer(   690,770, 12, 12);
-
     }
 }

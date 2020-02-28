@@ -6,15 +6,10 @@ import javax.swing.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
-/**
- * Класс GameInitializer отвечает за создание главного окна программы и размер всех необходимых виджетов.
- * @author Eugene Ivanov on 31.03.18
- */
-
 public class GameInitializer extends JFrame {
-
     /**
-     * Конструктор класса GameInitializer, который отвечает за создание и настройку GUI главного окна игры.
+     * Настройка GUI главного окна игры.
+     *
      * @param frameWidth ширина фрейма.
      * @param frameHeight высота фрейма.
      * @param gridWidth ширина сетки.

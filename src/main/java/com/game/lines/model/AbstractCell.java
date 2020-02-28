@@ -13,17 +13,12 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 /**
- * Абстрактный класс AbstractCell, которорый реализует интерфейс MouseListener.
- *
- * @author Eugene Ivanov on 11.04.18
+ * Абстрактная ячейка.
  */
-
 public abstract class AbstractCell extends JLabel implements Clickable {
-
-    private int Xx; // Положение ячейки по оси координат X.
-    private int Yy; // Положение ячейки по оси координат Y.
-    Logger cellLogger = Logger.getLogger(Cell.class.getName()); // Логгер ячейки.
-    // Карта ячеек, где ключ - это координаты, а значение - ячейка.
+    private int Xx; // положение ячейки по оси координат X
+    private int Yy; // положение ячейки по оси координат Y
+    Logger cellLogger = Logger.getLogger(Cell.class.getName());
     private static Map<Pair<Integer, Integer>, Cell> cellMap = new HashMap<>();
     /**
      * Список пустых ячеек (состояние которых {@link State#EMPTY} либо {@link Cell#containsImage()}  == false})
@@ -33,12 +28,10 @@ public abstract class AbstractCell extends JLabel implements Clickable {
     static Cell previousCell; // Предыдущая нажатая ячейка.
     private State state; // Состояние ячейки.
 
-    // Конструктор класса, в котором происходит добавление слушателя нажатий мыши.
     AbstractCell() {
         addMouseListener(this);
     }
 
-    // Сеттеры и геттеры полей класса.
     public static Map<Pair<Integer, Integer>, Cell> getCellMap() {
         return cellMap;
     }
@@ -74,6 +67,7 @@ public abstract class AbstractCell extends JLabel implements Clickable {
     /**
      * Возвращаемое значение метода, будет использоваться для поиска изображения по названию цвета, содержащегося
      * в названии файла изображения.
+     *
      * @return название цвета картинки.
      */
     public String getImageColor() {
@@ -104,7 +98,6 @@ public abstract class AbstractCell extends JLabel implements Clickable {
     @Override
     public void mouseReleased(MouseEvent e) { }
 
-    // Переопределение методов equals() и hashCode().
     @Override
     public boolean equals(Object obj) {
         boolean value = false;

@@ -6,18 +6,14 @@ import com.game.lines.logic.Play;
 import javax.swing.*;
 import java.awt.*;
 
-/**
- * @author Eugene Ivanov on 17.06.18
- */
-
 public class EndingModal extends JDialog {
-
     private static Color paneColor;
     private static EndingModal modal;
 
-    /**
-     * Конструктор класса EndingModal.
-     */
+    public static void init() {
+        new EndingModal();
+    }
+
     private EndingModal() {
         super(GameInitializer.getFrames()[0], "Игра окончена", true);
         modal = this;
@@ -43,7 +39,6 @@ public class EndingModal extends JDialog {
             GameHelper.startNewGame();
             modal.dispose();
         });
-
         addRigidArea(pane);
         addAButton(String.format(" %s "      , "Выход из игры"), pane)
                 .addActionListener( event -> OptionModal.getOptionPane());
@@ -73,13 +68,8 @@ public class EndingModal extends JDialog {
         return button;
     }
 
-
     private static void addRigidArea(Container container) {
         Component rigidArea = Box.createRigidArea(new Dimension(15, 15));
         container.add(rigidArea);
-    }
-
-    public static void init() {
-        new EndingModal();
     }
 }

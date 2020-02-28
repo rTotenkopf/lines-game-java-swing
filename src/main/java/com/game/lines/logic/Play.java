@@ -16,35 +16,30 @@ import static com.game.lines.logic.State.*;
 import static com.game.lines.model.Cell.*;
 
 /**
- * Класс Play отвечает за игровую логику игры Lines: перемещение шара из ячейки в ячейку (проверка возможности
- * перемещения); генерацию новых шаров на игровом поле, а также удаление с поля линии из 5-ти шаров
- * одинакового цвета.
- *
- * @author Eugene Ivanov on 24.04.18
+ * Игровая логика игры Lines.
+ * Перемещение шара из ячейки в ячейку (проверка возможности перемещения), генерация новых шаров на игровом поле,
+ * а также удаление с поля линии из 5-ти и более шаров одинакового цвета.
  */
-
 public class Play {
-
-    // Логгер игрового процесса.
+    // логгер игрового процесса
     private Logger playLogger;
-    // Счетчик очков в игре.
+    // счетчик очков в игре
     private static int pointsCounter;
-    // Счетчик удаленных шаров.
+    // счетчик удаленных шаров
     private static int ballsCounter;
-    // Длина стороны сетки игрового поля.
+    // длина стороны сетки игрового поля
     private static int sideLength;
-    // Переменная принимает значение true, если ход (перемещение) возможен.
+    // переменная принимает значение true, если ход (перемещение) возможен
     private static boolean moveAbility;
-    // Ячейка, в которую перемещаем изображение.
+    // ячейка, в которую перемещаем изображение
     private Cell targetCell;
-    // Связанный список ячеек для реализации проверки возможности хода.
+    // связанный список ячеек для реализации проверки возможности хода
     private List<Cell> visited;
-    // Очередь, основанная на связанном списке, необходима для реализации проверки возможности хода.
+    // очередь, необходимая для реализации проверки возможности хода
     private Queue<Cell> queue;
-    // Переменная принимает значение true, если строка была удалена.
+    // переменная принимает значение true, если строка была удалена
     private boolean lineState;
 
-    // Сеттеры и геттеры для переменных класса Play.
     static void setPointsCounter(int pointsCounter) {
         Play.pointsCounter = pointsCounter;
     }
@@ -76,13 +71,13 @@ public class Play {
      */
     private Play(Cell filledCell, Cell emptyCell) {
         playLogger = Logger.getLogger(getClass().getName());
-        sideLength = Grid.getGridLength();  // Длина (в ячейках) стороны квадрата игрового поля.
-        targetCell = emptyCell;             // "Целевая ячейка", она же ячейка, в которую нужно ходить.
-        visited = new ArrayList<>();        // Инициализация списка, используемого для проверки возможности хода в ячейку.
-        queue = new LinkedList<>();         // Инициализация очереди, используемой для проверки возможности хода в ячейку.
-        setLineState(false);                // Установка значения переменной экземпляра lineState.
-        moveAbility = traverse(filledCell); // Получение результата выполнения метода traverse.
-        makeMove(filledCell, emptyCell);    // Вызов метода для исполнения одного игорового хода.
+        sideLength = Grid.getGridLength();  // длина (в ячейках) стороны квадрата игрового поля
+        targetCell = emptyCell;             // "целевая ячейка", она же ячейка, в которую нужно ходить
+        visited = new ArrayList<>();        // инициализация списка, используемого для проверки возможности хода в ячейку
+        queue = new LinkedList<>();         // инициализация очереди, используемой для проверки возможности хода в ячейку
+        setLineState(false);                // установка значения переменной экземпляра lineState
+        moveAbility = traverse(filledCell); // получение результата выполнения метода traverse
+        makeMove(filledCell, emptyCell);    // вызов метода для исполнения одного игорового хода
     }
 
     /**
@@ -98,6 +93,7 @@ public class Play {
      * (метод вызывается повторно, потому что необходимо удалить также линии, которые были сфомированы рандомно,
      * т.е. случайным образом, когда сгенерированные методом {@link GameHelper#generateRandomImages(String, boolean, int)}
      * изображения, выстраиваются в линии без прямого воздействия игрока.
+     *
      * @param filledCell ячейка с изображением.
      * @param emptyCell пустая ячейка.
      */
@@ -147,23 +143,23 @@ public class Play {
      */
     public static boolean moveInit(Cell filledCell, Cell emptyCell) {
         new Play(filledCell, emptyCell);
+
         return moveAbility;
     }
 
     /**
-     * Метод который осуществляет поиск всех возможных линий на игровом поле.
+     * Поиск всех возможных линий на игровом поле.
      */
     private void linesSearch() {
-        perpendicularSearch(false); // Поиск линий по вертикали.
-        perpendicularSearch(true); // Поиск линий по горизонтали.
+        perpendicularSearch(false); // поиск линий по вертикали
+        perpendicularSearch(true); // поиск линий по горизонтали
 
-        // Поиск линий по диагонали справа налево и снизу вверх с ++ сдвигом по оси Y и -- сдвигом по оси X.
+        // поиск линий по диагонали справа налево и снизу вверх с ++ сдвигом по оси Y и -- сдвигом по оси X
         for (int x = 5; x <= sideLength ; x++) {
             diagonallyLines_1( x, false);
             diagonallyLines_1( x, true);
         }
-
-        // Поиск линий по диагонали слева направо и сверху вниз с -- сдвигом по оси Y и ++ сдвигом по оси X.
+        // поиск линий по диагонали слева направо и сверху вниз с -- сдвигом по оси Y и ++ сдвигом по оси X
         for (int x = sideLength - 4; x >= 2; x--) {
             diagonallyLines_2( x, false);
             diagonallyLines_2( x, true);
@@ -171,9 +167,10 @@ public class Play {
     }
 
     /**
-     * Метод поиска перпендикулярных (горизонтальных и вертикальных) линий.
-     * @param isVertical параметр, в зависисмости от значения которого будет выполяняться поиск линий:
-     *                 по горизонтали или вертикали.
+     * Поиск перпендикулярных (горизонтальных и вертикальных) линий.
+     *
+     * @param isVertical параметр, в зависисмости от значения которого будет выполяняться поиск линий
+     * (по горизонтали или вертикали)
      */
     private void perpendicularSearch(boolean isVertical) {
         BiPredicate<Cell, Cell> searchPredicate = (curr, next) ->
@@ -229,11 +226,12 @@ public class Play {
 
     /**
      * Построение последовательности изображений одного цвета, найденных в строке.
-     * @param x координата X ячейки.
-     * @param isOpposite boolean-значение, указывающее на конфигурацию поиска линий.
-     * @param function функция, которая выражает Y через Х (линейная функция).
-     * @param oppositeFunction функция, которая выражает Y через X, но с помощью другой формулы, нежели function.
-     * @param sequenceMap карта, где Key = цвет, Value = последовательность (список) ячеек одного цвета.
+     *
+     * @param x координата X ячейки
+     * @param isOpposite boolean-значение, указывающее на конфигурацию поиска линий
+     * @param function функция, которая выражает Y через Х (линейная функция)
+     * @param oppositeFunction функция, которая выражает Y через X, но с помощью другой формулы, нежели function
+     * @param sequenceMap карта, где Key = цвет, Value = последовательность (список) ячеек одного цвета
      */
     private void lineSequence(int x,
                               boolean isOpposite,
@@ -255,8 +253,9 @@ public class Play {
 
     /**
      * Подготовка последовательности изображений одного цвета, найденных в строке.
-     * @param sequence последовательность изображений, в порядке их добавления .
-     * @param predicate условие, по которому будут сравниваться ячейки из строки.
+     *
+     * @param sequence последовательность изображений, в порядке их добавления
+     * @param predicate условие, по которому будут сравниваться ячейки из строки
      */
     private void prepareLineSequence(List<Cell> sequence, BiPredicate<Cell, Cell> predicate) {
         Map<Integer, Set<Cell>> map = new HashMap<>();
@@ -287,25 +286,26 @@ public class Play {
 
     /**
      * Удаление изображений из ячеек.
+     *
      * @param line коллекция, содержащая ячейки, изображения из которых необходимо удалить.
      */
     private void deleteImagesFromCells(Collection<Cell> line) {
         playLogger.info("Line of " + line.size() + " balls was deleted!");
         GuiManager.getInfoLabel().setText("Линия из " + line.size() + " шаров удалена!");
-        setLineState(true); // Значение true означает, что срока удалена.
-        line.forEach( cell -> { // Последовательное удаление изображений из ячеек.
+        setLineState(true); // значение true означает, что срока удалена
+        line.forEach( cell -> { // последовательное удаление изображений из ячеек
             cell.setIcon(null);
             cell.setState(EMPTY);
             getEmptyCells().add(cell);
         });
-        GameHelper.accuralPoints(line.size()); // Начисление очков.
-        line.clear(); // Очистка коллекции.
+        GameHelper.accuralPoints(line.size()); // начисление очков
+        line.clear(); // очистка коллекции
     }
 
     /**
      * Обход графа пустых ячеек (массив или область пустых ячеек на игровом поле, в которой находится
-     * ячейка, ИЗ КОТОРОЙ планируется переместить изображение), с целью "посетить" все пустые ячейки в заданной
-     * области. Если среди "посещенных" ячеек будет находиться пустая ячейка В КОТОРУЮ планируется переместить
+     * ячейка, из которой планируется переместить изображение), с целью "посетить" все пустые ячейки в заданной
+     * области. Если среди "посещенных" ячеек будет находиться пустая ячейка в которую планируется переместить
      * изображение, то ход (перемещение) возможен, иначе - ход невозможен.
      * @param node вершина графа, она же - ячейка из которой перемещается изображение.
      * @return true - ход в выбранную ячейку возможен или false - ход невозможен.
@@ -324,20 +324,21 @@ public class Play {
 
     /**
      * Перемещение изображения из одной ячейки в другую.
+     *
      * @param previousCell предыдущая ячейка (с изображением)
      * @param currentCell текущая (пустая) ячейка.
      */
     private void moveImageCell(Cell previousCell, Cell currentCell) {
-        // Получаем изображение из предыдущей ячейки.
+        // получаем изображение из предыдущей ячейки
         String pictureColor = previousCell.getImageColor();
-        // Устанавливаем изображение в пустую ячейку.
-        currentCell.setIcon(ballsMap().get(pictureColor) );
-        // Удаляем изображение из предыдущей ячейки.
+        // устанавливаем изображение в пустую ячейку
+        currentCell.setIcon(ballsMap().get(pictureColor));
+        // удаляем изображение из предыдущей ячейки
         previousCell.setIcon(null);
-        // Меняем состояния предыдущей и текущей ячеек.
+        // меняем состояния предыдущей и текущей ячеек
         previousCell.setState(EMPTY);
         currentCell.setState(RELEASED);
-        // Добавляем предыдущую ячейку в список свободных ячеек и удаляем текущую ячейку.
+        // добавляем предыдущую ячейку в список свободных ячеек и удаляем текущую ячейку
         getEmptyCells().add(previousCell);
         getEmptyCells().remove(currentCell);
     }

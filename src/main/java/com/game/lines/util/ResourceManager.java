@@ -18,22 +18,21 @@ import java.util.Map;
 
 public class ResourceManager {
 
-    // Название папки с изображениями.
+    // папка с изображениями
     private static final String BALLS_FOLDER;
-    // Название папки с иконкой.
+    // папка с иконкой
     private static final String ICON_FOLDER;
-    // Имя изображения иконки.
+    // имя изображения
     private static final String ICON_NAME;
-    // Название типа (расширения) файла.
+    // тип (расширение) файла
     private static final String FILE_TYPE;
-    // Суффикс имени файла.
+    // суффикс имени файла
     private static final String SUFFIX;
-    // URL иконки окна игры.
+    // URL иконки окна игры
     private static final URL IMAGE_ICON_URL;
-    // Массив изображений шаров, используемых в игре.
+    // массив изображений шаров, используемых в игре
     public static final Object[] BALLS;
 
-    // Блок статической инициализации констант класса.
     static {
         BALLS_FOLDER = "/images/balls/";
         ICON_FOLDER = "/images/icons/";
@@ -44,15 +43,15 @@ public class ResourceManager {
         BALLS = ballsMap().values().toArray();
     }
 
-    // Получаем изображение иконки окна игры, используя его URL.
     public static Image getImageIcon() {
         return IMAGE_ICON_URL != null ? new ImageIcon(IMAGE_ICON_URL).getImage() : null;
     }
 
     /**
-     * Key - название цвета;
-     * Value - изображение шара;
-     * @return карта изображений шаров по цветам.
+     * key - название цвета;
+     * value - изображение шара;
+     *
+     * @return map изображений шаров по цветам.
      */
     public static Map<String, ImageIcon> ballsMap() {
         Map<String, ImageIcon> imageMap = new HashMap<>();

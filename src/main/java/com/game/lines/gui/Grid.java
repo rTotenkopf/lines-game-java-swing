@@ -9,10 +9,6 @@ import java.awt.*;
 
 import static com.game.lines.model.Cell.*;
 
-/**
- * @author Eugene Ivanov on 07.09.18
- */
-
 public class Grid {
 
     private static JLabel[][] grid;
@@ -30,10 +26,10 @@ public class Grid {
      * @param gridHeight высота сетки.
      */
     void createGrid(int gridWidth, int gridHeight, JPanel gridPanel) {
-        gridPanel.setLayout(new GridLayout(gridWidth, gridHeight) ); // Установка сетки на панель.
-        grid = new Cell[gridWidth][gridHeight]; // Инициализация сетки.
-        Border lineBorder = BorderFactory.createLineBorder(Color.BLACK, 1); // Установка границ ячеек сетки.
-        // Создание и инициализация ячеек сетки.
+        gridPanel.setLayout(new GridLayout(gridWidth, gridHeight) ); // установка сетки на панель
+        grid = new Cell[gridWidth][gridHeight]; // инициализация сетки
+        Border lineBorder = BorderFactory.createLineBorder(Color.BLACK, 1); // установка границ ячеек сетки
+        // создание и инициализация ячеек сетки
         for (int y = gridHeight; y >= 1; y--) {
             for (int x = 1; x <= gridWidth; x++) {
                 Cell createdCell = new Cell(x, y); // Создание новой ячейки на сетке.
@@ -52,15 +48,15 @@ public class Grid {
         int x = newCell.getXx();
         int y = newCell.getYy();
 //        newCell.setText("(" + (x) + "," + (y) + ")");
-        getCellMap().put(newCell.getCoordinates(), newCell); // Добавление ячейки в карту ячеек.
-        newCell.setBorder(lineBorder); // Установка границ ячейки.
-        newCell.setVerticalAlignment(SwingConstants.CENTER); // Установка вертикальной центровки.
-        newCell.setHorizontalAlignment(SwingConstants.CENTER); // Установка горизонтальной центровки.
-        newCell.setBackground(Color.WHITE); // Установка цвета фона ячейки.
-        newCell.setOpaque(true); // Установка свойства "непрозрачности" ячейки.
-        gridPanel.add(newCell); // Добавление ячейки на сетку.
-        newCell.setState(State.EMPTY); // Установка состояния ячейки.
-        grid[--x][--y] = newCell; // Инициализация ячейки.
-        getEmptyCells().add(newCell); // Добавление ячейки в список пустых ячеек.
+        getCellMap().put(newCell.getCoordinates(), newCell); // добавление ячейки в карту ячеек
+        newCell.setBorder(lineBorder); // установка границ ячейки
+        newCell.setVerticalAlignment(SwingConstants.CENTER); // установка вертикальной центровки
+        newCell.setHorizontalAlignment(SwingConstants.CENTER); // установка горизонтальной центровки
+        newCell.setBackground(Color.WHITE); // установка цвета фона ячейки
+        newCell.setOpaque(true); // установка свойства "непрозрачности" ячейки
+        gridPanel.add(newCell); // добавление ячейки на сетку
+        newCell.setState(State.EMPTY); // установка состояния ячейки
+        grid[--x][--y] = newCell; // инициализация ячейки
+        getEmptyCells().add(newCell); // добавление ячейки в список пустых ячеек
     }
 }

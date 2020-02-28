@@ -7,10 +7,8 @@ import javax.swing.*;
  */
 
 final class OptionModal {
-
     /**
-     * Конструктор класса OptionModal. Здесь производится настройка модального окна, возницкающего при попытке закрыть
-     * главное окно игры.
+     * Настройка модального окна, возницкающего при попытке закрыть главное окно игры.
      */
     private OptionModal() {
         UIManager.put("OptionPane.yesButtonText", "Продолжить игру");
